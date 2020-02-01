@@ -1,0 +1,1 @@
+{"type":"Sprite","props":{"y":75,"x":250,"width":500,"presetID":1,"pivotY":75,"pivotX":250,"name":"rewardWords","isPresetRoot":true,"height":150},"compId":94,"child":[{"type":"Script","props":{"presetID":3,"runtime":"script/RewardWords.ts"},"compId":96}],"loadList":[],"loadList3D":[]}

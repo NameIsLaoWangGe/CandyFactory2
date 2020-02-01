@@ -1,0 +1,1 @@
+{"type":"Sprite","props":{"y":0,"x":0,"width":50,"presetID":1,"name":"enemyBullet","isPresetRoot":true,"height":50},"compId":87,"child":[{"type":"Script","props":{"presetID":3,"runtime":"script/EnemyBullet.ts"},"compId":89},{"type":"Sprite","props":{"y":5.5,"x":6,"texture":"candy/敌人/敌人子弹.png","presetID":4},"compId":91}],"loadList":["candy/敌人/敌人子弹.png"],"loadList3D":[]}

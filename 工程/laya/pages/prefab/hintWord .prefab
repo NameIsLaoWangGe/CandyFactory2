@@ -1,0 +1,100 @@
+{
+    "x":0,
+    "type":"Sprite",
+    "selectedBox":86,
+    "selecteID":94,
+    "searchKey":"Sprite,hintWord ",
+    "props":{"y":0,"x":0,"width":250,"presetID":1,"preset":"laya/pages/prefab/hintWord .prefab","name":"hintWord ","isPresetRoot":true,"height":50},
+    "nodeParent":-1,
+    "maxID":95,
+    "label":"hintWord ",
+    "isOpen":true,
+    "isDirectory":true,
+    "isAniNode":true,
+    "hasChild":true,
+    "compId":86,
+    "child":[
+        {
+            "x":15,
+            "type":"FontClip",
+            "searchKey":"FontClip,addNumber",
+            "props":{"y":10,"x":125,"width":102,"value":"+20","skin":"candy/字体/图片数字1.png","sheet":"+0123456789","presetID":6,"preset":"laya/pages/prefab/hintWord .prefab","name":"addNumber","height":34,"align":"left"},
+            "nodeParent":86,
+            "label":"addNumber",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":93,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"FontClip",
+            "searchKey":"FontClip,subNumber",
+            "props":{"y":8,"x":125,"width":102,"value":"-20","skin":"candy/字体/减属性.png","sheet":"-0123456789","presetID":3,"preset":"laya/pages/prefab/hintWord .prefab","name":"subNumber","height":34,"align":"left"},
+            "nodeParent":86,
+            "label":"subNumber",
+            "isOpen":true,
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":88,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"FontClip",
+            "searchKey":"FontClip,propertyType",
+            "props":{"y":6,"x":9,"value":"攻击里","spaceY":0,"spaceX":-5,"skin":"candy/字体/属性标签.png","sheet":"公鸡速度攻击里生命防御力","presetID":4,"preset":"laya/pages/prefab/hintWord .prefab","name":"propertyType","align":"left"},
+            "nodeParent":86,
+            "label":"propertyType",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":89,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"FontClip",
+            "searchKey":"FontClip,addScore",
+            "props":{"y":27,"x":113,"width":126,"value":"1000","skin":"candy/字体/分数：+01234567892.png","sheet":"+0123456789k","presetID":7,"preset":"laya/pages/prefab/hintWord .prefab","pivotY":26,"pivotX":63,"name":"addScore","height":51,"align":"center"},
+            "nodeParent":86,
+            "label":"addScore",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":94,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Script",
+            "switchAble":true,
+            "source":"src/script/HintWord.ts",
+            "searchKey":"Script,HintWord",
+            "removeAble":true,
+            "props":{"presetID":5,"preset":"laya/pages/prefab/hintWord .prefab"},
+            "nodeParent":86,
+            "label":"HintWord",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":91,
+            "child":[
+                ]
+        }],
+    "animations":[
+        {
+            "nodes":[
+                ],
+            "name":"ani1",
+            "id":1,
+            "frameRate":24,
+            "action":0
+        }]
+}
