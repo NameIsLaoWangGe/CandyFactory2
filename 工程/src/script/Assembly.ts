@@ -57,6 +57,9 @@ export default class Assembly extends Laya.Script {
     /**管道1的骨骼动画*/
     private pipeSk_01: Laya.Skeleton;
     private pipeSk_01Tem: Laya.Templet;
+    /**管道2的骨骼动画*/
+    private pipeSk_02: Laya.Skeleton;
+    private pipeSk_02Tem: Laya.Templet;
 
     constructor() { super(); }
 
@@ -98,7 +101,7 @@ export default class Assembly extends Laya.Script {
     createPipeSk_01(): void {
         //创建动画模板
         this.pipeSk_01Tem = new Laya.Templet();
-        this.pipeSk_01Tem.on(Laya.Event.COMPLETE, this, this.parseComplete);
+        this.pipeSk_01Tem.on(Laya.Event.COMPLETE, this, this.parseComplete_01);
         this.pipeSk_01Tem.on(Laya.Event.ERROR, this, this.onError);
         this.pipeSk_01Tem.loadAni("candy/糖果机器/pipeline_01.sk");
     }
@@ -107,11 +110,27 @@ export default class Assembly extends Laya.Script {
         console.log('骨骼动画加载错误');
     }
 
-    parseComplete(): void {
+    parseComplete_01(): void {
         // 播放敌人动画
         var skeleton: Laya.Skeleton;
         this.pipeSk_01 = this.pipeSk_01Tem.buildArmature(0);//模板0
         this.pipeSk_01.play('newAnimation', true);
+    }
+
+    /**创建骨骼动画皮肤*/
+    createPipeSk_02(): void {
+        //创建动画模板
+        this.pipeSk_02Tem = new Laya.Templet();
+        this.pipeSk_02Tem.on(Laya.Event.COMPLETE, this, this.parseComplete_02);
+        this.pipeSk_02Tem.on(Laya.Event.ERROR, this, this.onError);
+        this.pipeSk_02Tem.loadAni("candy/糖果机器/pipeline_01.sk");
+    }
+
+    parseComplete_02(): void {
+        // 播放敌人动画
+        var skeleton: Laya.Skeleton;
+        this.pipeSk_02 = this.pipeSk_01Tem.buildArmature(0);//模板0
+        this.pipeSk_02.play('newAnimation', true);
     }
 
     /**位移抖动

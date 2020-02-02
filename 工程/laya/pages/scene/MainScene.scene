@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":142,
-    "selecteID":159,
+    "selectedBox":2,
+    "selecteID":107,
     "searchKey":"Scene",
     "props":{"x":0,"width":750,"sceneColor":"#000000","height":1334},
     "nodeParent":-1,
-    "maxID":160,
+    "maxID":165,
     "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
@@ -59,7 +59,7 @@
                     "x":30,
                     "type":"Image",
                     "searchKey":"Image,陈列台影子",
-                    "props":{"y":388,"x":207,"skin":"candy/糖果机器/陈列台影子.png","name":"陈列台影子"},
+                    "props":{"y":387,"x":207,"skin":"candy/糖果机器/陈列台影子.png","name":"陈列台影子"},
                     "nodeParent":18,
                     "label":"陈列台影子",
                     "isDirectory":false,
@@ -73,7 +73,7 @@
                     "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,机器",
-                    "props":{"y":-63,"x":10,"texture":"candy/糖果机器/糖果制造机.png","name":"机器","alpha":1},
+                    "props":{"y":-64,"x":10,"texture":"candy/糖果机器/糖果制造机.png","name":"机器","alpha":1},
                     "nodeParent":18,
                     "label":"机器",
                     "isOpen":true,
@@ -86,7 +86,7 @@
                             "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,suspend",
-                            "props":{"y":140,"x":425,"texture":"candy/ui/暂停按钮.png","name":"suspend"},
+                            "props":{"y":139,"x":425,"texture":"candy/ui/暂停按钮.png","name":"suspend"},
                             "nodeParent":142,
                             "label":"suspend",
                             "isOpen":false,
@@ -114,9 +114,65 @@
                         },
                         {
                             "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,flow_02",
+                            "props":{"y":16,"x":195,"texture":"candy/糖果机器/管道2.png","name":"flow_02"},
+                            "nodeParent":142,
+                            "label":"flow_02",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":160,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,flow_01",
+                            "props":{"y":119,"x":67,"texture":"candy/糖果机器/管道1.png","name":"flow_01"},
+                            "nodeParent":142,
+                            "label":"flow_01",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":162,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"SkeletonPlayer",
+                            "searchKey":"SkeletonPlayer,pipeline_02",
+                            "props":{"y":122,"x":282,"url":"candy/糖果机器/pipeline_02.sk","name":"pipeline_02"},
+                            "nodeParent":142,
+                            "label":"pipeline_02",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":164,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,flow_02高光",
+                            "props":{"y":39,"x":274,"texture":"candy/糖果机器/管道2高光.png","name":"flow_02高光"},
+                            "nodeParent":142,
+                            "label":"flow_02高光",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":161,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
                             "type":"SkeletonPlayer",
                             "searchKey":"SkeletonPlayer,pipeline_01",
-                            "props":{"y":190,"x":197,"url":"candy/糖果机器/pipeline_01.sk","name":"pipeline_01"},
+                            "props":{"y":189,"x":197,"url":"candy/糖果机器/pipeline_01.sk","name":"pipeline_01"},
                             "nodeParent":142,
                             "label":"pipeline_01",
                             "isDirectory":false,
@@ -138,6 +194,20 @@
                             "isAniNode":true,
                             "hasChild":false,
                             "compId":149,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite",
+                            "props":{"y":157.5,"x":91,"texture":"candy/糖果机器/指示灯.png"},
+                            "nodeParent":142,
+                            "label":"Sprite",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":163,
                             "child":[
                                 ]
                         }]
