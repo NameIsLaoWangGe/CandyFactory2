@@ -360,10 +360,10 @@ export default class OperationButton extends Laya.Script {
         let moveY;
         if (candy.x < Laya.stage.width / 2) {
             explodeTarget = this.selfScene['MainSceneControl'].role_01;
-            point = new Laya.Point(candy.x - 200, candy.y);
+            point = new Laya.Point(candy.x - 200, candy.y + 80);
         } else {
             explodeTarget = this.selfScene['MainSceneControl'].role_02;
-            point = new Laya.Point(candy.x + 200, candy.y);
+            point = new Laya.Point(candy.x + 200, candy.y + 80);
         }
         // 播放翻转动画
         if (candy['Candy'].skeleton) {
@@ -383,7 +383,7 @@ export default class OperationButton extends Laya.Script {
                 default:
                     break;
             }
-            candy['Candy'].skeleton.playbackRate(3);
+            candy['Candy'].skeleton.playbackRate(4);
         }
         this.flewToGround(candy, point, explodeTarget);
     }
@@ -403,7 +403,7 @@ export default class OperationButton extends Laya.Script {
         } else {
             HalfX = candy.x + (targetP.x - candy.x) / distancePer;
         }
-        HalfY = candy.y - 150;
+        HalfY = candy.y - 100;
         // 第一步飞天放大
         Laya.Tween.to(candy, { x: HalfX, y: HalfY, scaleX: 1.3, scaleY: 1.3 }, 500, null, Laya.Handler.create(this, function () {
 

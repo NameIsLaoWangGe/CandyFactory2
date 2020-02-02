@@ -2,11 +2,11 @@
     "x":0,
     "type":"Scene",
     "selectedBox":142,
-    "selecteID":81,
+    "selecteID":159,
     "searchKey":"Scene",
     "props":{"x":0,"width":750,"sceneColor":"#000000","height":1334},
     "nodeParent":-1,
-    "maxID":146,
+    "maxID":160,
     "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
@@ -89,7 +89,7 @@
                             "props":{"y":140,"x":425,"texture":"candy/ui/暂停按钮.png","name":"suspend"},
                             "nodeParent":142,
                             "label":"suspend",
-                            "isOpen":null,
+                            "isOpen":false,
                             "isDirectory":true,
                             "isAniNode":true,
                             "hasChild":true,
@@ -111,6 +111,35 @@
                                     "child":[
                                         ]
                                 }]
+                        },
+                        {
+                            "x":45,
+                            "type":"SkeletonPlayer",
+                            "searchKey":"SkeletonPlayer,pipeline_01",
+                            "props":{"y":190,"x":197,"url":"candy/糖果机器/pipeline_01.sk","name":"pipeline_01"},
+                            "nodeParent":142,
+                            "label":"pipeline_01",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":159,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,flow_01高光",
+                            "props":{"y":141,"x":211,"width":121,"texture":"candy/糖果机器/水管流水高光_01.png","rotation":1,"pivotY":17,"pivotX":61,"name":"flow_01高光","height":33},
+                            "nodeParent":142,
+                            "label":"flow_01高光",
+                            "isOpen":true,
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":149,
+                            "child":[
+                                ]
                         }]
                 },
                 {
@@ -292,7 +321,7 @@
                     "source":"src/script/Assembly.ts",
                     "searchKey":"Script,Assembly",
                     "removeAble":true,
-                    "props":{"y":-1,"x":0,"shortPointer":"@node:123","machine":"@node:142","LongPointer":"@node:119"},
+                    "props":{"y":-1,"x":0,"shortPointer":"@node:123","machine":"@node:142","flowMask_01":"@node:158","LongPointer":"@node:119"},
                     "nodeParent":18,
                     "label":"Assembly",
                     "isDirectory":false,

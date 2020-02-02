@@ -2,7 +2,6 @@
     "x":0,
     "type":"Sprite",
     "selectedBox":95,
-    "selecteID":99,
     "searchKey":"Sprite,candy_Explode",
     "props":{"y":50,"x":49,"width":100,"presetID":1,"preset":"laya/pages/prefab/candy_Explode.prefab","pivotY":50,"pivotX":50,"name":"candy_Explode","isPresetRoot":true,"height":100},
     "nodeParent":-1,

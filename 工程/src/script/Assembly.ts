@@ -1,6 +1,7 @@
 export default class Assembly extends Laya.Script {
     /** @prop {name:machine, tips:糖果制造机器, type:Node}*/
     public machine: Laya.Sprite;
+
     /** @prop {name:LongPointer, tips:长指针, type:Node}*/
     public LongPointer: Laya.Sprite;
 
@@ -53,6 +54,9 @@ export default class Assembly extends Laya.Script {
     private timeSchedule: Laya.ProgressBar;
     /**时间抖动次数*/
     private timerShakeNum: number;
+    /**管道1的骨骼动画*/
+    private pipeSk_01: Laya.Skeleton;
+    private pipeSk_01Tem: Laya.Templet;
 
     constructor() { super(); }
 
@@ -85,6 +89,29 @@ export default class Assembly extends Laya.Script {
         this.timer = this.owner.getChildByName('timer') as Laya.Sprite;
         this.timeSchedule = this.timer.getChildByName('timeSchedule') as Laya.ProgressBar;
         this.timerShakeNum = 0;
+
+        this.pipeSk_01 = this.machine.getChildByName('pipeline_01') as Laya.Skeleton;
+        this.createPipeSk_01();
+    }
+
+    /**创建骨骼动画皮肤*/
+    createPipeSk_01(): void {
+        //创建动画模板
+        this.pipeSk_01Tem = new Laya.Templet();
+        this.pipeSk_01Tem.on(Laya.Event.COMPLETE, this, this.parseComplete);
+        this.pipeSk_01Tem.on(Laya.Event.ERROR, this, this.onError);
+        this.pipeSk_01Tem.loadAni("candy/糖果机器/pipeline_01.sk");
+    }
+
+    onError(): void {
+        console.log('骨骼动画加载错误');
+    }
+
+    parseComplete(): void {
+        // 播放敌人动画
+        var skeleton: Laya.Skeleton;
+        this.pipeSk_01 = this.pipeSk_01Tem.buildArmature(0);//模板0
+        this.pipeSk_01.play('newAnimation', true);
     }
 
     /**位移抖动

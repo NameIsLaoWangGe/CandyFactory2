@@ -169,7 +169,7 @@ export default class Enemy extends Laya.Script {
         if (this.enemyType === 'infighting') {
             this.attackY = this.slefTagRole.y - Math.floor(Math.random() * 50);
         } else if ('range') {
-            this.attackY = this.slefTagRole.y - Math.floor(Math.random() * 50) - 500;
+            this.attackY = this.slefTagRole.y - Math.floor(Math.random() * 50) - 450;
         }
     }
 

@@ -130,9 +130,13 @@ P 5A403804 黄色糖果球.png
 D candy/糖果机器
 R DD8C5022 candyLaunch.png
 R 30F8BB9A candyLaunch.sk
+R 6BF1BFD5 pipeline_01.png
+R 7DA7E367 pipeline_01.sk
 P 8068A284 提示.png
+P 295BA79A 水管流水遮罩.png
+P 3062B8BE 水管流水高光_01.png
 P 1D1B0797 短指针.png
-R 2384BB87 糖果制造机.png
+R 42E30DB6 糖果制造机.png
 R E5D4B665 糖果陈列台.png
 P E4AB60C7 长指针.png
 R 995383EE 陈列台影子.png
