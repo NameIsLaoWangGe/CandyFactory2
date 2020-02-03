@@ -10,6 +10,7 @@ import Enemy from "./script/Enemy"
 import EnemyBullet from "./script/EnemyBullet"
 import Explode from "./script/Explode"
 import HintWord from "./script/HintWord"
+import Resurgence from "./script/Resurgence"
 import RewardWords from "./script/RewardWords"
 import RoleBullet from "./script/RoleBullet"
 /*
@@ -42,6 +43,7 @@ export default class GameConfig{
         reg("script/EnemyBullet.ts",EnemyBullet);
         reg("script/Explode.ts",Explode);
         reg("script/HintWord.ts",HintWord);
+        reg("script/Resurgence.ts",Resurgence);
         reg("script/RewardWords.ts",RewardWords);
         reg("script/RoleBullet.ts",RoleBullet);
     }

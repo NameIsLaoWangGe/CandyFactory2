@@ -55,6 +55,10 @@ export default class Enemy extends Laya.Script {
     /**骨骼动画*/
     private skeleton: Laya.Skeleton;
 
+    /**两个主角*/
+    private role_01: Laya.Sprite;
+    private role_02: Laya.Sprite;
+
     constructor() { super(); }
 
     onEnable(): void {
@@ -87,6 +91,8 @@ export default class Enemy extends Laya.Script {
         if (this.skeleton) {
             this.skeleton.removeSelf();
         }
+        this.role_01 = this.selfScene['MainSceneControl'].role_01;
+        this.role_02 = this.selfScene['MainSceneControl'].role_02;
     }
 
     /**创建骨骼动画皮肤*/
@@ -348,13 +354,15 @@ export default class Enemy extends Laya.Script {
 
     onUpdate(): void {
         // 主角全部死亡则停止移动
-        if (this.roleParent._children.length === 0) {
+        if (this.selfScene['MainSceneControl'].gameOver) {
             return;
         }
+
         // 如果没有目标则什么都不执行
         if (this.slefTagRole === null) {
             return;
         }
+
         // 血量低于0则死亡,并且关闭主角发射子弹预警,并且停止下面行为
         if (this.enemyProperty.blood < 0) {
             this.enemyDeath();
@@ -373,8 +381,8 @@ export default class Enemy extends Laya.Script {
             let differenceX = Math.abs(this.self.x - this.attackX);
             let differenceY = Math.abs(this.self.y - this.attackY);
             if (differenceX < 10 && differenceY < 10) {
-                this.mainSceneControl.role_01['Role'].role_Warning = true;
-                this.mainSceneControl.role_02['Role'].role_Warning = true;
+                this.role_01['Role'].role_Warning = true;
+                this.role_02['Role'].role_Warning = true;
                 this.selfSpeed = 0;
                 let nowTime = Date.now();
                 if (nowTime - this.recordTime > this.enemyProperty.attackSpeed) {

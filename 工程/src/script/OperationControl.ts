@@ -77,6 +77,7 @@ export default class OperationButton extends Laya.Script {
             this.self._children[i].on(Laya.Event.MOUSE_UP, this, this.up);
             this.self._children[i].on(Laya.Event.MOUSE_OUT, this, this.out);
         }
+
     }
 
     /**判断按下的按钮和准备位置的糖果是否匹配;
@@ -448,7 +449,7 @@ export default class OperationButton extends Laya.Script {
 
     onUpdate(): void {
         // 主角全部死亡游戏结束
-        if (this.selfScene['MainSceneControl'].roleParent._children.length === 0) {
+        if (this.selfScene['MainSceneControl'].gameOver) {
             this.operateSwitch = false;
             return;
         }

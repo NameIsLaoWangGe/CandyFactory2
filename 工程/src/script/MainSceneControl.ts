@@ -60,11 +60,13 @@ export default class MainSceneControl extends Laya.Script {
     /** @prop {name:assembly, tips:"流水线", type:Node}*/
     public assembly: Laya.Sprite;
 
-
     /** @prop {name:role_01 , tips:"主角1", type:Node}*/
     public role_01: Laya.Sprite;
     /** @prop {name:role_02 , tips:"主角2", type:Node}*/
     public role_02: Laya.Sprite;
+
+    /** @prop {name:resurgence , tips:"复活继续", type:Prefab}*/
+    public resurgence: Laya.Prefab;
 
     /**两个主角的对话框*/
     private role_01speak: Laya.Sprite;
@@ -131,6 +133,8 @@ export default class MainSceneControl extends Laya.Script {
     private launchTemp_02: Laya.Templet;
     private candyLaunch_02: Laya.Skeleton;
 
+    /**游戏结束*/
+    private gameOver: boolean;
 
     constructor() { super(); }
 
@@ -149,9 +153,9 @@ export default class MainSceneControl extends Laya.Script {
         // 初始化怪物属性，依次为血量，
         this.enemyProperty = {
             blood: 200,
-            attackValue: 20,
+            attackValue: 1000,
             attackSpeed: 1000,//暂时最小时间间隔为100
-            defense: 15,
+            defense: 500,
             moveSpeed: 10,
             creatInterval: 5000
         }
@@ -183,7 +187,12 @@ export default class MainSceneControl extends Laya.Script {
         this.suspend = false;
         this.startRow = 4;
 
+        this.gameOver = false;
+
+        this.self = this.owner as Laya.Scene;
+
         this.createLaunchAni();
+
     }
     /**两个发射口的骨骼动画*/
     createLaunchAni(): void {
@@ -429,31 +438,6 @@ export default class MainSceneControl extends Laya.Script {
         return explodeCandy;
     }
 
-    /**主角初始化，成对出现在两个固定位置，每次初始化后的位置可能会调换*/
-    roletInit(): void {
-        this.role_01 = this.owner.scene.role_01;
-        this.role_02 = this.owner.scene.role_02;
-        let pic_01 = (this.role_01.getChildByName('pic') as Laya.Sprite);
-        let pic_02 = (this.role_02.getChildByName('pic') as Laya.Sprite);
-
-        // 随机更换皮肤
-        let imageUrl_01: string = 'candy/主角/主角1背面.png';
-        let imageUrl_02: string = 'candy/主角/主角2背面.png';
-        let randomNum = Math.floor(Math.random() * 2);
-        if (randomNum === 0) {
-            pic_01.loadImage(imageUrl_01);
-            pic_01.name = 'redRole';
-            pic_02.loadImage(imageUrl_02);
-            pic_02.name = 'yellowRole';
-
-        } else {
-            pic_02.loadImage(imageUrl_01);
-            pic_02.name = 'redRole';
-            pic_01.loadImage(imageUrl_02);
-            pic_01.name = 'yellowRole';
-        }
-    }
-
     /**两个主角对话框的初始化*/
     roleSpeakBoxs(): void {
         for (let i = 0; i < 2; i++) {
@@ -611,8 +595,27 @@ export default class MainSceneControl extends Laya.Script {
         }
     }
 
+    /**复活*/
+    createResurgence(): void {
+        let resurgence = Laya.Pool.getItemByCreateFun('resurgence', this.resurgence.create, this.resurgence) as Laya.Sprite;
+        this.self.addChild(resurgence);
+        resurgence.pos(0, 0);
+    }
+
     /**属性刷新显示规则*/
     onUpdate(): void {
+        // 游戏结束
+        if (this.gameOver) {
+            return;
+        }
+
+        // 主角全部死亡则停止移动,并且弹出复活
+        if (this.role_01['Role'].roleDeath && this.role_02['Role'].roleDeath) {
+            this.gameOver = true;
+            this.createResurgence();
+            return;
+        }
+
         // 时刻对敌人的层级进行排序
         this.enemyOrder();
         // 记录时间

@@ -36,6 +36,10 @@ export default class Role extends Laya.Script {
     private templet: Laya.Templet;
     /**骨骼动画*/
     private skeleton: Laya.Skeleton;
+
+    /**主角是否死亡*/
+    private roleDeath: boolean;
+
     constructor() { super(); }
 
     onEnable(): void {
@@ -58,10 +62,10 @@ export default class Role extends Laya.Script {
         this.self['Role'] = this;
 
         this.selfScene = this.self.scene as Laya.Scene;
-        this.mainSceneControl = this.selfScene.getComponent(MainSceneControl);//场景脚本组件
-        this.candyParent = this.mainSceneControl.candyParent;
-        this.scoreLabel = this.mainSceneControl.scoreLabel;
+        this.candyParent = this.selfScene['MainSceneControl'].candyParent;
+        this.scoreLabel = this.selfScene['MainSceneControl'].scoreLabel;
         this.nowTime = Date.now();
+        this.roleDeath = false;
     }
 
     /**创建骨骼动画皮肤*/
@@ -219,7 +223,7 @@ export default class Role extends Laya.Script {
     lockedBulletTarget(bullet): void {
         // 两点之间的距离数组
         let distanceArr: Array<any> = [];
-        let enemyParent = this.mainSceneControl.enemyParent;
+        let enemyParent = this.selfScene['MainSceneControl'].enemyParent;
         for (let i = 0; i < enemyParent._children.length; i++) {
             let enemy = enemyParent._children[i] as Laya.Sprite;
             //两点之间的距离
@@ -254,10 +258,20 @@ export default class Role extends Laya.Script {
     }
 
     onUpdate(): void {
-        // 血量低于0则死亡
-        if (this.role_property.blood <= 0) {
-            this.self.removeSelf();
+        if (this.roleDeath) {
+            return;
         }
+        // 血量低于0则死亡,并且弹出复活界面
+        if (this.role_property.blood <= 0) {
+            if (this.self.name === 'role_01') {
+                this.roleDeath = true;
+                this.self.alpha = 0;
+            } else if (this.self.name === 'role_02') {
+                this.roleDeath = true;
+                this.self.alpha = 0;
+            }
+        }
+
         // 刷新属性
         this.updateProperty();
         //创建子弹
