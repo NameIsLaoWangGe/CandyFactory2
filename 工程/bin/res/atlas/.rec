@@ -41,6 +41,7 @@ P 5FD17798 vscroll.png
 P DDDDFB9E vslider$bar.png
 P 01BAE7F5 vslider.png
 D candy/ui
+R 8ED6A8D6 candyfactory2020.2.3.png
 P A7762784 不玩了！.png
 P E6FC9468 主角属性显示.png
 P 9168C324 分数牌.png
@@ -56,9 +57,12 @@ P 4CAD90AC 时间$bar.png
 P D6602089 时间.png
 P F27E0E2A 暂停按钮.png
 P 546EE85A 正确提示.png
+P B5A09EDB 游戏结束标题.png
+P 6B458D5D 继续.png
 P DF75AD09 继续游戏.png
 P E7BD7926 血条$bar.png
 P A7618FFB 血条.png
+P C309F0D7 返回.png
 P 8F5327DD 进度条白色高光.png
 P ADB0D4CF 进度条装饰1.png
 P BBE9EEDE 进度条装饰2.png
