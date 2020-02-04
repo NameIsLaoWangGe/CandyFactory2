@@ -2,7 +2,6 @@
     "x":0,
     "type":"Sprite",
     "selectedBox":166,
-    "selecteID":167,
     "searchKey":"Sprite,resurgence",
     "props":{"y":0,"x":0,"presetID":1,"preset":"laya/pages/prefab/resurgence.prefab","name":"resurgence","isPresetRoot":true},
     "nodeParent":-1,

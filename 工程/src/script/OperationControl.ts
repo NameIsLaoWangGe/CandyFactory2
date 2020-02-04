@@ -452,7 +452,7 @@ export default class OperationButton extends Laya.Script {
         if (this.selfScene['MainSceneControl'].gameOver) {
             this.operateSwitch = false;
             return;
-        }
+        } 
         //计时器
         this.timerControl();
     }

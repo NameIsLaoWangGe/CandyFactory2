@@ -157,5 +157,6 @@ export default class HintWord extends Laya.Script {
     }
 
     onDisable(): void {
+        Laya.Pool.recover('hintWord', this.self);
     }
 }

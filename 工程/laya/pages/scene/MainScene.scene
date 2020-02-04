@@ -2,7 +2,6 @@
     "x":0,
     "type":"Scene",
     "selectedBox":2,
-    "selecteID":4,
     "searchKey":"Scene",
     "props":{"x":0,"width":750,"sceneColor":"#000000","height":1334},
     "nodeParent":-1,
@@ -405,23 +404,6 @@
                     "child":[
                         ]
                 }]
-        },
-        {
-            "x":15,
-            "type":"Script",
-            "switchAble":true,
-            "source":"src/script/MainSceneControl.ts",
-            "searchKey":"Script,MainSceneControl",
-            "removeAble":true,
-            "props":{"y":2,"x":0,"timer":"@node:92","suspend":"@node:81","speakBoxParent":"@node:53","speakBox":"@Prefab:prefab/speakBox.prefab","scoreLabel":"@node:116","role_02":"@node:24","role_01":"@node:25","roleParent":"@node:12","roleBullet":"@Prefab:prefab/roleBullet.prefab","rewardWords":"@Prefab:prefab/rewardWords.prefab","resurgence":"@Prefab:prefab/resurgence.prefab","operating":"@node:62","machine":"@node:109","induction":"@node:15","hintWord":"@Prefab:prefab/hintWord .prefab","friend":"@node:42","explode":"@Prefab:prefab/explode.prefab","enemy_Infighting":"@Prefab:prefab/enemy_Infighting.prefab","enemy_Fighting":"@Prefab:prefab/enemy_Fighting.prefab","enemyParent":"@node:23","enemyBullet":"@Prefab:prefab/enemyBullet.prefab","enemy":"@Prefab:prefab/enemy.prefab","displays":"@node:139","candy_Explode":"@Prefab:prefab/candy_Explode.prefab","candyParent_Move":"@node:85","candyParent":"@node:13","candy":"@Prefab:prefab/candy.prefab","bulletParent":"@node:59","bullet":"@Prefab:prefab/bullet.prefab","bucketParent":"@node:12","bucket":"@Prefab:prefab/bucket.prefab","background":"@node:4","assembly":"@node:18"},
-            "nodeParent":2,
-            "label":"MainSceneControl",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":11,
-            "child":[
-                ]
         },
         {
             "x":15,
@@ -838,6 +820,23 @@
                     "child":[
                         ]
                 }]
+        },
+        {
+            "x":15,
+            "type":"Script",
+            "switchAble":true,
+            "source":"src/script/MainSceneControl.ts",
+            "searchKey":"Script,MainSceneControl",
+            "removeAble":true,
+            "props":{"y":2,"x":0,"timer":"@node:92","suspend":"@node:81","speakBoxParent":"@node:53","speakBox":"@Prefab:prefab/speakBox.prefab","scoreLabel":"@node:116","role_02":"@node:24","role_01":"@node:25","roleParent":"@node:12","roleBullet":"@Prefab:prefab/roleBullet.prefab","rewardWords":"@Prefab:prefab/rewardWords.prefab","resurgence":"@Prefab:prefab/resurgence.prefab","operating":"@node:62","machine":"@node:109","induction":"@node:15","hintWord":"@Prefab:prefab/hintWord .prefab","friend":"@node:42","explode":"@Prefab:prefab/explode.prefab","enemy_Infighting":"@Prefab:prefab/enemy_Infighting.prefab","enemy_Fighting":"@Prefab:prefab/enemy_Fighting.prefab","enemyParent":"@node:23","enemyBullet":"@Prefab:prefab/enemyBullet.prefab","enemy":"@Prefab:prefab/enemy.prefab","displays":"@node:139","candy_Explode":"@Prefab:prefab/candy_Explode.prefab","candyParent_Move":"@node:85","candyParent":"@node:13","candy":"@Prefab:prefab/candy.prefab","bulletParent":"@node:59","bullet":"@Prefab:prefab/bullet.prefab","bucketParent":"@node:12","bucket":"@Prefab:prefab/bucket.prefab","background":"@node:4","assembly":"@node:18"},
+            "nodeParent":2,
+            "label":"MainSceneControl",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":11,
+            "child":[
+                ]
         }],
     "animations":[
         {

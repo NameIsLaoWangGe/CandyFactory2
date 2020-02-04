@@ -134,15 +134,13 @@ export default class Candy extends Laya.Script {
 
     /**属性减少提示动画*/
     hintWordMove(): void {
-        let hintWord = Laya.Pool.getItemByCreateFun('candy', this.hintWord.create, this.hintWord) as Laya.Sprite;
-        let role_01 = this.selfScene['MainSceneControl'].role_01 as Laya.Sprite;
-        let role_02 = this.selfScene['MainSceneControl'].role_02 as Laya.Sprite;
+        let hintWord = Laya.Pool.getItemByCreateFun('hintWord', this.hintWord.create, this.hintWord) as Laya.Sprite;
         if (this.explodeTarget.parent === null) {
             this.self.removeSelf();
             return;
         }
         this.explodeTarget.addChild(hintWord);
-        hintWord.pos(0, -150);
+        hintWord.pos(100, 50);
         let proPertyType: string;
         let numberValue: number;
         this.self.name = this.self.name.substring(0, 11);

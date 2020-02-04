@@ -252,7 +252,7 @@ export default class Role extends Laya.Script {
         distanceArr.sort(compare);
         if (distanceArr.length > 0) {
             let target = enemyParent.getChildByName(distanceArr[0].name) as Laya.Sprite;
-            bullet['Bullet'].bulletTarget = target
+            bullet['Bullet'].bulletTarget = target;
             bullet['Bullet'].bulletTargetName = target.name;
         }
     }

@@ -149,7 +149,9 @@ export default class Enemy extends Laya.Script {
     skeletonListen(): void {
         this.skeleton.on(Laya.Event.LABEL, this, function (e) {
             if (this.enemyType === 'infighting') {
-
+                if (e.name === 'hitOut') {
+                    this.enemyAttackRules();
+                }
             } else if ('range') {
                 if (e.name === 'hitOut') {
                     this.creatBullet();
@@ -411,7 +413,6 @@ export default class Enemy extends Laya.Script {
                     this.recordTime = nowTime;
                     // 血量判断，目标死亡后，会更换目标
                     if (this.slefTagRole['Role'].role_property.blood > 0) {
-                        this.enemyAttackRules();
                         this.skeleton.play('attack', false);
                         this.playSpeedAdjust();
                     } else {
