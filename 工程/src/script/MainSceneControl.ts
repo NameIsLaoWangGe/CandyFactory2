@@ -153,7 +153,7 @@ export default class MainSceneControl extends Laya.Script {
         // 初始化怪物属性，依次为血量，
         this.enemyProperty = {
             blood: 200,
-            attackValue: 1,
+            attackValue: 500,
             attackSpeed: 1000,//暂时最小时间间隔为100
             defense: 10,
             moveSpeed: 10,
@@ -405,7 +405,7 @@ export default class MainSceneControl extends Laya.Script {
     }
 
     /**产生爆炸糖果*/
-    createExplodeCandy(name: string): Laya.Sprite {
+    createExplodeCandy(candyName: string): Laya.Sprite {
         // 通过对象池创建
         let explodeCandy = Laya.Pool.getItemByCreateFun('candy_Explode', this.candy_Explode.create, this.candy_Explode) as Laya.Sprite;
         // 随机创建一种颜色糖果
@@ -415,7 +415,7 @@ export default class MainSceneControl extends Laya.Script {
         let url_03 = 'candy/糖果/蓝色糖果.png';
         let url_04 = 'candy/糖果/绿色糖果.png';
         let pic = (explodeCandy.getChildByName('pic') as Laya.Image);
-        switch (name.substring(0, 11)) {
+        switch (candyName.substring(0, 11)) {
             case 'yellowCandy':
                 pic.skin = url_01;
                 break;
@@ -434,7 +434,7 @@ export default class MainSceneControl extends Laya.Script {
         this.enemyParent.addChild(explodeCandy);
         explodeCandy.rotation = 0;
         this.candyCount++;
-        explodeCandy.name = name.substring(0, 11);
+        explodeCandy.name = candyName.substring(0, 11);
         return explodeCandy;
     }
 
@@ -601,6 +601,15 @@ export default class MainSceneControl extends Laya.Script {
         this.self.addChild(resurgence);
         resurgence.pos(0, 0);
     }
+
+    /**属性增减动画*/
+    createHintWord(target, proPertyType, numberValue): void {
+        let hintWord = Laya.Pool.getItemByCreateFun('hintWord', this.hintWord.create, this.hintWord) as Laya.Sprite;
+        target.addChild(hintWord);
+        hintWord.pos(100, -10);
+        hintWord['HintWord'].initProperty(proPertyType, numberValue);
+    }
+
 
     /**属性刷新显示规则*/
     onUpdate(): void {

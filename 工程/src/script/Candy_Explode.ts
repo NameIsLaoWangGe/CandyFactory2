@@ -121,7 +121,7 @@ export default class Candy extends Laya.Script {
             if (differenceX < 50 && differenceY < 50) {
                 this.self.removeSelf();
                 this.selfScene['MainSceneControl'].explodeAni(this.selfScene, this.self.x, this.self.y, this.self.name.substring(0, 11), 15, 100);
-                this.hintWordMove();
+                this.propertyHintWord();
                 this.roleReduceProperty();
                 // 关闭预警
                 this.selfScene['MainSceneControl'].role_01['Role'].role_Warning = true;
@@ -131,39 +131,24 @@ export default class Candy extends Laya.Script {
         }
     }
 
-
     /**属性减少提示动画*/
-    hintWordMove(): void {
-        let hintWord = Laya.Pool.getItemByCreateFun('hintWord', this.hintWord.create, this.hintWord) as Laya.Sprite;
-        if (this.explodeTarget.parent === null) {
-            this.self.removeSelf();
-            return;
-        }
-        this.explodeTarget.addChild(hintWord);
-        hintWord.pos(100, 50);
-        let proPertyType: string;
-        let numberValue: number;
-        this.self.name = this.self.name.substring(0, 11);
-        switch (this.self.name) {
+    propertyHintWord(): void {
+        let MainSceneControl = this.selfScene['MainSceneControl'];
+        switch (this.self.name.substring(0, 11)) {
             case 'yellowCandy':
-                proPertyType = '减少攻击里';
-                numberValue = 10;
+                MainSceneControl.createHintWord(this.explodeTarget, '减少攻击里', 10);
                 break;
             case 'redCandy___':
-                proPertyType = '减少生命';
-                numberValue = 5;
+                MainSceneControl.createHintWord(this.explodeTarget, '减少生命', 5);
                 break;
             case 'blueCandy__':
-                proPertyType = '减少公鸡速度';
-                numberValue = 10;
+                MainSceneControl.createHintWord(this.explodeTarget, '减少公鸡速度', 10);
                 break;
             case 'greenCandy_':
-                proPertyType = '减少防御力';
-                numberValue = 5;
+                MainSceneControl.createHintWord(this.explodeTarget, '减少防御力', 5);
                 break;
             default:
         }
-        hintWord['HintWord'].initProperty(proPertyType, numberValue);
     }
 
     /**根据糖果的种类增加主角属性规则

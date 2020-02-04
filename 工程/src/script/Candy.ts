@@ -175,36 +175,22 @@ export default class Candy extends Laya.Script {
 
     /**属性增加提示动画*/
     hintWordMove(): void {
-        let hintWord = Laya.Pool.getItemByCreateFun('hintWord', this.hintWord.create, this.hintWord) as Laya.Sprite;
-        if (this.candyTagRole.parent === null) {
-            this.self.removeSelf();
-            return;
-        }
-        this.candyTagRole.addChild(hintWord);
-        hintWord.pos(100, 50);
-        let proPertyType: string;
-        let numberValue: number;
-        this.self.name = this.self.name.substring(0, 11);
-        switch (this.self.name) {
+        let MainSceneControl = this.selfScene['MainSceneControl'];
+        switch (this.self.name.substring(0, 11)) {
             case 'yellowCandy':
-                proPertyType = '攻击里';
-                numberValue = 10;
+                MainSceneControl.createHintWord(this.candyTagRole, '攻击里', 10);
                 break;
             case 'redCandy___':
-                proPertyType = '生命';
-                numberValue = 5;
+                MainSceneControl.createHintWord(this.candyTagRole, '生命', 5);
                 break;
             case 'blueCandy__':
-                proPertyType = '公鸡速度';
-                numberValue = 10;
+                MainSceneControl.createHintWord(this.candyTagRole, '公鸡速度', 10);
                 break;
             case 'greenCandy_':
-                proPertyType = '防御力';
-                numberValue = 5;
+                MainSceneControl.createHintWord(this.candyTagRole, '防御力', 5);
                 break;
             default:
         }
-        hintWord['HintWord'].initProperty(proPertyType, numberValue);
     }
 
     /**根据糖果的种类增加主角属性规则

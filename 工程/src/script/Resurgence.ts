@@ -40,13 +40,14 @@ export default class Resurgence extends Laya.Script {
         this.digital.scaleX = 0;
         this.digital.scaleY = 0;
         this.digital.alpha = 0;
+        this.digital.value = '5';
         this.timeLine = 0;
 
         this.countdown = false;
 
         this.hintWord = this.selfScene['MainSceneControl'].hintWord;
 
-        Laya.timer.frameOnce(150, this, function () {
+        Laya.timer.frameOnce(100, this, function () {
             this.appearAni();
         })
     }
@@ -54,16 +55,16 @@ export default class Resurgence extends Laya.Script {
     //*动画初始化*/ 
     appearAni(): void {
         // 复活按钮
-        Laya.Tween.to(this.resurgence_Btn, { x: 375, rotation: 720 }, 700, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.resurgence_Btn, { x: 375, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
             this.resurgence_Btn.rotation = 0;
         }, []), 0);
         // 数字地板
-        Laya.Tween.to(this.digitalPlate, { x: 375, rotation: 720 }, 700, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.digitalPlate, { x: 375, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
             this.digitalPlate.rotation = 0;
             this.resurgence_BtnClink();
         }, []), 0);
         // 背景
-        Laya.Tween.to(this.background, { alpha: 0.7 }, 700, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.background, { alpha: 0.7 }, 500, null, Laya.Handler.create(this, function () {
         }, []), 0);
         // 倒计时数字
         Laya.Tween.to(this.digital, { scaleX: 1.3, scaleY: 1.3, alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
@@ -73,26 +74,23 @@ export default class Resurgence extends Laya.Script {
         }, []), 0);
     }
 
-    //*动画初始化*/ 
+    //*消失动画*/ 
     vanishInit(): void {
         // 复活按钮
-        Laya.Tween.to(this.resurgence_Btn, { x: 1200, rotation: -720 }, 700, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.resurgence_Btn, { x: 1200, rotation: -720 }, 500, null, Laya.Handler.create(this, function () {
             this.resurgence_Btn.rotation = 0;
         }, []), 0);
         // 数字地板
-        Laya.Tween.to(this.digitalPlate, { x: -1200, rotation: -720 }, 700, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.digitalPlate, { x: -1200, rotation: -720 }, 500, null, Laya.Handler.create(this, function () {
             this.digitalPlate.rotation = 0;
-            this.resurgence_BtnClink();
+            this.roleResurgenceAni();
+            this.self.removeSelf();
         }, []), 0);
         // 背景
         Laya.Tween.to(this.background, { alpha: 0 }, 700, null, Laya.Handler.create(this, function () {
         }, []), 0);
         // 倒计时数字
-        Laya.Tween.to(this.digital, { scaleX: 1.3, scaleY: 1.3, alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
-            Laya.Tween.to(this.digital, { scaleX: 0, scaleY: 0 }, 100, null, Laya.Handler.create(this, function () {
-                this.roleResurgenceAni();
-                this.self.removeSelf();
-            }, []), 0);
+        Laya.Tween.to(this.digital, { scaleX: 0, scaleY: 0, alpha: 1 }, 500, null, Laya.Handler.create(this, function () {
         }, []), 0);
     }
 
@@ -111,56 +109,54 @@ export default class Resurgence extends Laya.Script {
     /**属性增加提示动画*/
     hintWordMove(): void {
         let delayed = 0;
-        let role_01 = this.selfScene['MainSceneControl'].role_01;
-        let role_02 = this.selfScene['MainSceneControl'].role_02;
+        let MainSceneControl = this.selfScene['MainSceneControl'];
+        let role_01 = MainSceneControl.role_01;
+        let role_02 = MainSceneControl.role_02;
         for (let i = 0; i < 4; i++) {
             Laya.timer.frameOnce(delayed, this, function () {
-                for (let j = 0; j < 2; j++) {
-                    let hintWord = Laya.Pool.getItemByCreateFun('candy', this.hintWord.create, this.hintWord) as Laya.Sprite;
-                    if (j === 0) {
-                        role_01.addChild(hintWord);
-                    } else {
-                        role_02.addChild(hintWord);
-                    }
-                    hintWord.pos(0, -100);
-                    let proPertyType: string;
-                    let numberValue: number;
-                    switch (i) {
-                        case 0:
-                            proPertyType = '攻击里';
-                            role_01['Role'].role_property.attackValue += 20;
-                            role_02['Role'].role_property.attackValue += 20;
-                            break;
-                        case 1:
-                            proPertyType = '生命';
-                            role_01['Role'].role_property.blood = 1000;
-                            role_02['Role'].role_property.blood = 1000;
-                            break;
-                        case 2:
-                            proPertyType = '公鸡速度';
-                            role_01['Role'].role_property.attackSpeed += 20;
-                            role_02['Role'].role_property.attackSpeed += 20;
-                            break;
-                        case 3:
-                            proPertyType = '防御力';
-                            role_01['Role'].role_property.defense += 20;
-                            role_02['Role'].role_property.defense += 20;
-                            break;
-                        default:
-                            break;
-                    }
-                    numberValue = 5;
-                    hintWord['HintWord'].initProperty(proPertyType, numberValue);
-                    // 播放完毕之后开始游戏
-                    if (i === 3 && j === 1) {
-                        this.selfScene['MainSceneControl'].gameOver = false;
-                        role_01['Role'].roleDeath = false;
-                        role_02['Role'].roleDeath = false;
-                    }
+                switch (i) {
+                    case 0:
+                        MainSceneControl.createHintWord(role_01, '攻击里', 20);
+                        MainSceneControl.createHintWord(role_02, '攻击里', 20);
+                        role_01['Role'].role_property.attackValue += 20;
+                        role_02['Role'].role_property.attackValue += 20;
+                        break;
+                    case 1:
+                        MainSceneControl.createHintWord(role_01, '生命', 1000);
+                        MainSceneControl.createHintWord(role_02, '生命', 1000);
+                        role_01['Role'].role_property.blood = 1000;
+                        role_02['Role'].role_property.blood = 1000;
+                        break;
+                    case 2:
+                        MainSceneControl.createHintWord(role_01, '公鸡速度', 20);
+                        MainSceneControl.createHintWord(role_02, '公鸡速度', 20);
+                        role_01['Role'].role_property.attackSpeed += 20;
+                        role_02['Role'].role_property.attackSpeed += 20;
+                        break;
+                    case 3:
+                        MainSceneControl.createHintWord(role_01, '防御力', 10);
+                        MainSceneControl.createHintWord(role_02, '防御力', 10);
+                        role_01['Role'].role_property.defense += 10;
+                        role_02['Role'].role_property.defense += 10;
+                        break;
+                    default:
+                        break;
+                }
+                // 播放完毕之后开始游戏
+                if (i === 3) {
+                    this.resurgenceNeedPro();
                 }
             })
             delayed += 25;
         }
+    }
+    /**复活所需改变的属性*/
+    resurgenceNeedPro(): void {
+        let MainSceneControl = this.selfScene['MainSceneControl'];
+        MainSceneControl.gameOver = false;
+        MainSceneControl.role_01['Role'].roleDeath = false;
+        MainSceneControl.role_02['Role'].roleDeath = false;
+        MainSceneControl.operating['OperationControl'].operateSwitch = true;
     }
 
     /**复活按钮点击事件*/
