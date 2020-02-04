@@ -186,5 +186,6 @@ export default class RewardWords extends Laya.Script {
     }
 
     onDisable(): void {
+        Laya.Pool.recover('rewardWords', this.self);
     }
 }
