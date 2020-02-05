@@ -5,13 +5,27 @@ export default class Settlement extends Laya.Script {
     private selfScene: Laya.Scene;
     /**黑色背景遮罩*/
     private background: Laya.Sprite;
-    /**重来按钮*/
-    private continue_But: Laya.Image;
+
+    /**内容，除了背景图*/
+    private content: Laya.Sprite;
+
+
+    /**操作按钮父节点，主要方便动画制作*/
+    private operation: Laya.Sprite;
+    /**重来*/
+    private again_But: Laya.Image;
     /**返回按钮*/
     private return_But: Laya.Image;
+    /**游戏结束logo*/
+    private GOLogo: Laya.Image;
 
     /**时间线*/
     private timeLine: number;
+
+    /**分数节点*/
+    private scoreLabel: Laya.FontClip;
+    /**分数节点的父节点*/
+    private score: Laya.Prefab;
 
     constructor() { super(); }
 
@@ -23,14 +37,108 @@ export default class Settlement extends Laya.Script {
     init(): void {
         this.self = this.owner as Laya.Sprite;
         this.selfScene = this.self.scene as Laya.Scene;
+
         this.background = this.self.getChildByName('background') as Laya.Sprite;
+        this.content = this.self.getChildByName('content') as Laya.Sprite;
+
         this.background.alpha = 0;
-        this.return_But = this.self.getChildByName('return_But') as Laya.Image;
-        this.return_But.x = -1200;
-        this.continue_But = this.self.getChildByName('continue_But') as Laya.Image;
-        this.continue_But.x = 1200;
-       
+        this.operation = this.content.getChildByName('operation') as Laya.Sprite;
+        this.operation.x = -1200;
+
+        this.return_But = this.operation.getChildByName('return_But') as Laya.Image;
+        this.again_But = this.operation.getChildByName('again_But') as Laya.Image;
+
+        this.GOLogo = this.content.getChildByName('GOLogo') as Laya.Image;
+        this.GOLogo.x = 1200;
+
+        this.scoreLabel = this.selfScene['MainSceneControl'].scoreLabel;
+        this.score = this.selfScene['MainSceneControl'].score;
         this.timeLine = 0;
+
+        this.adaptive();
+        this.appearAni();
+    }
+
+    /**自适应*/
+    adaptive(): void {
+        this.background.width = Laya.stage.width;
+        this.background.height = Laya.stage.height;
+        this.content.x = Laya.stage.width / 2;
+        this.content.y = Laya.stage.height / 2;
+    }
+
+    //*动画初始化*/ 
+    appearAni(): void {
+        // 复活按钮
+        Laya.Tween.to(this.operation, { x: 375, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
+            this.operation.rotation = 0;
+
+        }, []), 0);
+
+        // 游戏结束logo
+        Laya.Tween.to(this.GOLogo, { x: 375, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
+            this.GOLogo.rotation = 0;
+        }, []), 0);
+
+        // 背景
+        Laya.Tween.to(this.background, { alpha: 0.7 }, 500, null, Laya.Handler.create(this, function () {
+        }, []), 0);
+
+        // 得分节点的动画
+        this.scoreAni();
+    }
+
+    /**得分节点的动画*/
+    scoreAni(): void {
+        let score = Laya.Pool.getItemByCreateFun('score', this.score.create, this.score) as Laya.Sprite;
+        this.selfScene.addChild(score);
+        //复制位置
+        let originalScore = this.scoreLabel.parent as Laya.Sprite;
+        let scoreCard = originalScore.parent as Laya.Sprite;
+        let assembly = scoreCard.parent as Laya.Sprite;
+        let x = this.scoreLabel.x + originalScore.x + scoreCard.x + assembly.x;
+        let y = this.scoreLabel.y + originalScore.y + scoreCard.x + assembly.y;
+        // 复制分数
+        let Label = score.getChildByName('scoreLabel') as Laya.FontClip;
+        Label.value = this.scoreLabel.value;
+
+        score.pos(x, y);
+        this.self.addChild(score);
+        // 动画
+        Laya.Tween.to(score, { x: 375, rotation: 720 }, 700, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(score, { rotation: 0, y: this.content.y + 100 }, 700, null, Laya.Handler.create(this, function () {
+                this.btnClink();
+            }, []), 0);
+        }, []), 0);
+    }
+
+    /**按钮点击事件*/
+    btnClink(): void {
+        // 重来
+        this.again_But.on(Laya.Event.MOUSE_DOWN, this, this.down);
+        this.again_But.on(Laya.Event.MOUSE_MOVE, this, this.move);
+        this.again_But.on(Laya.Event.MOUSE_UP, this, this.up);
+        this.again_But.on(Laya.Event.MOUSE_OUT, this, this.out);
+        // 返回
+        this.return_But.on(Laya.Event.MOUSE_DOWN, this, this.down);
+        this.return_But.on(Laya.Event.MOUSE_MOVE, this, this.move);
+        this.return_But.on(Laya.Event.MOUSE_UP, this, this.up);
+        this.return_But.on(Laya.Event.MOUSE_OUT, this, this.out);
+    }
+    down(event): void {
+        event.currentTarget.scale(0.95, 0.95);
+    }
+    /**移动*/
+    move(event): void {
+        event.currentTarget.scale(1, 1);
+    }
+    /**抬起增加属性*/
+    up(event): void {
+        event.currentTarget.scale(1, 1);
+    }
+    /**出屏幕*/
+    out(event): void {
+        event.currentTarget.scale(1, 1);
     }
 
     onDisable(): void {

@@ -20,6 +20,9 @@ export default class Resurgence extends Laya.Script {
     /**属性添加数字*/
     private hintWord: Laya.Prefab;
 
+    /**结算*/
+    private settlement: Laya.Prefab;
+
     constructor() { super(); }
 
     onEnable(): void {
@@ -32,10 +35,13 @@ export default class Resurgence extends Laya.Script {
         this.selfScene = this.self.scene as Laya.Scene;
         this.background = this.self.getChildByName('background') as Laya.Sprite;
         this.background.alpha = 0;
+
         this.resurgence_Btn = this.self.getChildByName('resurgence_Btn') as Laya.Image;
         this.resurgence_Btn.x = -1200;
+
         this.digitalPlate = this.self.getChildByName('digitalPlate') as Laya.Image;
         this.digitalPlate.x = 1200;
+
         this.digital = this.self.getChildByName('digital') as Laya.FontClip;
         this.digital.scaleX = 0;
         this.digital.scaleY = 0;
@@ -46,6 +52,7 @@ export default class Resurgence extends Laya.Script {
         this.countdown = false;
 
         this.hintWord = this.selfScene['MainSceneControl'].hintWord;
+        this.settlement = this.selfScene['MainSceneControl'].settlement;
 
         Laya.timer.frameOnce(100, this, function () {
             this.appearAni();
@@ -66,12 +73,38 @@ export default class Resurgence extends Laya.Script {
         // 背景
         Laya.Tween.to(this.background, { alpha: 0.7 }, 500, null, Laya.Handler.create(this, function () {
         }, []), 0);
-        // 倒计时数字
-        Laya.Tween.to(this.digital, { scaleX: 1.3, scaleY: 1.3, alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
-            Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 100, null, Laya.Handler.create(this, function () {
-                this.countdown = true;
+
+        // 倒计时数字的倒计时动画
+        Laya.Tween.to(this.digital, { scaleX: 1.2, scaleY: 1.2, alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
+                this.digital.scale(1.2, 1.2);
+                this.digital.value = '4';
+
+                Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
+                    this.digital.scale(1.2, 1.2);
+                    this.digital.value = '3';
+
+                    Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
+                        this.digital.scale(1.2, 1.2);
+                        this.digital.value = '2';
+
+                        Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
+                            this.digital.scale(1.2, 1.2);
+                            this.digital.value = '1';
+
+                            Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
+                                this.digital.scale(1.2, 1.2);
+                                this.digital.value = '0';
+                                Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
+                                    this.countdown = true;
+                                }, []), 0);
+                            }, []), 0);
+                        }, []), 0);
+                    }, []), 0);
+                }, []), 0);
             }, []), 0);
         }, []), 0);
+
     }
 
     //*消失动画*/ 
@@ -183,20 +216,39 @@ export default class Resurgence extends Laya.Script {
         event.currentTarget.scale(1, 1);
     }
 
+    /**创建结算界面*/
+    createSettlement(): void {
+        let settlement = Laya.Pool.getItemByCreateFun('settlement', this.settlement.create, this.settlement) as Laya.Sprite;
+        this.selfScene.addChild(settlement);
+        settlement.pos(0, 0);
+    }
+
     onUpdate(): void {
-        // 倒计时
         if (this.countdown) {
-            this.timeLine++;
-            if (this.digital.value === '0') {
-                return;
-            }
-            if (this.timeLine % 60 == 0) {
-                this.digital.value = (Number(this.digital.value) - 1).toString();
-            }
+            this.createSettlement();
+            this.countdown = false;
+        } else {
+            return;
         }
+        // // 倒计时
+        // if (this.countdown) {
+        //     this.timeLine++;
+        //     if (this.digital.value === '0') {
+        //         return;
+        //     }
+        //     // 等于零的时候创建结算界面
+        //     if (this.timeLine % 60 == 0) {
+        //         this.digital.value = (Number(this.digital.value) - 1).toString();
+        //         if (this.digital.value === '0') {
+        //             this.createSettlement();
+        //             this.self.removeSelf();
+        //         }
+        //     }
+        // }
     }
 
     onDisable(): void {
+        Laya.Tween.clearAll(this);
         Laya.Pool.recover('resurgence', this.self);
     }
 }

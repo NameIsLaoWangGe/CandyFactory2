@@ -68,6 +68,12 @@ export default class MainSceneControl extends Laya.Script {
     /** @prop {name:resurgence , tips:"复活继续", type:Prefab}*/
     public resurgence: Laya.Prefab;
 
+    /** @prop {name:settlement , tips:"结算", type:Prefab}*/
+    public settlement: Laya.Prefab;
+
+    /** @prop {name:score , tips:"分数节点", type:Prefab}*/
+    public score: Laya.Prefab;
+
     /**两个主角的对话框*/
     private role_01speak: Laya.Sprite;
     private role_02speak: Laya.Sprite;
