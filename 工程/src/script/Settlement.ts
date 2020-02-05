@@ -24,7 +24,7 @@ export default class Settlement extends Laya.Script {
 
     /**分数节点*/
     private scoreLabel: Laya.FontClip;
-    /**分数节点的父节点*/
+    /**分数节点的父节点预制*/
     private score: Laya.Prefab;
 
     constructor() { super(); }
@@ -65,6 +65,10 @@ export default class Settlement extends Laya.Script {
         this.background.height = Laya.stage.height;
         this.content.x = Laya.stage.width / 2;
         this.content.y = Laya.stage.height / 2;
+        this.self.width = Laya.stage.width;
+        this.self.height = Laya.stage.height;
+        this.self.x = 0;
+        this.self.y = 0;
     }
 
     //*动画初始化*/ 
@@ -91,24 +95,24 @@ export default class Settlement extends Laya.Script {
     /**得分节点的动画*/
     scoreAni(): void {
         let score = Laya.Pool.getItemByCreateFun('score', this.score.create, this.score) as Laya.Sprite;
-        this.selfScene.addChild(score);
-        //复制位置
-        let originalScore = this.scoreLabel.parent as Laya.Sprite;
-        let scoreCard = originalScore.parent as Laya.Sprite;
-        let assembly = scoreCard.parent as Laya.Sprite;
-        let x = this.scoreLabel.x + originalScore.x + scoreCard.x + assembly.x;
-        let y = this.scoreLabel.y + originalScore.y + scoreCard.x + assembly.y;
+
+        // //复制位置
+        // let originalScore = this.scoreLabel.parent as Laya.Sprite;
+        // let scoreCard = originalScore.parent as Laya.Sprite;
+        // let assembly = scoreCard.parent as Laya.Sprite;
+        // let x = scoreCard.x + assembly.x;
+        // let y = scoreCard.y + assembly.y;
         // 复制分数
         let Label = score.getChildByName('scoreLabel') as Laya.FontClip;
         Label.value = this.scoreLabel.value;
 
-        score.pos(x, y);
         this.self.addChild(score);
-        // 动画
-        Laya.Tween.to(score, { x: 375, rotation: 720 }, 700, null, Laya.Handler.create(this, function () {
-            Laya.Tween.to(score, { rotation: 0, y: this.content.y + 100 }, 700, null, Laya.Handler.create(this, function () {
-                this.btnClink();
-            }, []), 0);
+        score.pos(Laya.stage.width / 2, 0);
+        score.pivotX = score.width / 2;
+        score.pivotY = score.height / 2;
+        // // 动画
+        Laya.Tween.to(score, { x: 375, y: this.content.y - 200, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
+            this.btnClink();
         }, []), 0);
     }
 

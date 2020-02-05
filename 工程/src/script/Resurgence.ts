@@ -97,6 +97,7 @@ export default class Resurgence extends Laya.Script {
                                 this.digital.value = '0';
                                 Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
                                     this.countdown = true;
+                                    this.cutSettlement();
                                 }, []), 0);
                             }, []), 0);
                         }, []), 0);
@@ -104,7 +105,22 @@ export default class Resurgence extends Laya.Script {
                 }, []), 0);
             }, []), 0);
         }, []), 0);
+    }
 
+    /**切换结算界面的动画*/
+    cutSettlement(): void {
+        this.self.pivotX = Laya.stage.width / 2;
+        this.self.pivotY = Laya.stage.height / 2;
+        this.self.x = this.self.pivotX;
+        this.self.y = this.self.pivotY;
+        // 移动
+        Laya.Tween.to(this.self, { x: 1200, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
+            this.self.removeSelf();
+        }, []), 0);
+        // 移动
+        Laya.Tween.to(this.background, { alpha: 0 }, 300, null, Laya.Handler.create(this, function () {
+            this.self.removeSelf();
+        }, []), 0);
     }
 
     //*消失动画*/ 

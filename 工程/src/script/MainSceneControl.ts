@@ -159,7 +159,7 @@ export default class MainSceneControl extends Laya.Script {
         // 初始化怪物属性，依次为血量，
         this.enemyProperty = {
             blood: 200,
-            attackValue: 500,
+            attackValue: 5000,
             attackSpeed: 1000,//暂时最小时间间隔为100
             defense: 10,
             moveSpeed: 10,
@@ -200,6 +200,7 @@ export default class MainSceneControl extends Laya.Script {
         this.createLaunchAni();
 
     }
+
     /**两个发射口的骨骼动画*/
     createLaunchAni(): void {
         //创建动画模板1
@@ -255,7 +256,7 @@ export default class MainSceneControl extends Laya.Script {
     candyMoveToDisplay(): void {
         let delayed = 10;
         let candyHeiht = 100;
-        let spacing = 2;
+        let spacing = 1.8;
         let startX_02 = Laya.stage.width / 2 - 42;
         let startX_01 = Laya.stage.width / 2 + 58;
         //最远的那个位置
@@ -616,6 +617,14 @@ export default class MainSceneControl extends Laya.Script {
         hintWord['HintWord'].initProperty(proPertyType, numberValue);
     }
 
+    /**重来，重置各种属性
+     * 所有糖果和怪物都炸掉
+     * 分数清零
+     * 然后主角复活
+    */
+    startAgain(): void {
+       
+    }
 
     /**属性刷新显示规则*/
     onUpdate(): void {

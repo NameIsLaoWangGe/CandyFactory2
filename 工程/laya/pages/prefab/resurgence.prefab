@@ -3,7 +3,7 @@
     "type":"Sprite",
     "selectedBox":166,
     "searchKey":"Sprite,resurgence",
-    "props":{"y":0,"x":0,"width":750,"presetID":1,"preset":"laya/pages/prefab/resurgence.prefab","name":"resurgence","isPresetRoot":true,"height":1334},
+    "props":{"y":0,"x":0,"width":750,"presetID":1,"preset":"laya/pages/prefab/resurgence.prefab","pivotY":0,"pivotX":0,"name":"resurgence","isPresetRoot":true,"height":1334},
     "nodeParent":-1,
     "maxID":177,
     "label":"resurgence",
