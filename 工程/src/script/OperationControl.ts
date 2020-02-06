@@ -282,18 +282,9 @@ export default class OperationButton extends Laya.Script {
         this.clicksNameArr = [];
         this.alreadyGroup = [];
 
-        //准备发射糖果
+        //发射糖果预备动画，监听这个动画完成后发射糖果
         this.selfScene['MainSceneControl'].candyLaunch_01.play('prepare', false);
         this.selfScene['MainSceneControl'].candyLaunch_02.play('prepare', false);
-    }
-
-    /**新建糖果，初始换属性*/
-    initCandy(): void {
-        // 第二步位移
-        Laya.timer.frameOnce(30, this, function () {
-            this.selfScene['MainSceneControl'].candyMoveToDisplay();
-            this.timeSchedule.value = 1;
-        });
     }
 
     /**计时器控制
@@ -452,7 +443,7 @@ export default class OperationButton extends Laya.Script {
         if (this.selfScene['MainSceneControl'].gameOver) {
             this.operateSwitch = false;
             return;
-        } 
+        }
         //计时器
         this.timerControl();
     }

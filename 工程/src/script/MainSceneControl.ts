@@ -626,20 +626,61 @@ export default class MainSceneControl extends Laya.Script {
     restart(): void {
         // 消除敌人
         let enemyDelayed = 0;
+        let len1 = this.enemyParent._children.length;
         for (let i = 0; i < this.enemyParent._children.length; i++) {
             Laya.timer.frameOnce(enemyDelayed, this, function () {
-                this.enemyParent._children[i].removeSelf();
+                this.enemyParent._children[i].alpha = 0;
+                let x = this.enemyParent._children[i].x;
+                let y = this.enemyParent._children[i].y;
                 if (this.enemyParent._children[i]['Enemy'] === 'infighting') {
-                    this.explodeAni(this.selfScene, this.self.x, this.self.y, 'infighting', 15, 100);
+                    this.explodeAni(this.owner, x, y, 'infighting', 15, 100);
                 } else {
-                    this.explodeAni(this.selfScene, this.self.x, this.self.y, 'range', 15, 100);
+                    this.explodeAni(this.owner, x, y, 'range', 15, 100);
+                }
+                if (i === len1 - 1) {
+                    this.enemyParent.removeChildren(0, len1 - 1);
                 }
             });
             enemyDelayed += 20;
         }
 
         // 消除糖果
+        // 先隐藏在一并删除，否则可能会有length变化造成错误
+        let candyDelayed = 0;
+        let len2 = this.candyParent._children.length;
+        for (let j = 0; j < this.candyParent._children.length; j++) {
+            Laya.timer.frameOnce(candyDelayed, this, function () {
+                this.candyParent._children[j].alpha = 0;
+                let name = this.candyParent._children[j].name.substring(0, 11);
+                let x = this.candyParent._children[j].x;
+                let y = this.candyParent._children[j].y;
+                this.explodeAni(this.owner, x, y, 'disappear', 8, 1000);
+                if (j === len2 - 1) {
+                    this.roleResurgenceAni();
+                    this.candyParent.removeChildren(0, len2 - 1);
+                    console.log(this.candyParent._children.length);
+                    this.candyLaunch_01.play('prepare', false);
+                    this.candyLaunch_02.play('prepare', false);
+                }
+            });
+            candyDelayed += 20;
+        }
+    }
+    /**主角复活重新开始*/
+    roleResurgenceAni(): void {
+        this.restartProperties();
+        Laya.Tween.to(this.role_01, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
+        }, []), 0);
+        Laya.Tween.to(this.role_02, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
+        }, []), 0);
+    }
 
+    /**开始或者重新开始所需改变的属性*/
+    restartProperties(): void {
+        this.gameOver = false;
+        this.role_01['Role'].roleDeath = false;
+        this.role_02['Role'].roleDeath = false;
+        this.operating['OperationControl'].operateSwitch = true;
     }
 
     /**属性刷新显示规则*/

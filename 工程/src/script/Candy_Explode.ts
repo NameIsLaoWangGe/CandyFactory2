@@ -110,7 +110,6 @@ export default class Candy extends Laya.Script {
         if (this.selfScene['MainSceneControl'].gameOver) {
             return;
         }
-        
         if (this.explodeTarget !== null) {
             // x,y分别相减是两点连线向量
             // 向量计算并且归一化，向量长度为1。

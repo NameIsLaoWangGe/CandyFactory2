@@ -125,7 +125,7 @@ export default class Resurgence extends Laya.Script {
     }
 
     /**复活消失动画*/
-    vanishInit(): void {
+    vanishAni(): void {
         // 复活按钮
         Laya.Tween.to(this.resurgence_Btn, { x: 1200, rotation: -720 }, 450, null, Laya.Handler.create(this, function () {
             this.resurgence_Btn.rotation = 0;
@@ -143,7 +143,7 @@ export default class Resurgence extends Laya.Script {
         this.digital.scale(0, 0);
     }
 
-    /**主角复活动画*/
+    /**主角复活重新开始*/
     roleResurgenceAni(): void {
         let role_01 = this.selfScene['MainSceneControl'].role_01;
         let role_02 = this.selfScene['MainSceneControl'].role_02;
@@ -193,19 +193,11 @@ export default class Resurgence extends Laya.Script {
                 }
                 // 播放完毕之后开始游戏
                 if (i === 3) {
-                    this.resurgenceNeedPro();
+                    this.selfScene['MainSceneControl'].restartProperties();
                 }
             })
             delayed += 25;
         }
-    }
-    /**复活所需改变的属性*/
-    resurgenceNeedPro(): void {
-        let MainSceneControl = this.selfScene['MainSceneControl'];
-        MainSceneControl.gameOver = false;
-        MainSceneControl.role_01['Role'].roleDeath = false;
-        MainSceneControl.role_02['Role'].roleDeath = false;
-        MainSceneControl.operating['OperationControl'].operateSwitch = true;
     }
 
     /**复活按钮点击事件*/
@@ -225,7 +217,7 @@ export default class Resurgence extends Laya.Script {
     /**抬起增加属性*/
     up(event): void {
         event.currentTarget.scale(1, 1);
-        this.vanishInit();
+        this.vanishAni();
     }
     /**出屏幕*/
     out(event): void {
@@ -262,6 +254,7 @@ export default class Resurgence extends Laya.Script {
 
     onDisable(): void {
         Laya.Tween.clearAll(this);
+        Laya.timer.clearAll(this);
         Laya.Pool.recover('resurgence', this.self);
     }
 }
