@@ -44,12 +44,14 @@ export default class Settlement extends Laya.Script {
         this.background.alpha = 0;
         this.operation = this.content.getChildByName('operation') as Laya.Sprite;
         this.operation.x = -1200;
+        this.operation.alpha = 0;
 
         this.return_But = this.operation.getChildByName('return_But') as Laya.Image;
         this.again_But = this.operation.getChildByName('again_But') as Laya.Image;
 
         this.GOLogo = this.content.getChildByName('GOLogo') as Laya.Image;
         this.GOLogo.x = 1200;
+        this.GOLogo.alpha = 0;
 
         this.scoreLabel = this.selfScene['MainSceneControl'].scoreLabel;
         this.score = this.selfScene['MainSceneControl'].score;
@@ -73,19 +75,19 @@ export default class Settlement extends Laya.Script {
 
     //*动画初始化*/ 
     appearAni(): void {
-        // 复活按钮
-        Laya.Tween.to(this.operation, { x: 375, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
+        // 操作按钮
+        Laya.Tween.to(this.operation, { x: 375, rotation: 720, alpha: 1 }, 500, null, Laya.Handler.create(this, function () {
             this.operation.rotation = 0;
 
         }, []), 0);
 
         // 游戏结束logo
-        Laya.Tween.to(this.GOLogo, { x: 375, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.GOLogo, { x: 375, rotation: 720, alpha: 1 }, 500, null, Laya.Handler.create(this, function () {
             this.GOLogo.rotation = 0;
         }, []), 0);
 
         // 背景
-        Laya.Tween.to(this.background, { alpha: 0.7 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.background, { alpha: 0.8 }, 500, null, Laya.Handler.create(this, function () {
         }, []), 0);
 
         // 得分节点的动画
@@ -96,12 +98,6 @@ export default class Settlement extends Laya.Script {
     scoreAni(): void {
         let score = Laya.Pool.getItemByCreateFun('score', this.score.create, this.score) as Laya.Sprite;
 
-        // //复制位置
-        // let originalScore = this.scoreLabel.parent as Laya.Sprite;
-        // let scoreCard = originalScore.parent as Laya.Sprite;
-        // let assembly = scoreCard.parent as Laya.Sprite;
-        // let x = scoreCard.x + assembly.x;
-        // let y = scoreCard.y + assembly.y;
         // 复制分数
         let Label = score.getChildByName('scoreLabel') as Laya.FontClip;
         Label.value = this.scoreLabel.value;
@@ -110,7 +106,7 @@ export default class Settlement extends Laya.Script {
         score.pos(Laya.stage.width / 2, 0);
         score.pivotX = score.width / 2;
         score.pivotY = score.height / 2;
-        // // 动画
+        // 动画
         Laya.Tween.to(score, { x: 375, y: this.content.y - 200, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
             this.btnClink();
         }, []), 0);

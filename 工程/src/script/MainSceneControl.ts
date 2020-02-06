@@ -606,6 +606,7 @@ export default class MainSceneControl extends Laya.Script {
     createResurgence(): void {
         let resurgence = Laya.Pool.getItemByCreateFun('resurgence', this.resurgence.create, this.resurgence) as Laya.Sprite;
         this.self.addChild(resurgence);
+        resurgence.zOrder = 1000;
         resurgence.pos(0, 0);
     }
 
@@ -622,8 +623,23 @@ export default class MainSceneControl extends Laya.Script {
      * 分数清零
      * 然后主角复活
     */
-    startAgain(): void {
-       
+    restart(): void {
+        // 消除敌人
+        let enemyDelayed = 0;
+        for (let i = 0; i < this.enemyParent._children.length; i++) {
+            Laya.timer.frameOnce(enemyDelayed, this, function () {
+                this.enemyParent._children[i].removeSelf();
+                if (this.enemyParent._children[i]['Enemy'] === 'infighting') {
+                    this.explodeAni(this.selfScene, this.self.x, this.self.y, 'infighting', 15, 100);
+                } else {
+                    this.explodeAni(this.selfScene, this.self.x, this.self.y, 'range', 15, 100);
+                }
+            });
+            enemyDelayed += 20;
+        }
+
+        // 消除糖果
+
     }
 
     /**属性刷新显示规则*/

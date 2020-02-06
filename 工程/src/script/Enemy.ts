@@ -313,7 +313,7 @@ export default class Enemy extends Laya.Script {
      * 如果当前攻击的主角死了，敌人会攻击另一个目标
     */
     replaceTarget(): void {
-        if (this.slefTagRole['Role'].role_property.blood <= 0) {
+        if (!this.slefTagRole['Role'].roleDeath) {
             // 更换目标
             if (this.slefTagRole.name === 'role_01') {
                 this.slefTagRole = this.mainSceneControl.role_02;

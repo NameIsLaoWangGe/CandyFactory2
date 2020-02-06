@@ -5,6 +5,8 @@ export default class Resurgence extends Laya.Script {
     private selfScene: Laya.Scene;
     /**黑色背景遮罩*/
     private background: Laya.Sprite;
+    /**内容，除了背景图*/
+    private content: Laya.Sprite;
     /**复活按钮*/
     private resurgence_Btn: Laya.Image;
     /**倒计时数字底板*/
@@ -32,17 +34,25 @@ export default class Resurgence extends Laya.Script {
     /**初始化*/
     init(): void {
         this.self = this.owner as Laya.Sprite;
+        this.self.pivotX = 0;
+        this.self.pivotY = 0;
+        this.self.x = this.self.pivotX;
+        this.self.y = this.self.pivotY;
+
         this.selfScene = this.self.scene as Laya.Scene;
         this.background = this.self.getChildByName('background') as Laya.Sprite;
         this.background.alpha = 0;
 
-        this.resurgence_Btn = this.self.getChildByName('resurgence_Btn') as Laya.Image;
+        this.content = this.self.getChildByName('content') as Laya.Sprite;
+        this.content.alpha = 0;
+
+        this.resurgence_Btn = this.content.getChildByName('resurgence_Btn') as Laya.Image;
         this.resurgence_Btn.x = -1200;
 
-        this.digitalPlate = this.self.getChildByName('digitalPlate') as Laya.Image;
+        this.digitalPlate = this.content.getChildByName('digitalPlate') as Laya.Image;
         this.digitalPlate.x = 1200;
 
-        this.digital = this.self.getChildByName('digital') as Laya.FontClip;
+        this.digital = this.content.getChildByName('digital') as Laya.FontClip;
         this.digital.scaleX = 0;
         this.digital.scaleY = 0;
         this.digital.alpha = 0;
@@ -57,10 +67,29 @@ export default class Resurgence extends Laya.Script {
         Laya.timer.frameOnce(100, this, function () {
             this.appearAni();
         })
+
+        this.adaptive();
+    }
+
+    /**自适应*/
+    adaptive(): void {
+        this.background.width = Laya.stage.width;
+        this.background.height = Laya.stage.height;
+        this.content.x = Laya.stage.width / 2;
+        this.content.y = Laya.stage.height / 2;
+        this.self.width = Laya.stage.width;
+        this.self.height = Laya.stage.height;
+        this.self.x = 0;
+        this.self.y = 0;
     }
 
     //*动画初始化*/ 
     appearAni(): void {
+
+        // 总体显现
+        Laya.Tween.to(this.content, { alpha: 1 }, 500, null, Laya.Handler.create(this, function () {
+        }, []), 0);
+
         // 复活按钮
         Laya.Tween.to(this.resurgence_Btn, { x: 375, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
             this.resurgence_Btn.rotation = 0;
@@ -76,71 +105,42 @@ export default class Resurgence extends Laya.Script {
 
         // 倒计时数字的倒计时动画
         Laya.Tween.to(this.digital, { scaleX: 1.2, scaleY: 1.2, alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
-            Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
-                this.digital.scale(1.2, 1.2);
-                this.digital.value = '4';
-
-                Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
-                    this.digital.scale(1.2, 1.2);
-                    this.digital.value = '3';
-
-                    Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
-                        this.digital.scale(1.2, 1.2);
-                        this.digital.value = '2';
-
-                        Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
-                            this.digital.scale(1.2, 1.2);
-                            this.digital.value = '1';
-
-                            Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
-                                this.digital.scale(1.2, 1.2);
-                                this.digital.value = '0';
-                                Laya.Tween.to(this.digital, { scaleX: 1, scaleY: 1 }, 1000, null, Laya.Handler.create(this, function () {
-                                    this.countdown = true;
-                                    this.cutSettlement();
-                                }, []), 0);
-                            }, []), 0);
-                        }, []), 0);
-                    }, []), 0);
-                }, []), 0);
-            }, []), 0);
+            this.countdown = true;
         }, []), 0);
     }
 
-    /**切换结算界面的动画*/
+    /**切换结算界面的消失动画*/
     cutSettlement(): void {
         this.self.pivotX = Laya.stage.width / 2;
         this.self.pivotY = Laya.stage.height / 2;
         this.self.x = this.self.pivotX;
         this.self.y = this.self.pivotY;
         // 移动
-        Laya.Tween.to(this.self, { x: 1200, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.self, { x: 1500, rotation: 720, scaleX: 0, scaleY: 0, alpha: 0 }, 500, null, Laya.Handler.create(this, function () {
             this.self.removeSelf();
         }, []), 0);
         // 移动
         Laya.Tween.to(this.background, { alpha: 0 }, 300, null, Laya.Handler.create(this, function () {
-            this.self.removeSelf();
         }, []), 0);
     }
 
-    //*消失动画*/ 
+    /**复活消失动画*/
     vanishInit(): void {
         // 复活按钮
-        Laya.Tween.to(this.resurgence_Btn, { x: 1200, rotation: -720 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.resurgence_Btn, { x: 1200, rotation: -720 }, 450, null, Laya.Handler.create(this, function () {
             this.resurgence_Btn.rotation = 0;
         }, []), 0);
         // 数字地板
-        Laya.Tween.to(this.digitalPlate, { x: -1200, rotation: -720 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.digitalPlate, { x: -1200, rotation: -720 }, 450, null, Laya.Handler.create(this, function () {
             this.digitalPlate.rotation = 0;
             this.roleResurgenceAni();
             this.self.removeSelf();
         }, []), 0);
         // 背景
-        Laya.Tween.to(this.background, { alpha: 0 }, 700, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.background, { alpha: 0 }, 450, null, Laya.Handler.create(this, function () {
         }, []), 0);
         // 倒计时数字
-        Laya.Tween.to(this.digital, { scaleX: 0, scaleY: 0, alpha: 1 }, 500, null, Laya.Handler.create(this, function () {
-        }, []), 0);
+        this.digital.scale(0, 0);
     }
 
     /**主角复活动画*/
@@ -240,27 +240,24 @@ export default class Resurgence extends Laya.Script {
     }
 
     onUpdate(): void {
+        // 倒计时
         if (this.countdown) {
-            this.createSettlement();
-            this.countdown = false;
-        } else {
-            return;
+            this.timeLine++;
+            // 等于零的时候创建结算界面
+            if (this.timeLine % 60 == 0) {
+                this.digital.value = (Number(this.digital.value) - 1).toString();
+                this.digital.scale(1, 1);
+                if (this.digital.value === '-1') {
+                    this.countdown = false;
+                    this.createSettlement();
+                    this.cutSettlement();
+                }
+            } else {
+                // 动画
+                this.digital.scaleX -= 0.003;
+                this.digital.scaleY -= 0.003;
+            }
         }
-        // // 倒计时
-        // if (this.countdown) {
-        //     this.timeLine++;
-        //     if (this.digital.value === '0') {
-        //         return;
-        //     }
-        //     // 等于零的时候创建结算界面
-        //     if (this.timeLine % 60 == 0) {
-        //         this.digital.value = (Number(this.digital.value) - 1).toString();
-        //         if (this.digital.value === '0') {
-        //             this.createSettlement();
-        //             this.self.removeSelf();
-        //         }
-        //     }
-        // }
     }
 
     onDisable(): void {

@@ -106,6 +106,11 @@ export default class Candy extends Laya.Script {
      * 爆炸后通过对应的糖果减少主角的属性
     */
     flyToRole(): void {
+        // 如果是暂停或者是游戏结束,则不会移动
+        if (this.selfScene['MainSceneControl'].gameOver) {
+            return;
+        }
+        
         if (this.explodeTarget !== null) {
             // x,y分别相减是两点连线向量
             // 向量计算并且归一化，向量长度为1。

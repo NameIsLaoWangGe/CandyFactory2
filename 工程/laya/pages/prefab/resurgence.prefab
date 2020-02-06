@@ -2,10 +2,11 @@
     "x":0,
     "type":"Sprite",
     "selectedBox":166,
+    "selecteID":177,
     "searchKey":"Sprite,resurgence",
     "props":{"y":0,"x":0,"width":750,"presetID":1,"preset":"laya/pages/prefab/resurgence.prefab","pivotY":0,"pivotX":0,"name":"resurgence","isPresetRoot":true,"height":1334},
     "nodeParent":-1,
-    "maxID":177,
+    "maxID":178,
     "label":"resurgence",
     "isOpen":true,
     "isDirectory":true,
@@ -29,45 +30,59 @@
         },
         {
             "x":15,
-            "type":"Image",
-            "searchKey":"Image,resurgence_Btn",
-            "props":{"y":557,"x":375,"width":277,"skin":"candy/ui/复活继续.png","presetID":3,"preset":"laya/pages/prefab/resurgence.prefab","pivotY":140,"pivotX":139,"name":"resurgence_Btn","height":280},
+            "type":"Sprite",
+            "searchKey":"Sprite,content",
+            "props":{"y":655,"x":375,"width":750,"presetID":8,"preset":"laya/pages/prefab/resurgence.prefab","pivotY":264,"pivotX":375,"name":"content","height":528},
             "nodeParent":166,
-            "label":"resurgence_Btn",
-            "isDirectory":false,
+            "label":"content",
+            "isOpen":true,
+            "isDirectory":true,
             "isAniNode":true,
-            "hasChild":false,
-            "compId":169,
+            "hasChild":true,
+            "compId":177,
             "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Image",
-            "searchKey":"Image,digitalPlate",
-            "props":{"y":791,"x":375,"width":391,"skin":"candy/ui/复活倒计时底.png","presetID":7,"preset":"laya/pages/prefab/resurgence.prefab","pivotY":46,"pivotX":196,"name":"digitalPlate","height":92},
-            "nodeParent":166,
-            "label":"digitalPlate",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":176,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"FontClip",
-            "searchKey":"FontClip,digital",
-            "props":{"y":791,"x":375,"width":510,"value":"5","skin":"candy/字体/分数：+01234567892.png","sheet":"+0123456789K","presetID":5,"preset":"laya/pages/prefab/resurgence.prefab","pivotY":26,"pivotX":255,"name":"digital","height":51,"align":"center"},
-            "nodeParent":166,
-            "label":"digital",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":174,
-            "child":[
-                ]
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,resurgence_Btn",
+                    "props":{"y":166,"x":375,"width":277,"skin":"candy/ui/复活继续.png","presetID":3,"preset":"laya/pages/prefab/resurgence.prefab","pivotY":140,"pivotX":139,"name":"resurgence_Btn","height":280},
+                    "nodeParent":177,
+                    "label":"resurgence_Btn",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":169,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,digitalPlate",
+                    "props":{"y":400,"x":375,"width":391,"skin":"candy/ui/复活倒计时底.png","presetID":7,"preset":"laya/pages/prefab/resurgence.prefab","pivotY":46,"pivotX":196,"name":"digitalPlate","height":92},
+                    "nodeParent":177,
+                    "label":"digitalPlate",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":176,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
+                    "type":"FontClip",
+                    "searchKey":"FontClip,digital",
+                    "props":{"y":400,"x":375,"width":510,"value":"5","skin":"candy/字体/分数：+01234567892.png","sheet":"+0123456789K","presetID":5,"preset":"laya/pages/prefab/resurgence.prefab","pivotY":26,"pivotX":255,"name":"digital","height":51,"align":"center"},
+                    "nodeParent":177,
+                    "label":"digital",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":174,
+                    "child":[
+                        ]
+                }]
         },
         {
             "x":15,
