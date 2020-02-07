@@ -113,18 +113,18 @@ export default class Settlement extends Laya.Script {
     }
 
     /**点击重来按钮的消失动画*/
-    vanishAni(): void {
+    cutTnterface(): void {
         this.self.pivotX = Laya.stage.width / 2;
         this.self.pivotY = Laya.stage.height / 2;
         this.self.x = this.self.pivotX;
         this.self.y = this.self.pivotY;
-        // 移动
-        Laya.Tween.to(this.self, { x: 1500, rotation: 720, scaleX: 0, scaleY: 0, alpha: 0 }, 500, null, Laya.Handler.create(this, function () {
+        // 整体移动
+        Laya.Tween.to(this.self, { x: 1500, rotation: 720, scaleX: 0, scaleY: 0, alpha: 0 }, 700, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
             this.self.removeSelf();
             this.selfScene['MainSceneControl'].restart();
         }, []), 0);
-        // 移动
-        Laya.Tween.to(this.background, { alpha: 0 }, 300, null, Laya.Handler.create(this, function () {
+        // 背景
+        Laya.Tween.to(this.background, { alpha: 0 }, 450, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
         }, []), 0);
     }
 
@@ -152,7 +152,7 @@ export default class Settlement extends Laya.Script {
     up(event): void {
         event.currentTarget.scale(1, 1);
         if (event.currentTarget.name === 'again_But') {
-            this.vanishAni();
+            this.cutTnterface();
         }
     }
     /**出屏幕*/

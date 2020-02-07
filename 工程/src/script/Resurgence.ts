@@ -112,38 +112,26 @@ export default class Resurgence extends Laya.Script {
         }, []), 0);
     }
 
-    /**切换结算界面的消失动画*/
-    cutSettlement(): void {
+    /**切换界面的消失动画
+     * @param type 切换到什么界面
+    */
+    cutTnterface(type): void {
         this.self.pivotX = Laya.stage.width / 2;
         this.self.pivotY = Laya.stage.height / 2;
         this.self.x = this.self.pivotX;
         this.self.y = this.self.pivotY;
         // 移动
-        Laya.Tween.to(this.self, { x: 1500, rotation: 720, scaleX: 0, scaleY: 0, alpha: 0 }, 500, null, Laya.Handler.create(this, function () {
-            this.self.removeSelf();
-        }, []), 0);
-        // 移动
-        Laya.Tween.to(this.background, { alpha: 0 }, 300, null, Laya.Handler.create(this, function () {
-        }, []), 0);
-    }
-
-    /**复活消失动画*/
-    vanishAni(): void {
-        // 复活按钮
-        Laya.Tween.to(this.resurgence_Btn, { x: 1200, rotation: -720 }, 450, null, Laya.Handler.create(this, function () {
-            this.resurgence_Btn.rotation = 0;
-        }, []), 0);
-        // 数字地板
-        Laya.Tween.to(this.digitalPlate, { x: -1200, rotation: -720 }, 450, null, Laya.Handler.create(this, function () {
-            this.digitalPlate.rotation = 0;
-            this.roleResurgenceAni();
-            this.self.removeSelf();
+        Laya.Tween.to(this.self, { x: 1500, rotation: 720, scaleX: 0, scaleY: 0, alpha: 0 }, 700, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+            if (type === 'main') {
+                this.roleResurgenceAni();
+                this.self.removeSelf();
+            } else {
+                this.self.removeSelf();
+            }
         }, []), 0);
         // 背景
-        Laya.Tween.to(this.background, { alpha: 0 }, 450, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.background, { alpha: 0 }, 450, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
         }, []), 0);
-        // 倒计时数字
-        this.digital.scale(0, 0);
     }
 
     /**主角复活重新开始*/
@@ -230,7 +218,7 @@ export default class Resurgence extends Laya.Script {
     up(event): void {
         event.currentTarget.scale(1, 1);
         this.countdown = false;//停止读秒
-        this.vanishAni();
+        this.cutTnterface('main');
     }
     /**出屏幕*/
     out(event): void {
@@ -239,9 +227,12 @@ export default class Resurgence extends Laya.Script {
 
     /**创建结算界面*/
     createSettlement(): void {
-        let settlement = Laya.Pool.getItemByCreateFun('settlement', this.settlement.create, this.settlement) as Laya.Sprite;
-        this.selfScene.addChild(settlement);
-        settlement.pos(0, 0);
+        // 稍加延时
+        Laya.timer.frameOnce(20, this, function () {
+            let settlement = Laya.Pool.getItemByCreateFun('settlement', this.settlement.create, this.settlement) as Laya.Sprite;
+            this.selfScene.addChild(settlement);
+            settlement.pos(0, 0);
+        })
     }
 
     onUpdate(): void {
@@ -255,7 +246,7 @@ export default class Resurgence extends Laya.Script {
                 if (this.digital.value === '-1') {
                     this.countdown = false;
                     this.createSettlement();
-                    this.cutSettlement();
+                    this.cutTnterface('settlement');
                 }
             } else {
                 // 动画

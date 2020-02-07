@@ -340,10 +340,6 @@ export default class MainSceneControl extends Laya.Script {
 
     /**替换不同糖果贴图*/
     replaceCandyMap(candy): void {
-        let url_01 = 'candy/糖果/黄色糖果.png';
-        let url_02 = 'candy/糖果/红色糖果.png';
-        let url_03 = 'candy/糖果/蓝色糖果.png';
-        let url_04 = 'candy/糖果/绿色糖果.png';
         let skeleton = (candy.getChildByName('skeleton') as Laya.Skeleton);
         // 创建消失变换特效
         this.explodeAni(this.owner, candy.x, candy.y, 'disappear', 8, 1000);
@@ -411,6 +407,14 @@ export default class MainSceneControl extends Laya.Script {
         this.candyCount++;
         explodeCandy.name = candyName.substring(0, 11);
         return explodeCandy;
+    }
+
+    /**对爆炸糖果进行排序*/
+    explodeCandyzOrder(): void {
+        let len = this.candy_ExplodeParent._children.length;
+        for (let i = 0; i < len; i++) {
+            this.candy_ExplodeParent._children[i].zOrder = Math.round(this.candy_ExplodeParent._children[i].y);
+        }
     }
 
     /**两个主角对话框的初始化*/
@@ -680,7 +684,7 @@ export default class MainSceneControl extends Laya.Script {
 
     /**重新开始所需改变的属性*/
     restartProperties(): void {
-        this.initSecne();
+        this.gameOver = false;
         this.role_01['Role'].initProperty();//属性重置
         this.role_02['Role'].initProperty();
         this.operating['OperationControl'].initProperty();
