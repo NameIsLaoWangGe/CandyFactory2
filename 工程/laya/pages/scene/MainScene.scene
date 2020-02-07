@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":113,
-    "selecteID":175,
+    "selectedBox":2,
+    "selecteID":85,
     "searchKey":"Scene",
     "props":{"x":0,"width":750,"sceneColor":"#000000","height":1334},
     "nodeParent":-1,
-    "maxID":179,
+    "maxID":180,
     "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
@@ -49,14 +49,13 @@
             "props":{"y":0,"x":0,"width":751,"var":"assembly","name":"assembly","height":1067},
             "nodeParent":2,
             "label":"assembly",
-            "isOpen":true,
+            "isOpen":false,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":18,
             "child":[
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,陈列台影子",
                     "props":{"y":387,"x":207,"skin":"candy/糖果机器/陈列台影子.png","name":"陈列台影子"},
@@ -70,7 +69,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,machine",
                     "props":{"y":-64,"x":10,"texture":"candy/糖果机器/糖果制造机.png","name":"machine","alpha":1},
@@ -83,7 +81,6 @@
                     "compId":142,
                     "child":[
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,suspend",
                             "props":{"y":139,"x":425,"texture":"candy/ui/暂停按钮.png","name":"suspend"},
@@ -113,7 +110,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_02",
                             "props":{"y":16,"x":195,"texture":"candy/糖果机器/管道2.png","name":"flow_02"},
@@ -127,7 +123,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_01",
                             "props":{"y":119,"x":67,"texture":"candy/糖果机器/管道1.png","name":"flow_01"},
@@ -141,7 +136,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"SkeletonPlayer",
                             "searchKey":"SkeletonPlayer,pipeline_02",
                             "props":{"y":122,"x":282,"url":"candy/糖果机器/pipeline_02.sk","name":"pipeline_02"},
@@ -155,7 +149,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_02高光",
                             "props":{"y":39,"x":274,"texture":"candy/糖果机器/管道2高光.png","name":"flow_02高光"},
@@ -169,7 +162,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"SkeletonPlayer",
                             "searchKey":"SkeletonPlayer,pipeline_01",
                             "props":{"y":189,"x":197,"url":"candy/糖果机器/pipeline_01.sk","name":"pipeline_01"},
@@ -183,7 +175,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_01高光",
                             "props":{"y":141,"x":211,"width":121,"texture":"candy/糖果机器/水管流水高光_01.png","rotation":1,"pivotY":17,"pivotX":61,"name":"flow_01高光","height":33},
@@ -198,7 +189,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite",
                             "props":{"y":157.5,"x":91,"texture":"candy/糖果机器/指示灯.png"},
@@ -213,7 +203,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,进度条装饰2",
                     "props":{"y":291,"x":267,"texture":"candy/ui/进度条装饰2.png","name":"进度条装饰2"},
@@ -227,7 +216,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,timer",
                     "props":{"y":331,"x":381,"width":204,"pivotY":55,"pivotX":102,"name":"timer","height":109},
@@ -240,7 +228,6 @@
                     "compId":92,
                     "child":[
                         {
-                            "x":45,
                             "type":"ProgressBar",
                             "searchKey":"ProgressBar,timeSchedule",
                             "props":{"y":12,"x":36,"value":1,"skin":"candy/ui/时间.png","sizeGrid":"0,13,0,13","name":"timeSchedule"},
@@ -255,7 +242,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,进度条高光",
                             "props":{"y":26,"x":41,"texture":"candy/ui/进度条白色高光.png","name":"进度条高光"},
@@ -269,7 +255,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,进度条装饰1",
                             "props":{"y":-19,"x":-15,"texture":"candy/ui/进度条装饰1.png","name":"进度条装饰1"},
@@ -284,7 +269,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,分数牌",
                     "props":{"y":123,"x":30,"width":192,"texture":"candy/ui/分数牌.png","name":"分数牌","height":340},
@@ -297,7 +281,6 @@
                     "compId":113,
                     "child":[
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,score",
                             "props":{"y":0,"x":0,"width":193,"name":"score","height":82},
@@ -310,7 +293,6 @@
                             "compId":175,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Sprite",
                                     "searchKey":"Sprite,分数字样",
                                     "props":{"y":30,"x":30,"texture":"candy/ui/分数：.png","scaleY":0.4,"scaleX":0.4,"name":"分数字样"},
@@ -324,7 +306,6 @@
                                         ]
                                 },
                                 {
-                                    "x":60,
                                     "type":"FontClip",
                                     "searchKey":"FontClip,scoreLabel",
                                     "props":{"y":34,"x":100.5,"value":"250","spaceX":-5,"skin":"candy/字体/分数：+01234567892.png","sheet":"+0123456789k","scaleY":0.4,"scaleX":0.4,"name":"scoreLabel","align":"left"},
@@ -340,7 +321,6 @@
                         }]
                 },
                 {
-                    "x":30,
                     "type":"SkeletonPlayer",
                     "searchKey":"SkeletonPlayer,candyLaunch_01",
                     "props":{"y":359,"x":225.5,"url":"candy/糖果机器/candyLaunch.sk","name":"candyLaunch_01"},
@@ -355,7 +335,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"SkeletonPlayer",
                     "searchKey":"SkeletonPlayer,candyLaunch_02",
                     "props":{"y":358,"x":536,"url":"candy/糖果机器/candyLaunch.sk","name":"candyLaunch_02"},
@@ -370,7 +349,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,链接线",
                     "props":{"y":839,"x":260,"texture":"candy/ui/操作位置链接线.png","name":"链接线","alpha":1},
@@ -384,7 +362,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,按钮底",
                     "props":{"y":1020,"x":135,"texture":"candy/操作按钮/底座.png","name":"按钮底","alpha":1},
@@ -399,7 +376,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Script",
                     "switchAble":true,
                     "source":"src/script/Assembly.ts",
@@ -416,7 +392,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,longPointer",
                     "props":{"y":304,"x":641,"width":5,"texture":"candy/糖果机器/长指针.png","pivotY":15,"pivotX":2.5,"name":"longPointer","height":18},
@@ -431,7 +406,6 @@
                         ]
                 },
                 {
-                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,陈列台",
                     "props":{"y":384,"x":383,"width":273,"skin":"candy/糖果机器/糖果陈列台.png","pivotX":137,"name":"陈列台","height":552},
@@ -868,7 +842,7 @@
             "source":"src/script/MainSceneControl.ts",
             "searchKey":"Script,MainSceneControl",
             "removeAble":true,
-            "props":{"y":2,"x":0,"timer":"@node:92","suspend":"@node:81","speakBoxParent":"@node:53","speakBox":"@Prefab:prefab/speakBox.prefab","settlement":"@Prefab:prefab/settlement.prefab","scoreLabel":"@node:116","score":"@Prefab:prefab/score.prefab","role_02":"@node:24","role_01":"@node:25","roleParent":"@node:12","roleBullet":"@Prefab:prefab/roleBullet.prefab","rewardWords":"@Prefab:prefab/rewardWords.prefab","resurgence":"@Prefab:prefab/resurgence.prefab","operating":"@node:62","machine":"@node:109","induction":"@node:15","hintWord":"@Prefab:prefab/hintWord .prefab","friend":"@node:42","explode":"@Prefab:prefab/explode.prefab","enemy_Infighting":"@Prefab:prefab/enemy_Infighting.prefab","enemy_Fighting":"@Prefab:prefab/enemy_Fighting.prefab","enemyParent":"@node:23","enemyBullet":"@Prefab:prefab/enemyBullet.prefab","enemy":"@Prefab:prefab/enemy.prefab","displays":"@node:139","candy_Explode":"@Prefab:prefab/candy_Explode.prefab","candyParent_Move":"@node:85","candyParent":"@node:13","candy":"@Prefab:prefab/candy.prefab","bulletParent":"@node:59","bullet":"@Prefab:prefab/bullet.prefab","bucketParent":"@node:12","bucket":"@Prefab:prefab/bucket.prefab","background":"@node:4","assembly":"@node:18"},
+            "props":{"y":2,"x":0,"timer":"@node:92","suspend":"@node:81","speakBoxParent":"@node:53","speakBox":"@Prefab:prefab/speakBox.prefab","settlement":"@Prefab:prefab/settlement.prefab","scoreLabel":"@node:116","score":"@Prefab:prefab/score.prefab","role_02":"@node:24","role_01":"@node:25","roleParent":"@node:12","roleBullet":"@Prefab:prefab/roleBullet.prefab","rewardWords":"@Prefab:prefab/rewardWords.prefab","resurgence":"@Prefab:prefab/resurgence.prefab","operating":"@node:62","machine":"@node:109","induction":"@node:15","hintWord":"@Prefab:prefab/hintWord .prefab","friend":"@node:42","explode":"@Prefab:prefab/explode.prefab","enemy_Infighting":"@Prefab:prefab/enemy_Infighting.prefab","enemy_Fighting":"@Prefab:prefab/enemy_Fighting.prefab","enemyParent":"@node:23","enemyBullet":"@Prefab:prefab/enemyBullet.prefab","enemy":"@Prefab:prefab/enemy.prefab","displays":"@node:139","candy_ExplodeParent":"@node:85","candy_Explode":"@Prefab:prefab/candy_Explode.prefab","candyParent_Move":"@node:85","candyParent":"@node:13","candy":"@Prefab:prefab/candy.prefab","bulletParent":"@node:59","bullet":"@Prefab:prefab/bullet.prefab","bucketParent":"@node:12","bucket":"@Prefab:prefab/bucket.prefab","background":"@node:4","assembly":"@node:18"},
             "nodeParent":2,
             "label":"MainSceneControl",
             "isDirectory":false,

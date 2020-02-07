@@ -58,6 +58,8 @@ export default class Candy extends Laya.Script {
         this.selfScene['MainSceneControl'].role_02['Role'].role_Warning = true;
         this.self['Candy_Explode'] = this;
 
+        this.skeleton = this.self.getChildByName('skeleton') as Laya.Skeleton;
+
         this.createBoneAni();
     }
 
@@ -68,7 +70,6 @@ export default class Candy extends Laya.Script {
         this.templet.on(Laya.Event.COMPLETE, this, this.parseComplete);
         this.templet.on(Laya.Event.ERROR, this, this.onError);
         this.templet.loadAni("candy/糖果/candyCompilations.sk");
-        (this.self.getChildByName('pic') as Laya.Image).alpha = 0;
     }
 
     onError(): void {
@@ -78,8 +79,6 @@ export default class Candy extends Laya.Script {
     parseComplete(): void {
         // 播放敌人动画
         var skeleton: Laya.Skeleton;
-        this.skeleton = this.templet.buildArmature(0);//模板0
-        this.self.addChild(this.skeleton);
         switch (this.self.name.substring(0, 11)) {
             case 'yellowCandy':
                 this.skeleton.play('yellow_explode', true);
@@ -96,8 +95,6 @@ export default class Candy extends Laya.Script {
             default:
                 break;
         }
-        this.skeleton.x = this.self.width / 2 + 3;
-        this.skeleton.y = this.self.height / 2;
         this.skeleton.playbackRate(1);
     }
 
@@ -203,8 +200,6 @@ export default class Candy extends Laya.Script {
             this.self.removeSelf();
             this.selfScene['MainSceneControl'].explodeAni(this.self.x, this.self.y, this.self.name.substring(0, 11));
         }
-        // 暂时做个旋转效果
-        this.pic.rotation += 25;
         // 飞到主角身上
         this.flyToRole();
     }

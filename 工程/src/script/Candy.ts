@@ -56,6 +56,8 @@ export default class Candy extends Laya.Script {
         this.selected = false;
         this.group = null;
 
+        this.skeleton = this.self.getChildByName('skeleton') as Laya.Skeleton;
+
         this.self['Candy'] = this;
         this.createBoneAni();
     }
@@ -67,18 +69,14 @@ export default class Candy extends Laya.Script {
         this.templet.on(Laya.Event.COMPLETE, this, this.parseComplete);
         this.templet.on(Laya.Event.ERROR, this, this.onError);
         this.templet.loadAni("candy/糖果/candyCompilations.sk");
-        (this.self.getChildByName('pic') as Laya.Image).alpha = 0;
     }
 
     onError(): void {
-        console.log('骨骼动画加载错误');
+        console.log('骨骼动画加载错误！');
     }
 
     parseComplete(): void {
         // 播放敌人动画
-        var skeleton: Laya.Skeleton;
-        this.skeleton = this.templet.buildArmature(0);//模板0
-        this.self.addChild(this.skeleton);
         switch (this.self.name.substring(0, 11)) {
             case 'yellowCandy':
                 this.skeleton.play('yellow_static', true);

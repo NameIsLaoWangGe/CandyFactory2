@@ -1,4 +1,4 @@
-// v1.1.0
+// v1.1.1
 // publish 2.x 也是用这个文件，需要做兼容
 let isPublish2 = process.argv[2].includes("publish_xmgame.js") && process.argv[3].includes("--evn=publish2");
 // 获取Node插件和工作路径
@@ -19,6 +19,7 @@ const fs = require("fs");
 const path = require("path");
 const childProcess = require("child_process");
 const del = require(ideModuleDir + "del");
+const revCollector = require(ideModuleDir + 'gulp-rev-collector');
 let commandSuffix = ".cmd";
 
 let prevTasks = ["packfile"];
@@ -34,6 +35,7 @@ let
 	projDir; // 小米快游戏工程目录
 let IDEXMProjPath,
 	isUpdateIDEXMProj = false;
+let versionCon; // 版本管理version.json
 // 创建小米项目前，拷贝小米引擎库、修改index.js
 // 应该在publish中的，但是为了方便发布2.0及IDE 1.x，放在这里修改
 gulp.task("preCreate_XM", prevTasks, function() {
@@ -405,13 +407,19 @@ gulp.task("modifyFile_XM", ["deleteSignFile_XM"], function() {
 	manifestJson.icon = `/layaicon/${path.basename(config.xmInfo.icon)}`;
 	fs.writeFileSync(manifestPath, JSON.stringify(manifestJson, null, 4), "utf8");
 
+	if (config.version) {
+		let versionPath = projDir + "/version.json";
+		versionCon = fs.readFileSync(versionPath, "utf8");
+		versionCon = JSON.parse(versionCon);
+	}
+	let indexJsStr = (versionCon && versionCon["index.js"]) ? versionCon["index.js"] :  "index.js";
 	// 修改main.js文件
 	let content = 'require("./qg-adapter.js");\nrequire("./libs/laya.xmmini.js");\nrequire("./index.js");';
 	let mainJsPath = path.join(projDir, "main.js");
 	fs.writeFileSync(mainJsPath, content, "utf8");
 
 	// 小米项目，修改index.js
-	let filePath = path.join(projDir, "index.js");
+	let filePath = path.join(projDir, indexJsStr);
 	if (!fs.existsSync(filePath)) {
 		return;
 	}
@@ -420,8 +428,23 @@ gulp.task("modifyFile_XM", ["deleteSignFile_XM"], function() {
 	fs.writeFileSync(filePath, fileContent, "utf8");
 })
 
+gulp.task("version_XM", ["modifyFile_XM"], function () {
+	// 如果不是小米快游戏
+	if (platform !== "xmgame") {
+		return;
+	}
+	if (config.version) {
+		let versionPath = projDir + "/version.json";
+		let mainJSPath = projDir + "/main.js";
+		let srcList = [versionPath, mainJSPath];
+		return gulp.src(srcList)
+			.pipe(revCollector())
+			.pipe(gulp.dest(projDir));
+	}
+});
+
 // 打包rpk
-gulp.task("buildRPK_XM", ["modifyFile_XM"], function() {
+gulp.task("buildRPK_XM", ["version_XM"], function() {
 	// 如果不是小米快游戏
 	if (platform !== "xmgame") {
 		return;

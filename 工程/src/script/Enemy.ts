@@ -69,6 +69,7 @@ export default class Enemy extends Laya.Script {
     /**初始化*/
     initProperty(): void {
         this.self = this.owner as Laya.Sprite;
+        this.self.alpha = 1;
         this.selfScene = this.owner.scene as Laya.Scene;
         this.mainSceneControl = this.selfScene.getComponent(MainSceneControl);//场景脚本组件
         this.roleParent = this.mainSceneControl.roleParent;

@@ -45,7 +45,6 @@ export default class Role extends Laya.Script {
     onEnable(): void {
         this.initProperty();
         this.bucketClink();
-        this.rolePropertySet();
         this.createBoneAni();
     }
 
@@ -66,6 +65,7 @@ export default class Role extends Laya.Script {
         this.scoreLabel = this.selfScene['MainSceneControl'].scoreLabel;
         this.nowTime = Date.now();
         this.roleDeath = false;
+        this.rolePropertySet();
     }
 
     /**创建骨骼动画皮肤*/
@@ -90,6 +90,7 @@ export default class Role extends Laya.Script {
         this.skeletonListen();
         this.self.addChild(this.skeleton);
         this.skeleton.play('speak', true);
+        this.skeleton.name = 'skeleton';
         if (this.self.name === 'role_01') {
             this.skeleton.x = 60;
             this.skeleton.y = 72;
@@ -263,6 +264,7 @@ export default class Role extends Laya.Script {
         }
         // 血量低于0则死亡,并且弹出复活界面
         if (this.role_property.blood <= 0) {
+            this.role_property.blood = 0;//保证主角的血量显示不小于0;
             if (this.self.name === 'role_01') {
                 this.roleDeath = true;
                 this.self.alpha = 0;

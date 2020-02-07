@@ -7,7 +7,7 @@ export default class MainSceneControl extends Laya.Script {
     public candyParent: Laya.Sprite;
     /** @prop {name:candy_Explode, tips:"糖果", type:Prefab}*/
     public candy_Explode: Laya.Prefab;
-    /** @prop {name:candyParent_Move, tips:"克隆糖果用来移动的父节点", type:Node}*/
+    /** @prop {name:candy_ExplodeParent, tips:"爆炸糖果的父节点", type:Node}*/
     public candy_ExplodeParent: Laya.Sprite;
     /** @prop {name:explode, tips:"制作爆炸动画的预制体", type:Prefab}*/
     public explode: Laya.Prefab;
@@ -17,8 +17,6 @@ export default class MainSceneControl extends Laya.Script {
 
     /** @prop {name:enemy, tips:"敌人", type:Prefab}*/
     public enemy: Laya.Prefab;
-    /** @prop {name:enemy_Infighting, tips:"近战敌人", type:Prefab}*/
-    public enemy_Infighting: Laya.Prefab;
     /** @prop {name:enemyParent, tips:"敌人父节点", type:Node}*/
     public enemyParent: Laya.Sprite;
     /** @prop {name:enemyBullet, tips:"敌人子弹预制体", type:Prefab}*/
@@ -346,21 +344,21 @@ export default class MainSceneControl extends Laya.Script {
         let url_02 = 'candy/糖果/红色糖果.png';
         let url_03 = 'candy/糖果/蓝色糖果.png';
         let url_04 = 'candy/糖果/绿色糖果.png';
-        let pic = (candy.getChildByName('pic') as Laya.Image);
+        let skeleton = (candy.getChildByName('skeleton') as Laya.Skeleton);
         // 创建消失变换特效
         this.explodeAni(this.owner, candy.x, candy.y, 'disappear', 8, 1000);
-        switch (candy.name.substring(0, 11)) {
+        switch (this.self.name.substring(0, 11)) {
             case 'yellowCandy':
-                pic.skin = url_01;
+                skeleton.play('yellow_static', true);
                 break;
             case 'redCandy___':
-                pic.skin = url_02;
+                skeleton.play('red_static', true);
                 break;
             case 'blueCandy__':
-                pic.skin = url_03;
+                skeleton.play('blue_static', true);
                 break;
             case 'greenCandy_':
-                pic.skin = url_04;
+                skeleton.play('green_static', true);
                 break;
             default:
                 break;
@@ -374,27 +372,19 @@ export default class MainSceneControl extends Laya.Script {
         // 随机创建一种颜色糖果
         // 糖果的名称结构是11位字符串加上索引值，方便查找，并且这样使他们的名称唯一
         let randomNum = Math.floor(Math.random() * 4);
-        let url_01 = 'candy/糖果/黄色糖果球.png';
-        let url_02 = 'candy/糖果/红色糖果球.png';
-        let url_03 = 'candy/糖果/蓝色糖果球.png';
-        let url_04 = 'candy/糖果/绿色糖果球.png';
         let pic = (candy.getChildByName('pic') as Laya.Image);
         switch (randomNum) {
             case 0:
                 candy.name = 'yellowCandy' + this.candyCount;
-                pic.skin = url_01;
                 break;
             case 1:
                 candy.name = 'redCandy___' + this.candyCount;
-                pic.skin = url_02;
                 break;
             case 2:
                 candy.name = 'blueCandy__' + this.candyCount;
-                pic.skin = url_03;
                 break;
             case 3:
                 candy.name = 'greenCandy_' + this.candyCount;
-                pic.skin = url_04;
                 break;
             default:
                 break;
@@ -415,30 +405,8 @@ export default class MainSceneControl extends Laya.Script {
     createExplodeCandy(candyName: string): Laya.Sprite {
         // 通过对象池创建
         let explodeCandy = Laya.Pool.getItemByCreateFun('candy_Explode', this.candy_Explode.create, this.candy_Explode) as Laya.Sprite;
-        // 随机创建一种颜色糖果
-        // 糖果的名称结构是11位字符串加上索引值，方便查找，并且这样使他们的名称唯一
-        let url_01 = 'candy/糖果/黄色糖果.png';
-        let url_02 = 'candy/糖果/红色糖果.png';
-        let url_03 = 'candy/糖果/蓝色糖果.png';
-        let url_04 = 'candy/糖果/绿色糖果.png';
-        let pic = (explodeCandy.getChildByName('pic') as Laya.Image);
-        switch (candyName.substring(0, 11)) {
-            case 'yellowCandy':
-                pic.skin = url_01;
-                break;
-            case 'redCandy___':
-                pic.skin = url_02;
-                break;
-            case 'blueCandy__':
-                pic.skin = url_03;
-            case 'greenCandy_':
-                pic.skin = url_04;
-                break;
-            default:
-                break;
-        }
         explodeCandy.pos(Laya.stage.width / 2, -100);
-        this.enemyParent.addChild(explodeCandy);
+        this.candy_ExplodeParent.addChild(explodeCandy);
         explodeCandy.rotation = 0;
         this.candyCount++;
         explodeCandy.name = candyName.substring(0, 11);
@@ -625,6 +593,7 @@ export default class MainSceneControl extends Laya.Script {
     */
     restart(): void {
         // 消除敌人
+        // 先隐藏在一并删除，否则可能会有length变化造成错误
         let enemyDelayed = 0;
         let len1 = this.enemyParent._children.length;
         for (let i = 0; i < this.enemyParent._children.length; i++) {
@@ -644,44 +613,79 @@ export default class MainSceneControl extends Laya.Script {
             enemyDelayed += 20;
         }
 
-        // 消除糖果
+        // 消除爆炸糖果
         // 先隐藏在一并删除，否则可能会有length变化造成错误
-        let candyDelayed = 0;
-        let len2 = this.candyParent._children.length;
-        for (let j = 0; j < this.candyParent._children.length; j++) {
-            Laya.timer.frameOnce(candyDelayed, this, function () {
-                this.candyParent._children[j].alpha = 0;
-                let name = this.candyParent._children[j].name.substring(0, 11);
-                let x = this.candyParent._children[j].x;
-                let y = this.candyParent._children[j].y;
+        let candyExpoleDelayed = 0;
+        let len2 = this.candy_ExplodeParent._children.length;
+        for (let j = 0; j < len2; j++) {
+            Laya.timer.frameOnce(candyExpoleDelayed, this, function () {
+                this.candy_ExplodeParent._children[j].alpha = 0;
+                let name = this.candy_ExplodeParent._children[j].name.substring(0, 11);
+                let x = this.candy_ExplodeParent._children[j].x;
+                let y = this.candy_ExplodeParent._children[j].y;
                 this.explodeAni(this.owner, x, y, 'disappear', 8, 1000);
                 if (j === len2 - 1) {
+                    this.candy_ExplodeParent.removeChildren(0, len2 - 1);
+                }
+            });
+            candyExpoleDelayed += 20;
+        }
+
+        // 消除糖果,如果此时没有糖果直接初始化
+        // 先隐藏在一并删除，否则可能会有length变化造成错误
+        let candyDelayed = 0;
+        let len3 = this.candyParent._children.length;
+        if (len3 === 0) {
+            this.roleResurgenceAni();
+            this.candyParent.removeChildren(0, len3 - 1);
+            this.candyLaunch_01.play('prepare', false);
+            this.candyLaunch_02.play('prepare', false);
+            return;
+        }
+
+        for (let k = 0; k < len3; k++) {
+            Laya.timer.frameOnce(candyDelayed, this, function () {
+                this.candyParent._children[k].alpha = 0;
+                let name = this.candyParent._children[k].name.substring(0, 11);
+                let x = this.candyParent._children[k].x;
+                let y = this.candyParent._children[k].y;
+                this.explodeAni(this.owner, x, y, 'disappear', 8, 1000);
+                if (k === len3 - 1) {
                     this.roleResurgenceAni();
-                    this.candyParent.removeChildren(0, len2 - 1);
-                    console.log(this.candyParent._children.length);
+                    this.candyParent.removeChildren(0, len3 - 1);
                     this.candyLaunch_01.play('prepare', false);
                     this.candyLaunch_02.play('prepare', false);
                 }
             });
             candyDelayed += 20;
         }
+
     }
     /**主角复活重新开始*/
     roleResurgenceAni(): void {
-        this.restartProperties();
+        let skeleton1 = this.role_01.getChildByName('skeleton') as Laya.Skeleton;
+        skeleton1.play('speak', true);
+        this.role_01['Role'].role_Warning = false;
         Laya.Tween.to(this.role_01, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
+            this.restartProperties();
         }, []), 0);
+
+        let skeleton2 = this.role_02.getChildByName('skeleton') as Laya.Skeleton;
+        skeleton2.play('speak', true);
+        this.role_02['Role'].role_Warning = false;
         Laya.Tween.to(this.role_02, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
         }, []), 0);
     }
 
-    /**开始或者重新开始所需改变的属性*/
+
+    /**重新开始所需改变的属性*/
     restartProperties(): void {
-        this.gameOver = false;
-        this.role_01['Role'].roleDeath = false;
-        this.role_02['Role'].roleDeath = false;
-        this.operating['OperationControl'].operateSwitch = true;
+        this.initSecne();
+        this.role_01['Role'].initProperty();//属性重置
+        this.role_02['Role'].initProperty();
+        this.operating['OperationControl'].initProperty();
     }
+
 
     /**属性刷新显示规则*/
     onUpdate(): void {

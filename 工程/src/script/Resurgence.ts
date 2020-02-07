@@ -79,11 +79,14 @@ export default class Resurgence extends Laya.Script {
         this.content.y = Laya.stage.height / 2;
         this.self.width = Laya.stage.width;
         this.self.height = Laya.stage.height;
+        this.self.alpha = 1;
+        this.self.scale(1, 1);
+        this.self.rotation = 0;
         this.self.x = 0;
         this.self.y = 0;
     }
 
-    //*动画初始化*/ 
+    /**动画初始化*/
     appearAni(): void {
 
         // 总体显现
@@ -193,11 +196,20 @@ export default class Resurgence extends Laya.Script {
                 }
                 // 播放完毕之后开始游戏
                 if (i === 3) {
-                    this.selfScene['MainSceneControl'].restartProperties();
+                    this.resurgenceProperties();
                 }
             })
             delayed += 25;
         }
+    }
+
+    /**开始或者重新开始所需改变的属性*/
+    resurgenceProperties(): void {
+        let MainSceneControl = this.selfScene['MainSceneControl'];
+        MainSceneControl.gameOver = false;
+        MainSceneControl.role_01['Role'].roleDeath = false;
+        MainSceneControl.role_02['Role'].roleDeath = false;
+        MainSceneControl.operating['OperationControl'].operateSwitch = true;
     }
 
     /**复活按钮点击事件*/
@@ -217,6 +229,7 @@ export default class Resurgence extends Laya.Script {
     /**抬起增加属性*/
     up(event): void {
         event.currentTarget.scale(1, 1);
+        this.countdown = false;//停止读秒
         this.vanishAni();
     }
     /**出屏幕*/

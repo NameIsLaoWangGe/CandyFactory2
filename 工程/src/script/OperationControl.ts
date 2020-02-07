@@ -66,6 +66,8 @@ export default class OperationButton extends Laya.Script {
         this.rewardWords = this.selfScene['MainSceneControl'].rewardWords;
 
         this.timeSchedule = this.timer.getChildByName('timeSchedule') as Laya.ProgressBar;
+        this.timeSchedule.value = 1;
+        // this.operateSwitch = true;
         this.self['OperationControl'] = this;
     }
 

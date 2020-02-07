@@ -1,4 +1,4 @@
-// v1.0.1
+// v1.0.2
 // publish 2.x 也是用这个文件，需要做兼容
 let isPublish2 = process.argv[2].includes("publish_oppogame.js") && process.argv[3].includes("--evn=publish2");
 // 获取Node插件和工作路径
@@ -19,6 +19,7 @@ const fs = require("fs");
 const path = require("path");
 const childProcess = require("child_process");
 const del = require(ideModuleDir + "del");
+const revCollector = require(ideModuleDir + 'gulp-rev-collector');
 let commandSuffix = ".cmd";
 
 let prevTasks = ["packfile"];
@@ -33,6 +34,7 @@ let
     toolkitPath,
     tempReleaseDir, // OPPO临时拷贝目录
 	projDir; // OPPO快游戏工程目录
+let versionCon; // 版本管理version.json
 // 创建OPPO项目前，拷贝OPPO引擎库、修改index.js
 // 应该在publish中的，但是为了方便发布2.0及IDE 1.x，放在这里修改
 gulp.task("preCreate_OPPO", prevTasks, function() {
@@ -268,6 +270,12 @@ gulp.task("modifyFile_OPPO", ["deleteSignFile_OPPO"], function() {
 	}
 	fs.writeFileSync(manifestPath, JSON.stringify(manifestJson, null, 4), "utf8");
 
+	if (config.version) {
+		let versionPath = projDir + "/version.json";
+		versionCon = fs.readFileSync(versionPath, "utf8");
+		versionCon = JSON.parse(versionCon);
+	}
+	let indexJsStr = (versionCon && versionCon["index.js"]) ? versionCon["index.js"] :  "index.js";
 	// OPPO项目，修改main.js
 	let filePath = path.join(projDir, "main.js");
 	// 这个地方，1.x IDE和2.x IDE 不一致
@@ -276,7 +284,7 @@ require("./libs/laya.quickgamemini.js");\nrequire("index.js");`;
 	fs.writeFileSync(filePath, fileContent, "utf8");
 
 	// OPPO项目，修改index.js
-	let indexFilePath = path.join(projDir, "index.js");
+	let indexFilePath = path.join(projDir, indexJsStr);
 	if (!fs.existsSync(indexFilePath)) {
 		return;
 	}
@@ -285,8 +293,23 @@ require("./libs/laya.quickgamemini.js");\nrequire("index.js");`;
 	fs.writeFileSync(indexFilePath, indexFileContent, "utf8");
 });
 
+gulp.task("version_OPPO", ["modifyFile_OPPO"], function () {
+	// 如果不是OPPO快游戏
+	if (platform !== "oppogame") {
+		return;
+	}
+	if (config.version) {
+		let versionPath = projDir + "/version.json";
+		let mainJSPath = projDir + "/main.js";
+		let srcList = [versionPath, mainJSPath];
+		return gulp.src(srcList)
+			.pipe(revCollector())
+			.pipe(gulp.dest(projDir));
+	}
+});
+
 // 打包rpk
-gulp.task("buildRPK_OPPO", ["modifyFile_OPPO"], function() {
+gulp.task("buildRPK_OPPO", ["version_OPPO"], function() {
 	// 如果不是OPPO快游戏
 	if (platform !== "oppogame") {
 		return;
