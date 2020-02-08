@@ -63,11 +63,14 @@ export default class MainSceneControl extends Laya.Script {
     /** @prop {name:role_02 , tips:"主角2", type:Node}*/
     public role_02: Laya.Sprite;
 
-    /** @prop {name:resurgence , tips:"复活继续", type:Prefab}*/
+    /** @prop {name:resurgence , tips:"复活继续界面", type:Prefab}*/
     public resurgence: Laya.Prefab;
 
     /** @prop {name:settlement , tips:"结算", type:Prefab}*/
     public settlement: Laya.Prefab;
+
+    /** @prop {name:startInterface , tips:"开始游戏界面", type:Prefab}*/
+    public startInterface: Laya.Prefab;
 
     /** @prop {name:score , tips:"分数节点", type:Prefab}*/
     public score: Laya.Prefab;
@@ -143,18 +146,18 @@ export default class MainSceneControl extends Laya.Script {
     constructor() { super(); }
 
     onEnable(): void {
-        this.initSecne();
-        this.roleSpeakBoxs();
-        this.candyMoveToDisplay();
+        this.noStarted();
+        this.createStartInterface(); 
+        // this.startGame();
+        // this.roleSpeakBoxs();
     }
 
     /**场景初始化*/
-    initSecne(): void {
+    startGame(): void {
         this.enemyAppear = false;
         this.enemyTagRole = null;
         this.enemyCount = 0;
-
-        // 初始化怪物属性，依次为血量，
+        // 初始化怪物属性，依次为血量，攻击力，攻速，移动速度，攻击速度
         this.enemyProperty = {
             blood: 200,
             attackValue: 5000,
@@ -163,7 +166,6 @@ export default class MainSceneControl extends Laya.Script {
             moveSpeed: 10,
             creatInterval: 5000
         }
-
         this.enemyInterval_01 = 500;
         this.enemyTime_01 = Date.now();
         this.enemySwitch_01 = true;
@@ -185,18 +187,28 @@ export default class MainSceneControl extends Laya.Script {
         // 关闭多点触控
         Laya.MouseManager.multiTouchEnabled = false;
         this.timerControl = 0;
-
-        this.owner['MainSceneControl'] = this;//脚本赋值
-
         this.suspend = false;
         this.startRow = 4;
-
-        this.gameOver = false;
-
         this.self = this.owner as Laya.Scene;
 
-        this.createLaunchAni();
+        this.candyMoveToDisplay();
+    }
 
+    /**游戏没有开始的时候设置的属性*/
+    noStarted(): void {
+        this.owner['MainSceneControl'] = this;//脚本赋值
+        this.gameOver = false;
+        this.createLaunchAni();
+    }
+
+    /**创建开始游戏界面*/
+    createStartInterface(): void {
+        let startInterface = Laya.Pool.getItemByCreateFun('startInterface', this.startInterface.create, this.startInterface) as Laya.Sprite;
+        this.owner.addChild(startInterface);
+        startInterface.pivotX = startInterface.width / 2;
+        startInterface.pivotY = startInterface.height / 2;
+        startInterface.x = Laya.stage.width / 2;
+        startInterface.y = Laya.stage.height / 2;
     }
 
     /**两个发射口的骨骼动画*/
@@ -212,6 +224,7 @@ export default class MainSceneControl extends Laya.Script {
         this.launchTemp_02.on(Laya.Event.ERROR, this, this.onError);
         this.launchTemp_02.loadAni("candy/糖果机器/candyLaunch.sk");
     }
+
     onError(): void {
         console.log('骨骼动画加载错误');
     }

@@ -64,6 +64,10 @@ export default class Assembly extends Laya.Script {
     constructor() { super(); }
 
     onEnable(): void {
+        this.initProperty();
+    }
+    /**初始化属性*/
+    initProperty(): void {
         this.self = this.owner as Laya.Sprite;
         this.selfScene = this.self.scene;
         this.smokeSwitch = true;
@@ -94,7 +98,15 @@ export default class Assembly extends Laya.Script {
         this.timerShakeNum = 0;
 
         this.pipeSk_01 = this.machine.getChildByName('pipeline_01') as Laya.Skeleton;
+        this.pipeSk_02 = this.machine.getChildByName('pipeline_02') as Laya.Skeleton;
         this.createPipeSk_01();
+        this.createPipeSk_02();
+    }
+
+    /**开始机器运动*/
+    assemblyStart(): void {
+        this.pipeSk_01.play('flow', true);
+        this.pipeSk_02.play('flow', true);
     }
 
     /**创建骨骼动画皮肤*/
@@ -111,10 +123,8 @@ export default class Assembly extends Laya.Script {
     }
 
     parseComplete_01(): void {
-        // 播放敌人动画
-        var skeleton: Laya.Skeleton;
-        this.pipeSk_01 = this.pipeSk_01Tem.buildArmature(0);//模板0
-        this.pipeSk_01.play('newAnimation', true);
+        // 水管动画
+        this.pipeSk_01.play('static', true);
     }
 
     /**创建骨骼动画皮肤*/
@@ -127,10 +137,8 @@ export default class Assembly extends Laya.Script {
     }
 
     parseComplete_02(): void {
-        // 播放敌人动画
-        var skeleton: Laya.Skeleton;
-        this.pipeSk_02 = this.pipeSk_01Tem.buildArmature(0);//模板0
-        this.pipeSk_02.play('newAnimation', true);
+        // 水管动画
+        this.pipeSk_02.play('static', true);
     }
 
     /**位移抖动
@@ -204,6 +212,9 @@ export default class Assembly extends Laya.Script {
     }
 
     onUpdate(): void {
+        if (this.selfScene['MainSceneControl'].gameOver) {
+            return;
+        }
         this.timeLine++;
         // 烟囱烟雾特效
         if (this.smokeSwitch) {

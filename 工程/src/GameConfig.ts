@@ -14,6 +14,7 @@ import Resurgence from "./script/Resurgence"
 import RewardWords from "./script/RewardWords"
 import RoleBullet from "./script/RoleBullet"
 import Settlement from "./script/Settlement"
+import startGame from "./script/startGame"
 /*
 * 游戏初始化配置;
 */
@@ -48,6 +49,7 @@ export default class GameConfig{
         reg("script/RewardWords.ts",RewardWords);
         reg("script/RoleBullet.ts",RoleBullet);
         reg("script/Settlement.ts",Settlement);
+        reg("script/startGame.ts",startGame);
     }
 }
 GameConfig.init();
