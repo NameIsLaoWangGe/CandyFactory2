@@ -41,8 +41,14 @@ export default class Explode extends Laya.Script {
     initProperty(type): void {
         this.effectsType = type;
         switch (type) {
+            case 'starShining':
+                this.starShiningProperty();
+                break;
             case 'disappear':
                 this.disappearProperty();
+                break;
+            case 'appear':
+                this.appearProperty();
                 break;
             case 'fireworks':
                 this.fireworksProperty();
@@ -182,6 +188,7 @@ export default class Explode extends Laya.Script {
                 break;
         }
     }
+
     /**烟花爆炸移动
     * 爆炸
     * 减速
@@ -205,8 +212,7 @@ export default class Explode extends Laya.Script {
         this.randomSpeed = Math.floor(Math.random() * 10) + 5;
         this.initialAngle = 90;
         this.scale = Math.floor(Math.random() * 4) + 2;
-        this.self.scaleX = this.scale / 10;
-        this.self.scaleY = this.scale / 10;
+        this.self.scale(this.scale / 10, this.scale / 10);
         this.vinshTime = Math.floor(Math.random() * 5) + 2;
         this.startAlpha = 1;
         this.self.alpha = this.startAlpha;
@@ -240,8 +246,7 @@ export default class Explode extends Laya.Script {
         this.randomSpeed = Math.random() * 2 + 2;
         this.initialAngle = Math.floor(Math.random() * 360);
         this.scale = 7;
-        this.self.scaleX = this.scale / 10;
-        this.self.scaleY = this.scale / 10;
+        this.self.scale(this.scale / 10, this.scale / 10);
         this.vinshTime = Math.floor(Math.random() * 5) + 2;
         this.startAlpha = (Math.floor(Math.random() * 6) + 4) / 10;
         this.self.alpha = this.startAlpha;
@@ -277,6 +282,106 @@ export default class Explode extends Laya.Script {
         }
     }
 
+    /**出现动画属性*/
+    appearProperty(): void {
+        this.moveSwitch = true;
+        this.randomSpeed = Math.random() * 2 + 2;
+        this.initialAngle = Math.floor(Math.random() * 360);
+        this.scale = 7;
+        this.self.scale(this.scale / 10, this.scale / 10);
+        this.vinshTime = Math.floor(Math.random() * 5) + 2;
+        this.startAlpha = (Math.floor(Math.random() * 6) + 4) / 10;
+        this.self.alpha = this.startAlpha;
+        this.rotationD = Math.floor(Math.random() * 2) === 1 ? -5 : 5;
+        // 图片
+        this.img.skin = 'candy/特效/白色单元.png';
+        this.img.rotation = this.initialAngle - 90;
+        let number = Math.floor(Math.random() * 2);
+        switch (number) {
+            case 0:
+                this.img.skin = 'candy/特效/白色单元.png';
+                break;
+            case 1:
+                this.img.skin = 'candy/特效/白色单元_02.png';
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**出现动画移动*/
+    appearEffects(): void {
+        this.accelerated += 0.01;
+        if (this.timer > 0 && this.timer <= 20) {
+            this.commonSpeedXYByAngle(this.initialAngle, this.randomSpeed);
+        } else if (this.timer > 20 && this.timer < 30) {
+            this.commonSpeedXYByAngle(this.initialAngle, this.randomSpeed - 2);
+        } else if (this.timer >= 30) {
+            this.self.alpha -= 0.02;
+            if (this.self.alpha <= 0) {
+                this.self.removeSelf();
+            }
+        }
+    }
+
+    /**星星闪烁动画属性*/
+    starShiningProperty(): void {
+        this.moveSwitch = true;
+        this.randomSpeed = Math.floor(Math.random() * 15) + 2;
+        this.scale = Math.floor(Math.random() * 8) + 4;
+        this.self.scale(this.scale / 10, this.scale / 10);
+        this.startAlpha = 0;
+        this.self.alpha = this.startAlpha;
+        this.rotationD = Math.floor(Math.random() * 2) === 1 ? -10 : 10;
+        // 图片
+        let number = Math.floor(Math.random() * 7) + 1;
+        switch (number) {
+            case 1:
+                this.img.skin = 'candy/特效/星星1.png';
+                break;
+            case 2:
+                this.img.skin = 'candy/特效/星星2.png';
+                break;
+            case 3:
+                this.img.skin = 'candy/特效/星星3.png';
+                break;
+            case 4:
+                this.img.skin = 'candy/特效/星星4.png';
+                break;
+            case 5:
+                this.img.skin = 'candy/特效/星星5.png';
+                break;
+            case 6:
+                this.img.skin = 'candy/特效/星星6.png';
+                break;
+            case 7:
+                this.img.skin = 'candy/特效/星星7.png';
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**星星闪烁动画*/
+    starShiningEffects(): void {
+        if (this.timer > 0 && this.timer <= 20) {
+            this.self.alpha += 0.1;
+            this.self.rotation += this.rotationD;
+            this.self.scaleX += 0.01;
+            this.self.scaleY += 0.01;
+        } else if (this.timer > 20 && this.timer < 30) {
+            this.self.rotation += this.rotationD;
+        } else if (this.timer >= 30) {
+            this.self.rotation -= this.rotationD;
+            this.self.alpha -= 0.01;
+            this.self.scaleX -= 0.01;
+            this.self.scaleY -= 0.01;
+            if (this.self.alpha <= 0) {
+                this.self.removeSelf();
+            }
+        }
+    }
+
     /**移动规则*/
     move(): void {
         if (this.effectsType === 'fireworks') {
@@ -285,6 +390,8 @@ export default class Explode extends Laya.Script {
             this.smokeEffects();
         } else if (this.effectsType === 'disappear') {
             this.disappearEffects();
+        } else if (this.effectsType === 'appear') {
+            this.appearEffects();
         } else {
             this.commonExplosion();
         }

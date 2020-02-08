@@ -147,7 +147,7 @@ export default class MainSceneControl extends Laya.Script {
 
     onEnable(): void {
         this.noStarted();
-        this.createStartInterface(); 
+        this.createStartInterface();
         // this.startGame();
         // this.roleSpeakBoxs();
     }
@@ -189,13 +189,14 @@ export default class MainSceneControl extends Laya.Script {
         this.timerControl = 0;
         this.suspend = false;
         this.startRow = 4;
-        this.self = this.owner as Laya.Scene;
+        this.gameOver = false;
 
         this.candyMoveToDisplay();
     }
 
     /**游戏没有开始的时候设置的属性*/
     noStarted(): void {
+        this.self = this.owner as Laya.Scene;
         this.owner['MainSceneControl'] = this;//脚本赋值
         this.gameOver = false;
         this.createLaunchAni();
