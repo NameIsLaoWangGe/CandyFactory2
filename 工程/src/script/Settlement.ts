@@ -113,7 +113,7 @@ export default class Settlement extends Laya.Script {
     }
 
     /**点击重来按钮的消失动画*/
-    cutTnterface(): void {
+    cutTnterface(type): void {
         this.self.pivotX = Laya.stage.width / 2;
         this.self.pivotY = Laya.stage.height / 2;
         this.self.x = this.self.pivotX;
@@ -121,7 +121,11 @@ export default class Settlement extends Laya.Script {
         // 整体移动
         Laya.Tween.to(this.self, { x: 1500, rotation: 720, scaleX: 0, scaleY: 0, alpha: 0 }, 700, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
             this.self.removeSelf();
-            this.selfScene['MainSceneControl'].restart();
+            if (type === 'restart') {
+                this.selfScene['MainSceneControl'].restart();
+            } else if (type === 'returnStart') {
+                this.selfScene['MainSceneControl'].createStartInterface('returnStart');
+            }
         }, []), 0);
         // 背景
         Laya.Tween.to(this.background, { alpha: 0 }, 450, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
@@ -152,7 +156,9 @@ export default class Settlement extends Laya.Script {
     up(event): void {
         event.currentTarget.scale(1, 1);
         if (event.currentTarget.name === 'again_But') {
-            this.cutTnterface();
+            this.cutTnterface('restart');
+        } else if (event.currentTarget.name === 'return_But') {
+            this.cutTnterface('returnStart');
         }
     }
     /**出屏幕*/

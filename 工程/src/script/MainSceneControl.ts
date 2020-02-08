@@ -147,7 +147,7 @@ export default class MainSceneControl extends Laya.Script {
 
     onEnable(): void {
         this.noStarted();
-        this.createStartInterface();
+        this.createStartInterface('start');
         // this.startGame();
         // this.roleSpeakBoxs();
     }
@@ -203,13 +203,15 @@ export default class MainSceneControl extends Laya.Script {
     }
 
     /**创建开始游戏界面*/
-    createStartInterface(): void {
+    createStartInterface(type): void {
         let startInterface = Laya.Pool.getItemByCreateFun('startInterface', this.startInterface.create, this.startInterface) as Laya.Sprite;
         this.owner.addChild(startInterface);
         startInterface.pivotX = startInterface.width / 2;
         startInterface.pivotY = startInterface.height / 2;
         startInterface.x = Laya.stage.width / 2;
         startInterface.y = Laya.stage.height / 2;
+
+        startInterface['startGame'].aniTypeInit(type);
     }
 
     /**两个发射口的骨骼动画*/
