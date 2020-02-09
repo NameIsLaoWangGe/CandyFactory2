@@ -43,8 +43,10 @@ P 01BAE7F5 vslider.png
 D candy/ui
 R 8ED6A8D6 candyfactory2020.2.3.png
 P A7762784 不玩了！.png
-R 1156F99C 主界面背景_01.jpg
-R 0ADC675B 主界面背景_02.png
+R 352F4886 主界面背景_01.png
+R 73D19C88 主界面背景_02.png
+R 12A5DF31 主界面背景_03.png
+R A4CD819A 主界面背景_04.png
 P E6FC9468 主角属性显示.png
 P C55056AF 分享.png
 P 9168C324 分数牌.png
@@ -55,7 +57,7 @@ P 05F75E52 对话框.png
 R BBC12A8E 属性战士框.png
 P DD3BB8F3 开始按钮1.png
 P 10767910 开始按钮2.png
-P F2796521 开始游戏标题.png
+P AB788A6C 开始游戏标题.png
 P 684F9E31 排行榜.png
 P 594D9461 操作位置链接线.png
 P 4861FB87 敌人属性显示.png
@@ -65,7 +67,7 @@ P D6602089 时间.png
 P F27E0E2A 暂停按钮.png
 P 546EE85A 正确提示.png
 P B5A09EDB 游戏结束标题.png
-R F2AE3193 纯背景.jpg
+R 77594E48 纯背景.jpg
 P DF75AD09 继续游戏.png
 P E7BD7926 血条$bar.png
 P A7618FFB 血条.png

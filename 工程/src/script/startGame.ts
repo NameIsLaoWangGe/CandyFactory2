@@ -10,6 +10,12 @@ export default class startGame extends Laya.Script {
     /** @prop {name:bg_02, tips:"背景2", type:Node}*/
     public bg_02: Laya.Image;
 
+    /** @prop {name:bg_03, tips:"背景3", type:Node}*/
+    public bg_03: Laya.Image;
+
+    /** @prop {name:bg_04, tips:"背景4", type:Node}*/
+    public bg_04: Laya.Image;
+
     /** @prop {name:bg_Pure, tips:"纯背景", type:Node}*/
     public bg_Pure: Laya.Sprite;
 
@@ -63,7 +69,17 @@ export default class startGame extends Laya.Script {
     /**开始时初始化一些节点的位置*/
     startInit(): void {
         this.bg_01.x = 187;
+        this.bg_01.y = 410;
+
         this.bg_02.x = 562;
+        this.bg_02.y = 410;
+
+        this.bg_03.x = 187;
+        this.bg_03.y = 1230;
+
+        this.bg_04.x = 562;
+        this.bg_04.y = 1230;
+
         this.bg_Pure.alpha = 1;
 
         this.btn_Start.x = -1500;
@@ -78,37 +94,11 @@ export default class startGame extends Laya.Script {
         this.btn_Participate.scale(0, 0);
         this.btn_Ranking.alpha = 0;
         this.btn_Ranking.scale(0, 0);
-        this.appearAni();
-    }
-
-    /**返回主界面初始化一些节点的位置*/
-    returnStartInit(): void {
-        this.bg_01.x = -1500;
-        this.bg_01.rotation = 0;
-        this.bg_01.alpha = 0;
-        this.bg_02.x = 1500;
-        this.bg_02.rotation = 0;
-        this.bg_02.alpha = 0;
-
-        this.bg_Pure.alpha = 0;
-
-        this.btn_Start.x = 375;
-        this.btn_Start.alpha = 0;
-        this.btn_Start.scale(1, 1);
-
-        this.LoGo.x = 375;
-        this.LoGo.alpha = 0;
-        this.LoGo.scale(1, 1);
-
-        this.btn_Participate.alpha = 0;
-        this.btn_Participate.scale(1, 1);
-        this.btn_Ranking.alpha = 0;
-        this.btn_Ranking.scale(1, 1);
-        this.returnStart();
+        this.startAni();
     }
 
     /**动画初始化*/
-    appearAni(): void {
+    startAni(): void {
         // LoGo
         Laya.Tween.to(this.LoGo, { x: 375, rotation: 1080, alpha: 1, scaleX: 1, scaleY: 1 }, 600, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.LoGo.rotation = 0;
@@ -132,27 +122,80 @@ export default class startGame extends Laya.Script {
 
     /**开始游戏界面消失动画*/
     vanishAni(): void {
+        //隐藏其他元素
         this.bg_Pure.alpha = 0;
         this.LoGo.alpha = 0;
         this.btn_Start.alpha = 0;
         this.btn_Ranking.alpha = 0;
         this.btn_Participate.alpha = 0;
 
-        // 两个背景拉开
-        Laya.Tween.to(this.bg_01, { x: -1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: 540 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
-        }, []), 0);
-
-        Laya.Tween.to(this.bg_02, { x: 1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: -540 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+        // 4个背景拉开
+        Laya.Tween.to(this.bg_01, { x: -1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: 720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+            this.bg_01.rotation = 0;
             this.self.removeSelf();
             this.selfScene['MainSceneControl'].startGame();
         }, []), 0);
+
+        Laya.Tween.to(this.bg_02, { x: 1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: -720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+            this.bg_02.rotation = 0;
+        }, []), 0);
+
+        Laya.Tween.to(this.bg_03, { x: -1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: -720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+            this.bg_03.rotation = 0;
+        }, []), 0);
+
+        Laya.Tween.to(this.bg_04, { x: 1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: 720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+            this.bg_04.rotation = 0;
+        }, []), 0);
+    }
+
+
+    /**返回主界面初始化一些节点的位置*/
+    returnStartInit(): void {
+        this.bg_01.x = -1500;
+        this.bg_01.alpha = 0;
+        this.bg_02.x = 1500;
+        this.bg_02.alpha = 0;
+        this.bg_03.x = -1500;
+        this.bg_03.alpha = 0;
+        this.bg_04.x = 1500;
+        this.bg_04.alpha = 0;
+
+        this.bg_Pure.alpha = 0;
+
+        this.btn_Start.x = 375;
+        this.btn_Start.alpha = 0;
+        this.btn_Start.scale(1, 1);
+
+        this.LoGo.x = 375;
+        this.LoGo.alpha = 0;
+        this.LoGo.scale(1, 1);
+
+        this.btn_Participate.alpha = 0;
+        this.btn_Participate.scale(1, 1);
+        this.btn_Ranking.alpha = 0;
+        this.btn_Ranking.scale(1, 1);
+        this.returnStartAni();
     }
 
     /**返回主界面动画*/
     /**开始游戏界面消失动画*/
-    returnStart(): void {
-        // 两个背景拉开
+    returnStartAni(): void {
+        this.bg_01.x = 187;
+        this.bg_01.y = 410;
+
+        this.bg_02.x = 562;
+        this.bg_02.y = 410;
+
+        this.bg_03.x = 187;
+        this.bg_03.y = 1230;
+
+        this.bg_04.x = 562;
+        this.bg_04.y = 1230;
+
+        // 4个背景合并
         Laya.Tween.to(this.bg_01, { x: 187, alpha: 1, scaleX: 1, scaleY: 1, rotation: 720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            // 显示其他元素
             this.bg_Pure.alpha = 1;
             this.LoGo.alpha = 1;
             this.btn_Start.alpha = 1;
@@ -164,6 +207,14 @@ export default class startGame extends Laya.Script {
 
         Laya.Tween.to(this.bg_02, { x: 562, alpha: 1, scaleX: 1, scaleY: 1, rotation: -720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.bg_02.rotation = 0;
+        }, []), 0);
+
+        Laya.Tween.to(this.bg_03, { x: 187, alpha: 1, scaleX: 1, scaleY: 1, rotation: 720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            this.bg_03.rotation = 0;
+        }, []), 0);
+
+        Laya.Tween.to(this.bg_04, { x: 562, alpha: 1, scaleX: 1, scaleY: 1, rotation: -720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            this.bg_04.rotation = 0;
         }, []), 0);
     }
 

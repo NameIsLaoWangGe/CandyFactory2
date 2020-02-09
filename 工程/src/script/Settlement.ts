@@ -76,18 +76,18 @@ export default class Settlement extends Laya.Script {
     //*动画初始化*/ 
     appearAni(): void {
         // 操作按钮
-        Laya.Tween.to(this.operation, { x: 375, rotation: 720, alpha: 1 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.operation, { x: 375, rotation: 720, alpha: 1 }, 550, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.operation.rotation = 0;
 
         }, []), 0);
 
         // 游戏结束logo
-        Laya.Tween.to(this.GOLogo, { x: 375, rotation: 720, alpha: 1 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.GOLogo, { x: 375, rotation: 720, alpha: 1 }, 550, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.GOLogo.rotation = 0;
         }, []), 0);
 
         // 背景
-        Laya.Tween.to(this.background, { alpha: 0.8 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.background, { alpha: 0.8 }, 550, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
         }, []), 0);
 
         // 得分节点的动画
@@ -107,7 +107,7 @@ export default class Settlement extends Laya.Script {
         score.pivotX = score.width / 2;
         score.pivotY = score.height / 2;
         // 动画
-        Laya.Tween.to(score, { x: 375, y: this.content.y - 200, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(score, { x: 375, y: this.content.y - 200, rotation: 720 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.btnClink();
         }, []), 0);
     }
@@ -124,6 +124,7 @@ export default class Settlement extends Laya.Script {
             if (type === 'restart') {
                 this.selfScene['MainSceneControl'].restart();
             } else if (type === 'returnStart') {
+                this.selfScene['MainSceneControl'].returnStartSet();
                 this.selfScene['MainSceneControl'].createStartInterface('returnStart');
             }
         }, []), 0);

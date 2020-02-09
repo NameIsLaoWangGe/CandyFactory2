@@ -90,20 +90,20 @@ export default class Resurgence extends Laya.Script {
     appearAni(): void {
 
         // 总体显现
-        Laya.Tween.to(this.content, { alpha: 1 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.content, { alpha: 1 }, 550, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
         }, []), 0);
 
         // 复活按钮
-        Laya.Tween.to(this.resurgence_Btn, { x: 375, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.resurgence_Btn, { x: 375, rotation: 720 }, 550, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.resurgence_Btn.rotation = 0;
         }, []), 0);
         // 数字地板
-        Laya.Tween.to(this.digitalPlate, { x: 375, rotation: 720 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.digitalPlate, { x: 375, rotation: 720 }, 550, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.digitalPlate.rotation = 0;
             this.resurgence_BtnClink();
         }, []), 0);
         // 背景
-        Laya.Tween.to(this.background, { alpha: 0.7 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.background, { alpha: 0.7 }, 550, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
         }, []), 0);
 
         // 倒计时数字的倒计时动画

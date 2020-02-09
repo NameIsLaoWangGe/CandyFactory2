@@ -148,8 +148,6 @@ export default class MainSceneControl extends Laya.Script {
     onEnable(): void {
         this.noStarted();
         this.createStartInterface('start');
-        // this.startGame();
-        // this.roleSpeakBoxs();
     }
 
     /**场景初始化*/
@@ -198,7 +196,7 @@ export default class MainSceneControl extends Laya.Script {
     noStarted(): void {
         this.self = this.owner as Laya.Scene;
         this.owner['MainSceneControl'] = this;//脚本赋值
-        this.gameOver = false;
+        this.gameOver = true;
         this.createLaunchAni();
     }
 
@@ -618,6 +616,9 @@ export default class MainSceneControl extends Laya.Script {
         let len1 = this.enemyParent._children.length;
         for (let i = 0; i < this.enemyParent._children.length; i++) {
             Laya.timer.frameOnce(enemyDelayed, this, function () {
+                if (!this.enemyParent._children[i]) {
+                    return;
+                }
                 this.enemyParent._children[i].alpha = 0;
                 let x = this.enemyParent._children[i].x;
                 let y = this.enemyParent._children[i].y;
@@ -639,6 +640,9 @@ export default class MainSceneControl extends Laya.Script {
         let len2 = this.candy_ExplodeParent._children.length;
         for (let j = 0; j < len2; j++) {
             Laya.timer.frameOnce(candyExpoleDelayed, this, function () {
+                if (!this.candy_ExplodeParent._children[j]) {
+                    return;
+                }
                 this.candy_ExplodeParent._children[j].alpha = 0;
                 let name = this.candy_ExplodeParent._children[j].name.substring(0, 11);
                 let x = this.candy_ExplodeParent._children[j].x;
@@ -658,13 +662,14 @@ export default class MainSceneControl extends Laya.Script {
         if (len3 === 0) {
             this.roleResurgenceAni();
             this.candyParent.removeChildren(0, len3 - 1);
-            this.candyLaunch_01.play('prepare', false);
-            this.candyLaunch_02.play('prepare', false);
             return;
         }
 
         for (let k = 0; k < len3; k++) {
             Laya.timer.frameOnce(candyDelayed, this, function () {
+                if (!this.candyParent._children[k]) {
+                    return;
+                }
                 this.candyParent._children[k].alpha = 0;
                 let name = this.candyParent._children[k].name.substring(0, 11);
                 let x = this.candyParent._children[k].x;
@@ -673,39 +678,70 @@ export default class MainSceneControl extends Laya.Script {
                 if (k === len3 - 1) {
                     this.roleResurgenceAni();
                     this.candyParent.removeChildren(0, len3 - 1);
-                    this.candyLaunch_01.play('prepare', false);
-                    this.candyLaunch_02.play('prepare', false);
                 }
             });
             candyDelayed += 20;
         }
 
     }
+
     /**主角复活重新开始*/
     roleResurgenceAni(): void {
         let skeleton1 = this.role_01.getChildByName('skeleton') as Laya.Skeleton;
         skeleton1.play('speak', true);
-        this.role_01['Role'].role_Warning = false;
         Laya.Tween.to(this.role_01, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
             this.restartProperties();
         }, []), 0);
 
         let skeleton2 = this.role_02.getChildByName('skeleton') as Laya.Skeleton;
         skeleton2.play('speak', true);
-        this.role_02['Role'].role_Warning = false;
         Laya.Tween.to(this.role_02, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
         }, []), 0);
     }
 
-
     /**重新开始所需改变的属性*/
     restartProperties(): void {
-        this.gameOver = false;
-        this.role_01['Role'].initProperty();//属性重置
+        this.startGame();
+        //主角复活
+        this.role_01['Role'].role_Warning = false;
+        this.role_01['Role'].roleDeath = false;
+        this.role_01['Role'].initProperty();
+
+        this.role_02['Role'].role_Warning = false;
+        this.role_02['Role'].roleDeath = false;
         this.role_02['Role'].initProperty();
+
         this.operating['OperationControl'].initProperty();
     }
 
+    /**返回主界面清理场景*/
+    returnStartSet(): void {
+        // 分数清零
+        this.scoreLabel.value = '0';
+        this.noStarted();
+        // 清空三个元素
+        let len1 = this.enemyParent._children.length;
+        this.enemyParent.removeChildren(0, len1 - 1);
+
+        let len2 = this.candy_ExplodeParent._children.length;
+        this.candy_ExplodeParent.removeChildren(0, len2 - 1);
+
+        let len3 = this.candyParent._children.length;
+        this.candyParent.removeChildren(0, len3 - 1);
+        //主角复活
+        this.role_01.alpha = 1;
+        this.role_01['Role'].role_Warning = false;
+        this.role_01['Role'].roleDeath = false;
+        this.role_01['Role'].initProperty();
+
+        this.role_02.alpha = 1;
+        this.role_02['Role'].role_Warning = false;
+        this.role_02['Role'].roleDeath = false;
+        this.role_02['Role'].initProperty();
+
+        // 操作台重置
+        this.operating['OperationControl'].initProperty();
+    }
 
     /**属性刷新显示规则*/
     onUpdate(): void {
