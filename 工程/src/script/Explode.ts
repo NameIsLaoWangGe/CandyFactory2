@@ -332,7 +332,7 @@ export default class Explode extends Laya.Script {
         this.self.scale(this.scale / 10, this.scale / 10);
         this.startAlpha = 0;
         this.self.alpha = this.startAlpha;
-        this.rotationD = Math.floor(Math.random() * 2) === 1 ? -10 : 10;
+        this.rotationD = Math.floor(Math.random() * 2) === 1 ? -5 : 5;
         // 图片
         let number = Math.floor(Math.random() * 7) + 1;
         switch (number) {
@@ -364,16 +364,16 @@ export default class Explode extends Laya.Script {
 
     /**星星闪烁动画*/
     starShiningEffects(): void {
-        if (this.timer > 0 && this.timer <= 20) {
+        if (this.timer > 0 && this.timer <= 15) {
             this.self.alpha += 0.1;
             this.self.rotation += this.rotationD;
             this.self.scaleX += 0.01;
             this.self.scaleY += 0.01;
-        } else if (this.timer > 20 && this.timer < 30) {
+        } else if (this.timer > 15 && this.timer < 25) {
             this.self.rotation += this.rotationD;
-        } else if (this.timer >= 30) {
+        } else if (this.timer >= 25) {
             this.self.rotation -= this.rotationD;
-            this.self.alpha -= 0.01;
+            this.self.alpha -= 0.015;
             this.self.scaleX -= 0.01;
             this.self.scaleY -= 0.01;
             if (this.self.alpha <= 0) {
@@ -392,6 +392,8 @@ export default class Explode extends Laya.Script {
             this.disappearEffects();
         } else if (this.effectsType === 'appear') {
             this.appearEffects();
+        } else if (this.effectsType === 'starShining') {
+            this.starShiningEffects();
         } else {
             this.commonExplosion();
         }

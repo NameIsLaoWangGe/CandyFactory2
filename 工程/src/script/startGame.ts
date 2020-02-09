@@ -50,9 +50,7 @@ export default class startGame extends Laya.Script {
     constructor() { super(); }
 
     onEnable(): void {
-        this.self = this.owner as Laya.Sprite;
-        this.selfScene = this.self.scene as Laya.Scene;
-        this.self['startGame'] = this;
+        this.init();
     }
 
     /**动画模式
@@ -60,14 +58,26 @@ export default class startGame extends Laya.Script {
    */
     aniTypeInit(type) {
         if (type === 'start') {
-            this.startInit();
+            this.startAniInit();
         } else if (type === 'returnStart') {
             this.returnStartInit();
         }
     }
 
-    /**开始时初始化一些节点的位置*/
-    startInit(): void {
+    /**初始化一些非动画属性*/
+    init(): void {
+        this.self = this.owner as Laya.Sprite;
+        this.selfScene = this.self.scene as Laya.Scene;
+        this.self['startGame'] = this;
+
+        this.LoGo.zOrder = 1000;//logo下面要有星星动画
+
+        this.starTime = Date.now();
+        this.starInterval = 200;
+    }
+
+    /**进入界面的动画节点属性*/
+    startAniInit(): void {
         this.bg_01.x = 187;
         this.bg_01.y = 410;
 
@@ -220,6 +230,24 @@ export default class startGame extends Laya.Script {
 
     /**星星特效*/
     starShiningEffect(): void {
+        let spacingX = 50;//logo以外的像素范围
+        let spacingY = 20;//logo以外的像素范围
+        //右上角原点
+        let originX = this.LoGo.x - this.LoGo.width / 2 - spacingX;
+        let originY = this.LoGo.y - this.LoGo.height / 2 - spacingY;
+
+        // 整体范围减去中间logo框的范围
+        let x;
+        let y;
+        do {
+            x = originX + Math.random() * (this.LoGo.width + spacingX * 2);
+        } while (Math.abs(x - this.LoGo.x) < this.LoGo.width / 2);
+        do {
+            y = originY + Math.random() * (this.LoGo.height + spacingY * 2);
+        } while (Math.abs(y - this.LoGo.y) < this.LoGo.height / 2);
+
+        let zoder = this.LoGo.zOrder - 1;
+        this.selfScene['MainSceneControl'].explodeAni(this.self, x, y, 'starShining', 1, 100);
     }
 
     /**时间抖动抖动
@@ -286,7 +314,14 @@ export default class startGame extends Laya.Script {
     /**出屏幕*/
     out(event): void {
         event.currentTarget.scale(1, 1);
+    }
 
+    onUpdate(): void {
+        let time = Date.now();
+        if (time - this.starInterval > this.starTime) {
+            this.starTime = time;
+            this.starShiningEffect();
+        }
     }
 
     onDisable(): void {
