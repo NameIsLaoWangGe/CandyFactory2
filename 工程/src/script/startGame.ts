@@ -28,9 +28,14 @@ export default class startGame extends Laya.Script {
     /** @prop {name:btn_Ranking, tips:"排行榜按钮", type:Node}*/
     public btn_Ranking: Laya.Image;
 
+    /** @prop {name:starParent, tips:"闪烁星星的父节点", type:Node}*/
+    public starParent: Laya.Sprite;
+
     /** @prop {name:LoGo, tips:"标题", type:Node}*/
     public LoGo: Laya.Image;
 
+    /**星星开始开关*/
+    private starSwich: boolean;
     /**标题上的星星动画产生时间记录*/
     private starTime: number;
     /**标题上星星产生的时间间隔*/
@@ -72,8 +77,9 @@ export default class startGame extends Laya.Script {
 
         this.LoGo.zOrder = 1000;//logo下面要有星星动画
 
+        this.starSwich = true;
         this.starTime = Date.now();
-        this.starInterval = 200;
+        this.starInterval = 300;
     }
 
     /**进入界面的动画节点属性*/
@@ -230,24 +236,54 @@ export default class startGame extends Laya.Script {
 
     /**星星特效*/
     starShiningEffect(): void {
-        let spacingX = 50;//logo以外的像素范围
-        let spacingY = 20;//logo以外的像素范围
-        //右上角原点
-        let originX = this.LoGo.x - this.LoGo.width / 2 - spacingX;
-        let originY = this.LoGo.y - this.LoGo.height / 2 - spacingY;
+        let spacingX = 50;//logo以外扩大的像素范围
+        let spacingY = 20;
+        let insideW = this.LoGo.width - 20;//内部排除的像素范围
+        let insideH = this.LoGo.height - 20;
+        //右上角原点1
+        let originX1 = this.LoGo.x - insideW / 2 - spacingX;
+        let originY1 = this.LoGo.y - insideH / 2 - spacingY;
+        //以logo为中心左右范围
+        let x1;
+        let y1;
+        do {
+            x1 = originX1 + Math.random() * (insideW + spacingX * 2);
+        } while (Math.abs(x1 - this.LoGo.x) < insideW / 2);
+        y1 = originY1 + Math.random() * insideH + spacingY;
 
-        // 整体范围减去中间logo框的范围
+        //以logo为中心上下范围
+        //右上角原点2
+        let originX2 = this.LoGo.x - insideW / 2;
+        let originY2 = this.LoGo.y - insideH / 2 - spacingY;
+        let x2;
+        let y2;
+        x2 = originX2 + Math.random() * insideW;
+        do {
+            y2 = originY2 + Math.random() * (insideH + spacingY * 2);
+        } while (Math.abs(y2 - this.LoGo.y) < insideH / 2);
+
+        // 在两个范围内随机产生一个位置
         let x;
         let y;
-        do {
-            x = originX + Math.random() * (this.LoGo.width + spacingX * 2);
-        } while (Math.abs(x - this.LoGo.x) < this.LoGo.width / 2);
-        do {
-            y = originY + Math.random() * (this.LoGo.height + spacingY * 2);
-        } while (Math.abs(y - this.LoGo.y) < this.LoGo.height / 2);
 
+        let random = Math.floor(Math.random() * 3);
+        if (random === 0) {
+            x = x1;
+            y = y1;
+        } else {
+            x = x2;
+            y = y2;
+        }
         let zoder = this.LoGo.zOrder - 1;
-        this.selfScene['MainSceneControl'].explodeAni(this.self, x, y, 'starShining', 1, 100);
+        this.selfScene['MainSceneControl'].explodeAni(this.starParent, x, y, 'starShining', 1, 100);
+    }
+
+    /**星星消失动画*/
+    starVanish(): void {
+        this.starSwich = false;
+        Laya.Tween.to(this.starParent, { alpha: 0, }, 100, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            this.starParent.removeChildren(0, this.starParent._children.length - 1);
+        }, []), 0);
     }
 
     /**时间抖动抖动
@@ -304,6 +340,7 @@ export default class startGame extends Laya.Script {
     up(event): void {
         event.currentTarget.scale(1, 1);
         if (event.currentTarget.name === 'btn_Start') {
+            this.starVanish();
             this.vanishAni();
         } else if (event.currentTarget.name === 'btn_Participate') {
 
@@ -318,12 +355,16 @@ export default class startGame extends Laya.Script {
 
     onUpdate(): void {
         let time = Date.now();
-        if (time - this.starInterval > this.starTime) {
-            this.starTime = time;
-            this.starShiningEffect();
+        if (this.starSwich) {
+            if (time - this.starInterval > this.starTime) {
+                this.starTime = time;
+                this.starShiningEffect();
+            }
         }
     }
 
     onDisable(): void {
+        Laya.Tween.clearAll(this);
+        Laya.timer.clearAll(this);
     }
 }
