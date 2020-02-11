@@ -41,16 +41,17 @@ export default class startGame extends Laya.Script {
     /**标题上星星产生的时间间隔*/
     private starInterval: number;
 
-
-    /**开始按钮抖动开关*/
-    private RshakeSwitch: boolean;
+    /**开始按钮动画开关*/
+    private startBSwitch: boolean;
     /**开始按钮抖动方向记录*/
-    private RDirection: string;
+    private startBTime: number;
+    /**开始按钮星星产生的时间间隔*/
+    private startBInterval: number;
+    /**开始按钮抖动次数*/
+    private startBNum: number;
 
-    /**开始按钮抖动事件记录*/
-    private RshakeTime: number;
-    /**开始按钮抖动时间间隔*/
-    private RshakeInterval: number;
+    /**开始游戏点击一次就结束，不可多次点击*/
+    private againClik: boolean;
 
     constructor() { super(); }
 
@@ -79,7 +80,15 @@ export default class startGame extends Laya.Script {
 
         this.starSwich = true;
         this.starTime = Date.now();
-        this.starInterval = 300;
+        this.starInterval = 10;
+
+        this.startBSwitch = null;
+        this.startBInterval = null;
+        this.startBTime = Date.now();
+        this.startBNum = 0;
+
+
+        this.againClik = true;
     }
 
     /**进入界面的动画节点属性*/
@@ -116,14 +125,18 @@ export default class startGame extends Laya.Script {
     /**动画初始化*/
     startAni(): void {
         // LoGo
-        Laya.Tween.to(this.LoGo, { x: 375, rotation: 1080, alpha: 1, scaleX: 1, scaleY: 1 }, 600, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.LoGo, { x: 375, rotation: 1080, alpha: 1, scaleX: 1, scaleY: 1 }, 700, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.LoGo.rotation = 0;
+            this.starInterval = 300;//logo后面的星星出发间隔，开始很小，现在平稳
         }, []), 0);
         // 开始按钮
         // 动画结束之后出现
-        Laya.Tween.to(this.btn_Start, { x: 375, rotation: -1080, alpha: 1, scaleX: 1, scaleY: 1 }, 600, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.btn_Start, { x: 375, rotation: -1080, alpha: 1, scaleX: 1, scaleY: 1 }, 700, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.btn_Start.rotation = 0;
             this.buttonAppear();
+            // 第一次立即执行btn_Start抖动动画
+            this.startBSwitch = true;
+            this.startBInterval = 0;
         }, []), 0);
     }
 
@@ -146,7 +159,7 @@ export default class startGame extends Laya.Script {
         this.btn_Participate.alpha = 0;
 
         // 4个背景拉开
-        Laya.Tween.to(this.bg_01, { x: -1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: 720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.bg_01, { x: -1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: -720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
             this.bg_01.rotation = 0;
             this.self.removeSelf();
             this.selfScene['MainSceneControl'].startGame();
@@ -160,7 +173,7 @@ export default class startGame extends Laya.Script {
             this.bg_03.rotation = 0;
         }, []), 0);
 
-        Laya.Tween.to(this.bg_04, { x: 1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: 720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.bg_04, { x: 1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: -720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
             this.bg_04.rotation = 0;
         }, []), 0);
     }
@@ -210,18 +223,25 @@ export default class startGame extends Laya.Script {
         this.bg_04.y = 1230;
 
         // 4个背景合并
-        Laya.Tween.to(this.bg_01, { x: 187, alpha: 1, scaleX: 1, scaleY: 1, rotation: 720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.bg_01, { x: 187, alpha: 1, scaleX: 1, scaleY: 1, rotation: -720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             // 显示其他元素
             this.bg_Pure.alpha = 1;
             this.LoGo.alpha = 1;
-            this.btn_Start.alpha = 1;
             this.btn_Ranking.alpha = 1;
             this.btn_Participate.alpha = 1;
             this.bg_01.rotation = 0;
-            this.btnClink();
+            this.btn_Start.scale(0.1, 0.1);
+            this.starInterval = 300;//logo后面的星星出发间隔，开始很小，现在平稳
+            Laya.Tween.to(this.btn_Start, { alpha: 1, scaleX: 1, scaleY: 1, rotation: 0 }, 200, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                // 第一次立即执行btn_Start抖动动画
+                this.startBSwitch = true;
+                this.startBInterval = 0;
+                this.btnClink();
+            }, []), 0);
+
         }, []), 0);
 
-        Laya.Tween.to(this.bg_02, { x: 562, alpha: 1, scaleX: 1, scaleY: 1, rotation: -720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.bg_02, { x: 562, alpha: 1, scaleX: 1, scaleY: 1, rotation: 720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.bg_02.rotation = 0;
         }, []), 0);
 
@@ -286,28 +306,47 @@ export default class startGame extends Laya.Script {
         }, []), 0);
     }
 
-    /**时间抖动抖动
-    * 根据进度条的时间来给不同的抖动频率和抖动速度
-   */
-    timerShake() {
-        if (this.RshakeSwitch) {
-            let nowTime = Date.now();
-            if (nowTime - this.RshakeTime > this.RshakeInterval) {
-                this.RshakeTime = nowTime;
-                // 目标判断
-                if (this.RDirection === "left") {
-                    this.btn_Start.rotation = -3;
-                    if (this.btn_Start.rotation < 0) {
-                        this.RDirection = "right";
-                    }
-                } else if (this.RDirection === "right") {
-                    this.btn_Start.rotation = +3;
-                    if (this.btn_Start.rotation > 0) {
-                        this.RDirection = "left";
-                    }
+    /**开始按钮左右抖动*/
+    startBtnAni() {
+        this.startBInterval = 1050;//重置间隔，第一次的时候是0，立即执行
+        Laya.Tween.to(this.btn_Start, { rotation: -5 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            Laya.Tween.to(this.btn_Start, { rotation: 5 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                // 动画结束之后清除动画，防止重叠
+                Laya.Tween.clearTween(this.btn_Start);
+                this.startBNum++;
+                if (this.startBNum % 5 === 0) {
+                    this.wholeAni();
+                    this.startBSwitch = false;
                 }
-            }
-        }
+            }, []), 0);
+        }, []), 0);
+    }
+
+    /**整体动画*/
+    wholeAni(): void {
+        /**开始按钮旋转*/
+        Laya.Tween.to(this.btn_Start, { rotation: 360 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            this.btn_Start.rotation = 0;
+            this.startBSwitch = true;
+        }, []), 0);
+        // logo上下位移
+        Laya.Tween.to(this.LoGo, { y: this.LoGo.y - 100 }, 400, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            Laya.Tween.to(this.LoGo, { y: this.LoGo.y + 100 }, 400, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            }, []), 0);
+        }, []), 0);
+
+        //下面两个按钮上下位移
+        Laya.Tween.to(this.btn_Participate, { y: this.btn_Participate.y + 100 }, 400, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            Laya.Tween.to(this.btn_Participate, { y: this.btn_Participate.y - 100 }, 400, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            }, []), 0);
+        }, []), 0);
+
+        Laya.Tween.to(this.btn_Ranking, { y: this.btn_Ranking.y + 100 }, 400, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            Laya.Tween.to(this.btn_Ranking, { y: this.btn_Ranking.y - 100 }, 400, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            }, []), 0);
+        }, []), 0);
+
+
     }
 
     /**按钮点击事件*/
@@ -329,14 +368,39 @@ export default class startGame extends Laya.Script {
         this.btn_Participate.on(Laya.Event.MOUSE_OUT, this, this.out);
     }
 
+    /**关闭点击事件*/
+    /**按钮点击事件*/
+    closeBtnClink(): void {
+        // 开始游戏
+        this.btn_Start.off(Laya.Event.MOUSE_DOWN, this, this.down);
+        this.btn_Start.off(Laya.Event.MOUSE_MOVE, this, this.move);
+        this.btn_Start.off(Laya.Event.MOUSE_UP, this, this.up);
+        this.btn_Start.off(Laya.Event.MOUSE_OUT, this, this.out);
+        // 排行
+        this.btn_Ranking.off(Laya.Event.MOUSE_DOWN, this, this.down);
+        this.btn_Ranking.off(Laya.Event.MOUSE_MOVE, this, this.move);
+        this.btn_Ranking.off(Laya.Event.MOUSE_UP, this, this.up);
+        this.btn_Ranking.off(Laya.Event.MOUSE_OUT, this, this.out);
+        // 分享
+        this.btn_Participate.off(Laya.Event.MOUSE_DOWN, this, this.down);
+        this.btn_Participate.off(Laya.Event.MOUSE_MOVE, this, this.move);
+        this.btn_Participate.off(Laya.Event.MOUSE_UP, this, this.up);
+        this.btn_Participate.off(Laya.Event.MOUSE_OUT, this, this.out);
+    }
+
+
     down(event): void {
         event.currentTarget.scale(0.95, 0.95);
+        Laya.timer.pause();
     }
     /**移动*/
     move(event): void {
+        Laya.timer.resume();
         event.currentTarget.scale(1, 1);
     }
-    /**抬起增加属性*/
+    /**抬起增加属性
+     * 由于这里的按钮不是及时消失，所以要关闭点击事件
+    */
     up(event): void {
         event.currentTarget.scale(1, 1);
         if (event.currentTarget.name === 'btn_Start') {
@@ -347,21 +411,36 @@ export default class startGame extends Laya.Script {
         } else if (event.currentTarget.name === 'btn_Ranking') {
 
         }
+        Laya.timer.resume();
+        this.closeBtnClink();
     }
     /**出屏幕*/
     out(event): void {
+        Laya.timer.resume();
         event.currentTarget.scale(1, 1);
     }
 
     onUpdate(): void {
         let time = Date.now();
+        // 星星动画
         if (this.starSwich) {
             if (time - this.starInterval > this.starTime) {
                 this.starTime = time;
                 this.starShiningEffect();
             }
         }
+
+        // 开始按钮动画
+        if (this.startBSwitch) {
+            if (time - this.startBInterval > this.startBTime) {
+                this.startBTime = time;
+                this.startBtnAni();
+            }
+        }
+
     }
+
+
 
     onDisable(): void {
         Laya.Tween.clearAll(this);
