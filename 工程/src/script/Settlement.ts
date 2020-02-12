@@ -13,9 +13,9 @@ export default class Settlement extends Laya.Script {
     /**操作按钮父节点，主要方便动画制作*/
     private operation: Laya.Sprite;
     /**重来*/
-    private again_But: Laya.Image;
+    private btn_Again: Laya.Image;
     /**返回按钮*/
-    private return_But: Laya.Image;
+    private btn_Return: Laya.Image;
     /**游戏结束logo*/
     private GOLogo: Laya.Image;
 
@@ -26,6 +26,13 @@ export default class Settlement extends Laya.Script {
     private scoreLabel: Laya.FontClip;
     /**分数节点的父节点预制*/
     private score: Laya.Prefab;
+
+    /**两个按钮动画开始开关*/
+    private btnAniSwich: boolean;
+    /**两个按钮动画产生时间记录*/
+    private btnAniTime: number;
+    /**两个按钮动画产生的时间间隔*/
+    private btnAniInterval: number;
 
     constructor() { super(); }
 
@@ -46,8 +53,8 @@ export default class Settlement extends Laya.Script {
         this.operation.x = -1200;
         this.operation.alpha = 0;
 
-        this.return_But = this.operation.getChildByName('return_But') as Laya.Image;
-        this.again_But = this.operation.getChildByName('again_But') as Laya.Image;
+        this.btn_Return = this.operation.getChildByName('btn_Return') as Laya.Image;
+        this.btn_Again = this.operation.getChildByName('btn_Again') as Laya.Image;
 
         this.GOLogo = this.content.getChildByName('GOLogo') as Laya.Image;
         this.GOLogo.x = 1200;
@@ -56,6 +63,10 @@ export default class Settlement extends Laya.Script {
         this.scoreLabel = this.selfScene['MainSceneControl'].scoreLabel;
         this.score = this.selfScene['MainSceneControl'].score;
         this.timeLine = 0;
+
+        this.btnAniSwich = true;
+        this.btnAniTime = Date.now();
+        this.btnAniInterval = 3000;
 
         this.adaptive();
         this.appearAni();
@@ -66,7 +77,7 @@ export default class Settlement extends Laya.Script {
         this.background.width = Laya.stage.width;
         this.background.height = Laya.stage.height;
         this.content.x = Laya.stage.width / 2;
-        this.content.y = Laya.stage.height / 2;
+        this.content.y = Laya.stage.height / 2 - 50;
         this.self.width = Laya.stage.width;
         this.self.height = Laya.stage.height;
         this.self.x = 0;
@@ -84,6 +95,7 @@ export default class Settlement extends Laya.Script {
         // 游戏结束logo
         Laya.Tween.to(this.GOLogo, { x: 375, rotation: 720, alpha: 1 }, 550, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.GOLogo.rotation = 0;
+            this.GOLogoAni();
         }, []), 0);
 
         // 背景
@@ -133,20 +145,49 @@ export default class Settlement extends Laya.Script {
         }, []), 0);
     }
 
+    /**游戏结束logo的动画*/
+    GOLogoAni(): void {
+        Laya.Tween.to(this.GOLogo, { alpha: 0.5 }, 800, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(this.GOLogo, { alpha: 1 }, 800, null, Laya.Handler.create(this, function () {
+                this.GOLogoAni();
+            }, []), 0);
+        }, []), 0);
+    }
+
+    btnAni(): void {
+        Laya.Tween.to(this.btn_Return, { scaleX: 0.95, scaleY: 0.95 }, 100, null, Laya.Handler.create(this, function () {
+
+            Laya.Tween.to(this.btn_Return, { scaleX: 1.05, scaleY: 1.05 }, 100, null, Laya.Handler.create(this, function () {
+
+                Laya.Tween.to(this.btn_Return, { scaleX: 1, scaleY: 1 }, 100, null, Laya.Handler.create(this, function () {
+                }, []), 0);
+
+                Laya.Tween.to(this.btn_Again, { scaleX: 0.95, scaleY: 0.95 }, 100, null, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(this.btn_Again, { scaleX: 1.05, scaleY: 1.05 }, 100, null, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(this.btn_Again, { scaleX: 1, scaleY: 1 }, 100, null, Laya.Handler.create(this, function () {
+                        }, []), 0);
+                    }, []), 0);
+                }, []), 0);
+            }, []), 0);
+
+        }, []), 0);
+    }
+
     /**按钮点击事件*/
     btnClink(): void {
         // 重来
-        this.again_But.on(Laya.Event.MOUSE_DOWN, this, this.down);
-        this.again_But.on(Laya.Event.MOUSE_MOVE, this, this.move);
-        this.again_But.on(Laya.Event.MOUSE_UP, this, this.up);
-        this.again_But.on(Laya.Event.MOUSE_OUT, this, this.out);
+        this.btn_Again.on(Laya.Event.MOUSE_DOWN, this, this.down);
+        this.btn_Again.on(Laya.Event.MOUSE_MOVE, this, this.move);
+        this.btn_Again.on(Laya.Event.MOUSE_UP, this, this.up);
+        this.btn_Again.on(Laya.Event.MOUSE_OUT, this, this.out);
         // 返回
-        this.return_But.on(Laya.Event.MOUSE_DOWN, this, this.down);
-        this.return_But.on(Laya.Event.MOUSE_MOVE, this, this.move);
-        this.return_But.on(Laya.Event.MOUSE_UP, this, this.up);
-        this.return_But.on(Laya.Event.MOUSE_OUT, this, this.out);
+        this.btn_Return.on(Laya.Event.MOUSE_DOWN, this, this.down);
+        this.btn_Return.on(Laya.Event.MOUSE_MOVE, this, this.move);
+        this.btn_Return.on(Laya.Event.MOUSE_UP, this, this.up);
+        this.btn_Return.on(Laya.Event.MOUSE_OUT, this, this.out);
     }
     down(event): void {
+        Laya.timer.pause();
         event.currentTarget.scale(0.95, 0.95);
     }
     /**移动*/
@@ -156,17 +197,33 @@ export default class Settlement extends Laya.Script {
     /**抬起增加属性*/
     up(event): void {
         event.currentTarget.scale(1, 1);
-        if (event.currentTarget.name === 'again_But') {
+        if (event.currentTarget.name === 'btn_Again') {
             this.cutTnterface('restart');
-        } else if (event.currentTarget.name === 'return_But') {
+        } else if (event.currentTarget.name === 'btn_Return') {
             this.cutTnterface('returnStart');
         }
+        Laya.timer.resume();
+        Laya.Tween.clearTween(this.GOLogo);//删除logo的动画
     }
+
+
     /**出屏幕*/
     out(event): void {
+        Laya.timer.resume();
         event.currentTarget.scale(1, 1);
     }
 
+    onUpdate(): void {
+        let time = Date.now();
+        if (this.btnAniSwich) {
+            if (time - this.btnAniTime > this.btnAniInterval) {
+                this.btnAniTime = time;
+                this.btnAni();
+            }
+        }
+    }
+
     onDisable(): void {
+        Laya.Tween.clearAll(this);
     }
 }

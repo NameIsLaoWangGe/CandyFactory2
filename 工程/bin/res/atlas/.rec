@@ -52,7 +52,7 @@ P C55056AF 分享.png
 P 9168C324 分数牌.png
 P 02BDB92C 分数：.png
 P 08ED2E03 复活倒计时底.png
-P 7C487E18 复活继续.png
+P BD211EF5 复活继续.png
 P 05F75E52 对话框.png
 R BBC12A8E 属性战士框.png
 P DD3BB8F3 开始按钮1.png
@@ -96,11 +96,11 @@ P B82A2BA2 太棒了.png
 P 6D2C76CD 干得漂亮.png
 P B10CCA4A 牛皮.png
 D candy/操作按钮
-P 5779E5A7 底座.png
-P 51CFB9FB 红色按钮.png
-P 46AEFE45 绿色按钮.png
-P 1AFE4869 蓝色按钮.png
-P 5F3A830D 黄色按钮.png
+P AA0D3C02 底座.png
+P A5B3DDE9 红色按钮.png
+P E0A0C608 绿色按钮.png
+P 3AA26610 蓝色按钮.png
+P 678D7B70 黄色按钮.png
 D candy/敌人
 R 96155E5C fightingEnemy.png
 R 99A6B194 fightingEnemy.sk
@@ -159,8 +159,8 @@ P 1D1B0797 短指针.png
 P C6A8E23B 管道1.png
 P F60C6672 管道2.png
 P F97AF9D4 管道2高光.png
-R AABC5E14 糖果制造机.png
-R E5D4B665 糖果陈列台.png
+R 24FE58EB 糖果制造机.png
+R BEB7E39C 糖果陈列台.png
 P E4AB60C7 长指针.png
 R 995383EE 陈列台影子.png
 D candy/背景图

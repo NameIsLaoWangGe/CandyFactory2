@@ -80,7 +80,7 @@ export default class startGame extends Laya.Script {
 
         this.starSwich = true;
         this.starTime = Date.now();
-        this.starInterval = 10;
+        this.starInterval = 25;
 
         this.startBSwitch = null;
         this.startBInterval = null;

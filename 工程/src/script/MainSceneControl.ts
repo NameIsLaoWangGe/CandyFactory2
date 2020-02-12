@@ -268,11 +268,11 @@ export default class MainSceneControl extends Laya.Script {
     candyMoveToDisplay(): void {
         let delayed = 10;
         let candyHeiht = 100;
-        let spacing = 1.8;
+        let spacing = -1;
         let startX_02 = Laya.stage.width / 2 - 42;
         let startX_01 = Laya.stage.width / 2 + 58;
         //最远的那个位置
-        let startY = this.displays.y + 4 * (candyHeiht + spacing) - 30;
+        let startY = this.displays.y + 4 * (candyHeiht + spacing) - 35;
         for (let i = 0; i < this.startRow; i++) {
             Laya.timer.frameOnce(delayed, this, function () {
                 for (let j = 0; j < 2; j++) {
