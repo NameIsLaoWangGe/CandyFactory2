@@ -10,7 +10,7 @@
 	"compileType": "game",
 	"libVersion": "game",
 	"appid": "wx41a91eb718cf4ca9",
-	"projectname": "%E7%B3%96%E6%9E%9C%E8%BD%A6%E9%97%B4",
+	"projectname": "layaWXTest",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"condition": {

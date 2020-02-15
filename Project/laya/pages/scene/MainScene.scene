@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":135,
-    "selecteID":61,
+    "selectedBox":185,
+    "selecteID":186,
     "searchKey":"Scene",
     "props":{"x":0,"width":750,"sceneColor":"#000000","height":1334},
     "nodeParent":-1,
-    "maxID":185,
+    "maxID":189,
     "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
@@ -76,14 +76,13 @@
                     "props":{"y":-64,"x":10,"texture":"candy/糖果机器/糖果制造机.png","name":"machine","alpha":1},
                     "nodeParent":18,
                     "label":"machine",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":142,
                     "child":[
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,suspend",
                             "props":{"y":139,"x":425,"texture":"candy/ui/暂停按钮.png","name":"suspend"},
@@ -113,7 +112,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_02",
                             "props":{"y":16,"x":195,"texture":"candy/糖果机器/管道2.png","name":"flow_02"},
@@ -127,7 +125,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_01",
                             "props":{"y":119,"x":67,"texture":"candy/糖果机器/管道1.png","name":"flow_01"},
@@ -141,7 +138,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"SkeletonPlayer",
                             "searchKey":"SkeletonPlayer,pipeline_02",
                             "props":{"y":122,"x":282,"url":"candy/糖果机器/pipeline_02.sk","name":"pipeline_02"},
@@ -155,7 +151,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_02高光",
                             "props":{"y":39,"x":274,"texture":"candy/糖果机器/管道2高光.png","name":"flow_02高光"},
@@ -169,7 +164,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"SkeletonPlayer",
                             "searchKey":"SkeletonPlayer,pipeline_01",
                             "props":{"y":189,"x":197,"url":"candy/糖果机器/pipeline_01.sk","name":"pipeline_01"},
@@ -183,7 +177,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_01高光",
                             "props":{"y":141,"x":211,"width":121,"texture":"candy/糖果机器/水管流水高光_01.png","rotation":1,"pivotY":17,"pivotX":61,"name":"flow_01高光","height":33},
@@ -198,7 +191,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite",
                             "props":{"y":157.5,"x":91,"texture":"candy/糖果机器/指示灯.png"},
@@ -208,6 +200,62 @@
                             "isAniNode":true,
                             "hasChild":false,
                             "compId":163,
+                            "child":[
+                                ]
+                        }]
+                },
+                {
+                    "x":30,
+                    "type":"Sprite",
+                    "searchKey":"Sprite,energyLamp",
+                    "props":{"y":212,"x":442,"width":79,"name":"energyLamp","height":16},
+                    "nodeParent":18,
+                    "label":"energyLamp",
+                    "isOpen":true,
+                    "isDirectory":true,
+                    "isAniNode":true,
+                    "hasChild":true,
+                    "compId":185,
+                    "child":[
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,lamp_01",
+                            "props":{"y":5,"x":0,"texture":"candy/糖果机器/绿灯.png","name":"lamp_01"},
+                            "nodeParent":185,
+                            "label":"lamp_01",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":188,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,lamp_02",
+                            "props":{"y":5,"x":16,"texture":"candy/糖果机器/黄灯.png","name":"lamp_02"},
+                            "nodeParent":185,
+                            "label":"lamp_02",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":186,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,lamp_03",
+                            "props":{"y":5,"x":32,"texture":"candy/糖果机器/红灯.png","name":"lamp_03"},
+                            "nodeParent":185,
+                            "label":"lamp_03",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":187,
                             "child":[
                                 ]
                         }]
@@ -405,7 +453,7 @@
                     "source":"src/script/Assembly.ts",
                     "searchKey":"Script,Assembly",
                     "removeAble":true,
-                    "props":{"y":-1,"x":0,"shortPointer":"@node:123","machine":"@node:142","flowMask_01":"@node:158","LongPointer":"@node:119"},
+                    "props":{"y":-1,"x":0,"shortPointer":"@node:123","machine":"@node:142","flowMask_01":"@node:158","energyLamp":"@node:185","LongPointer":"@node:119"},
                     "nodeParent":18,
                     "label":"Assembly",
                     "isDirectory":false,

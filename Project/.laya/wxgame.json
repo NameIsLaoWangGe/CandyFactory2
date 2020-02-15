@@ -37,6 +37,13 @@
         "",
         ""
     ],
+    "exclude": false,
+    "excludeFilter": [
+        "!$basePath/res/**/*.*"
+    ],
+    "vexcludeNoteList": [
+        ""
+    ],
     "packfile": false,
     "packfileFilter": [
         ""
@@ -54,7 +61,8 @@
     ],
     "clearReleaseDir": true,
     "compile": true,
+    "forceCompile": false,
     "onlyIndexJS": true,
     "projectType": "ts",
-    "pubTime": 1581763410943
+    "pubTime": 1581764193151
 }

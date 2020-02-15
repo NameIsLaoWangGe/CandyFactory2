@@ -5,6 +5,15 @@ export default class Assembly extends Laya.Script {
     /** @prop {name:LongPointer, tips:长指针, type:Node}*/
     public LongPointer: Laya.Sprite;
 
+    /** @prop {name:energyLamp, tips:能量灯, type:Node}*/
+    public energyLamp: Laya.Sprite;
+    private lamp_01: Laya.Sprite;
+    private lamp_02: Laya.Sprite;
+    private lamp_03: Laya.Sprite;
+
+    /**指示灯动画开关*/
+    private LampSwitch: boolean;
+
     /**自己*/
     private self: Laya.Sprite;
     /**所属场景*/
@@ -75,6 +84,15 @@ export default class Assembly extends Laya.Script {
         this.smokeInterval = 500;
         this.initialPX_Machine = this.machine.x;
 
+        // 指示灯的动画设置
+        this.launchSwitch = false;
+        this.lamp_01 = this.energyLamp.getChildByName('lamp_01') as Laya.Sprite;
+        this.lamp_02 = this.energyLamp.getChildByName('lamp_02') as Laya.Sprite;
+        this.lamp_03 = this.energyLamp.getChildByName('lamp_03') as Laya.Sprite;
+        this.lamp_01.alpha = 0.3;
+        this.lamp_02.alpha = 0.3;
+        this.lamp_03.alpha = 0.3;
+
         // 位移抖动参数
         this.MDirection = Math.random() * 2 === 1 ? 'left' : 'right';
         this.MshakeInterval = 30;
@@ -101,6 +119,7 @@ export default class Assembly extends Laya.Script {
         this.pipeSk_02 = this.machine.getChildByName('pipeline_02') as Laya.Skeleton;
         this.createPipeSk_01();
         this.createPipeSk_02();
+        this.lampAni();
     }
 
     /**开始机器运动*/
@@ -139,6 +158,28 @@ export default class Assembly extends Laya.Script {
     parseComplete_02(): void {
         // 水管动画
         this.pipeSk_02.play('static', true);
+    }
+
+    /**能量灯动画*/
+    lampAni(): void {
+        if (this.launchSwitch) {
+            Laya.Tween.to(this.lamp_01, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                Laya.Tween.to(this.lamp_01, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                }, []), 0);
+
+                Laya.Tween.to(this.lamp_02, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(this.lamp_02, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                    }, []), 0);
+
+                    Laya.Tween.to(this.lamp_03, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                        Laya.Tween.to(this.lamp_03, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                            this.lampAni();
+                        }, []), 0);
+                    }, []), 0);
+                }, []), 0);
+
+            }, []), 0);
+        }
     }
 
     /**位移抖动
