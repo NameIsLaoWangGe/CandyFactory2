@@ -77,6 +77,7 @@ P ADB0D4CF 进度条装饰1.png
 P BBE9EEDE 进度条装饰2.png
 P 91F837EB 重来.png
 P F7111ECD 错误提示.png
+R 129BD0E2 防沉迷文字.png
 P 670E5314 黑色底.png
 D candy/主角
 R E088D4B9 role_01.png
@@ -145,6 +146,9 @@ P 5A403804 黄色糖果球.png
 D candy/糖果机器
 R DD8C5022 candyLaunch.png
 R 30F8BB9A candyLaunch.sk
+P EB904A46 lamp_04.png
+P 9B5D5CF7 lamp_05.png
+P CBF82DA2 lamp_06.png
 R 8AE9CAAC pipeline_01.png
 R 75F76674 pipeline_01.sk
 R 73FFFE58 pipeline_02.png
@@ -157,8 +161,8 @@ P 1D1B0797 短指针.png
 P C6A8E23B 管道1.png
 P F60C6672 管道2.png
 P F97AF9D4 管道2高光.png
-R 6CBCA7B5 糖果制造机.png
-R BEB7E39C 糖果陈列台.png
+R EB9EF949 糖果制造机.png
+R BDA2AE65 糖果陈列台.png
 P E40FB387 红灯.png
 P 21E7E6A3 绿灯.png
 P E4AB60C7 长指针.png

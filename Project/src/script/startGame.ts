@@ -34,6 +34,9 @@ export default class startGame extends Laya.Script {
     /** @prop {name:LoGo, tips:"标题", type:Node}*/
     public LoGo: Laya.Image;
 
+    /** @prop {name:antiAddiction, tips:"防沉迷文字", type:Node}*/
+    public antiAddiction: Laya.Image;
+
     /**星星开始开关*/
     private starSwich: boolean;
     /**标题上的星星动画产生时间记录*/
@@ -87,6 +90,8 @@ export default class startGame extends Laya.Script {
         this.startBTime = Date.now();
         this.startBNum = 0;
 
+        let heightL = Laya.stage.height;
+        this.antiAddiction.y = heightL * 7 / 8 + (this.self.height - heightL) / 2;
 
         this.againClik = true;
     }
@@ -115,6 +120,8 @@ export default class startGame extends Laya.Script {
         this.LoGo.alpha = 0;
         this.LoGo.scale(0, 0);
 
+        this.antiAddiction.alpha = 0;
+
         this.btn_Participate.alpha = 0;
         this.btn_Participate.scale(0, 0);
         this.btn_Ranking.alpha = 0;
@@ -137,6 +144,9 @@ export default class startGame extends Laya.Script {
             // 第一次立即执行btn_Start抖动动画
             this.startBSwitch = true;
             this.startBInterval = 0;
+            //防沉迷文字动画
+            Laya.Tween.to(this.antiAddiction, { alpha: 1 }, 200, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            }, []), 0);
         }, []), 0);
     }
 
@@ -157,6 +167,10 @@ export default class startGame extends Laya.Script {
         this.btn_Start.alpha = 0;
         this.btn_Ranking.alpha = 0;
         this.btn_Participate.alpha = 0;
+
+        // 防沉迷文字小时
+        Laya.Tween.to(this.antiAddiction, { alpha: 0 }, 200, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+        }, []), 0);
 
         // 4个背景拉开
         Laya.Tween.to(this.bg_01, { x: -1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: -720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
@@ -200,6 +214,8 @@ export default class startGame extends Laya.Script {
         this.LoGo.alpha = 0;
         this.LoGo.scale(1, 1);
 
+        this.antiAddiction.alpha = 0;
+
         this.btn_Participate.alpha = 0;
         this.btn_Participate.scale(1, 1);
         this.btn_Ranking.alpha = 0;
@@ -237,6 +253,9 @@ export default class startGame extends Laya.Script {
                 this.startBSwitch = true;
                 this.startBInterval = 0;
                 this.btnClink();
+                //防沉迷文字动画
+                Laya.Tween.to(this.antiAddiction, { alpha: 1 }, 200, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                }, []), 0);
             }, []), 0);
 
         }, []), 0);

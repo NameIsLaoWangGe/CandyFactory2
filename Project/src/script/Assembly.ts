@@ -5,14 +5,22 @@ export default class Assembly extends Laya.Script {
     /** @prop {name:LongPointer, tips:长指针, type:Node}*/
     public LongPointer: Laya.Sprite;
 
-    /** @prop {name:energyLamp, tips:能量灯, type:Node}*/
-    public energyLamp: Laya.Sprite;
+    /** @prop {name:energyLamp_01, tips:能量灯1, type:Node}*/
+    public energyLamp_01: Laya.Sprite;
     private lamp_01: Laya.Sprite;
     private lamp_02: Laya.Sprite;
     private lamp_03: Laya.Sprite;
 
+    /** @prop {name:energyLamp_02, tips:能量灯2, type:Node}*/
+    public energyLamp_02: Laya.Sprite;
+    private lamp_04: Laya.Sprite;
+    private lamp_05: Laya.Sprite;
+    private lamp_06: Laya.Sprite;
+
     /**指示灯动画开关*/
     private LampSwitch: boolean;
+    private lampTime: number;
+    private lampInterval: number;
 
     /**自己*/
     private self: Laya.Sprite;
@@ -47,17 +55,9 @@ export default class Assembly extends Laya.Script {
     /**角度抖动方向记录*/
     private RDirection: string;
 
-    /**时间线*/
-    private timeLine: number;
     /**Machine初始位置*/
     private initialPX_Machine: number;
 
-    /**抖动次数*/
-    private launchNum: number;
-    /**当前这次抖动的时间*/
-    private launchSwitch: boolean;
-
-    /**时间进度*/
     private timer: Laya.Sprite;
     /**进度条*/
     private timeSchedule: Laya.ProgressBar;
@@ -84,14 +84,24 @@ export default class Assembly extends Laya.Script {
         this.smokeInterval = 500;
         this.initialPX_Machine = this.machine.x;
 
-        // 指示灯的动画设置
-        this.launchSwitch = false;
-        this.lamp_01 = this.energyLamp.getChildByName('lamp_01') as Laya.Sprite;
-        this.lamp_02 = this.energyLamp.getChildByName('lamp_02') as Laya.Sprite;
-        this.lamp_03 = this.energyLamp.getChildByName('lamp_03') as Laya.Sprite;
+        // 指示灯1的动画设置
+        this.lamp_01 = this.energyLamp_01.getChildByName('lamp_01') as Laya.Sprite;
+        this.lamp_02 = this.energyLamp_01.getChildByName('lamp_02') as Laya.Sprite;
+        this.lamp_03 = this.energyLamp_01.getChildByName('lamp_03') as Laya.Sprite;
         this.lamp_01.alpha = 0.3;
         this.lamp_02.alpha = 0.3;
         this.lamp_03.alpha = 0.3;
+        // 指示灯2的动画设置
+        this.lamp_04 = this.energyLamp_02.getChildByName('lamp_04') as Laya.Sprite;
+        this.lamp_05 = this.energyLamp_02.getChildByName('lamp_05') as Laya.Sprite;
+        this.lamp_06 = this.energyLamp_02.getChildByName('lamp_06') as Laya.Sprite;
+        this.lamp_04.alpha = 0.3;
+        this.lamp_05.alpha = 0.3;
+        this.lamp_06.alpha = 0.3;
+
+        this.LampSwitch = true;
+        this.lampTime = Date.now();
+        this.lampInterval = 1600;
 
         // 位移抖动参数
         this.MDirection = Math.random() * 2 === 1 ? 'left' : 'right';
@@ -107,10 +117,6 @@ export default class Assembly extends Laya.Script {
         this.RDirection = Math.random() * 2 === 1 ? 'left' : 'right';
         this.RshakeSwitch = true;
 
-        // 抖动函数
-        this.launchNum = 0;
-        this.launchSwitch = true;
-
         this.timer = this.owner.getChildByName('timer') as Laya.Sprite;
         this.timeSchedule = this.timer.getChildByName('timeSchedule') as Laya.ProgressBar;
         this.timerShakeNum = 0;
@@ -119,7 +125,8 @@ export default class Assembly extends Laya.Script {
         this.pipeSk_02 = this.machine.getChildByName('pipeline_02') as Laya.Skeleton;
         this.createPipeSk_01();
         this.createPipeSk_02();
-        this.lampAni();
+        this.lampAni_01();
+        this.lampAni_02();
     }
 
     /**开始机器运动*/
@@ -161,25 +168,41 @@ export default class Assembly extends Laya.Script {
     }
 
     /**能量灯动画*/
-    lampAni(): void {
-        if (this.launchSwitch) {
-            Laya.Tween.to(this.lamp_01, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
-                Laya.Tween.to(this.lamp_01, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
-                }, []), 0);
-
-                Laya.Tween.to(this.lamp_02, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
-                    Laya.Tween.to(this.lamp_02, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
-                    }, []), 0);
-
-                    Laya.Tween.to(this.lamp_03, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
-                        Laya.Tween.to(this.lamp_03, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
-                            this.lampAni();
-                        }, []), 0);
-                    }, []), 0);
-                }, []), 0);
-
+    lampAni_01(): void {
+        Laya.Tween.to(this.lamp_01, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            Laya.Tween.to(this.lamp_01, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             }, []), 0);
-        }
+
+            Laya.Tween.to(this.lamp_02, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                Laya.Tween.to(this.lamp_02, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                }, []), 0);
+
+                Laya.Tween.to(this.lamp_03, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(this.lamp_03, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                    }, []), 0);
+                }, []), 0);
+            }, []), 0);
+
+        }, []), 0);
+    }
+
+    /**能量灯动画*/
+    lampAni_02(): void {
+        Laya.Tween.to(this.lamp_04, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            Laya.Tween.to(this.lamp_04, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            }, []), 0);
+
+            Laya.Tween.to(this.lamp_05, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                Laya.Tween.to(this.lamp_05, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                }, []), 0);
+
+                Laya.Tween.to(this.lamp_06, { alpha: 1 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                    Laya.Tween.to(this.lamp_06, { alpha: 0.3 }, 500, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+                    }, []), 0);
+                }, []), 0);
+            }, []), 0);
+
+        }, []), 0);
     }
 
     /**位移抖动
@@ -256,7 +279,7 @@ export default class Assembly extends Laya.Script {
         if (this.selfScene['MainSceneControl'].gameOver) {
             return;
         }
-        this.timeLine++;
+
         // 烟囱烟雾特效
         if (this.smokeSwitch) {
             1
@@ -278,6 +301,16 @@ export default class Assembly extends Laya.Script {
 
         //进度条抖动
         this.timerShake();
+
+        // 指示灯动画
+        if (this.LampSwitch) {
+            let time = Date.now();
+            if (time - this.lampTime > this.lampInterval) {
+                this.lampTime = time;
+                this.lampAni_01();
+                this.lampAni_02();
+            }
+        }
     }
 
     onDisable(): void {
