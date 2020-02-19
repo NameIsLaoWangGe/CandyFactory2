@@ -2,11 +2,11 @@
     "x":0,
     "type":"Sprite",
     "selectedBox":181,
-    "selecteID":197,
+    "selecteID":203,
     "searchKey":"Sprite,startInterface",
     "props":{"y":0,"x":0,"width":750,"presetID":1,"preset":"laya/pages/prefab/startInterface.prefab","name":"startInterface","isPresetRoot":true,"height":1640},
     "nodeParent":-1,
-    "maxID":203,
+    "maxID":204,
     "label":"startInterface",
     "isOpen":true,
     "isDirectory":true,
@@ -184,23 +184,6 @@
         },
         {
             "x":15,
-            "type":"Script",
-            "switchAble":true,
-            "source":"src/script/startGame.ts",
-            "searchKey":"Script,startGame",
-            "removeAble":true,
-            "props":{"starParent":"@node:201","presetID":14,"preset":"laya/pages/prefab/startInterface.prefab","btn_Start":"@node:192","btn_Ranking":"@node:188","btn_Participate":"@node:187","bg_Pure":"@node:185","bg_04":"@node:199","bg_03":"@node:198","bg_02":"@node:183","bg_01":"@node:197","antiAddiction":"@node:202","LoGo":"@node:200","Anti_addiction":"@node:202"},
-            "nodeParent":181,
-            "label":"startGame",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":196,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
             "type":"Sprite",
             "searchKey":"Sprite,antiAddiction",
             "props":{"y":1231,"x":375,"width":602,"texture":"candy/ui/防沉迷文字.png","presetID":20,"preset":"laya/pages/prefab/startInterface.prefab","pivotY":38,"pivotX":301,"name":"antiAddiction","height":75},
@@ -210,6 +193,23 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":202,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Script",
+            "switchAble":true,
+            "source":"src/script/StartGame.ts",
+            "searchKey":"Script,StartGame",
+            "removeAble":true,
+            "props":{"starParent":"@node:201","presetID":21,"preset":"laya/pages/prefab/startInterface.prefab","btn_Start":"@node:192","btn_Ranking":"@node:188","btn_Participate":"@node:187","bg_Pure":"@node:185","bg_04":"@node:199","bg_03":"@node:198","bg_02":"@node:183","bg_01":"@node:197","antiAddiction":"@node:202","LoGo":"@node:200"},
+            "nodeParent":181,
+            "label":"StartGame",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":203,
             "child":[
                 ]
         }],

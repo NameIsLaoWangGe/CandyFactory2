@@ -1,0 +1,1 @@
+require("weapp-adapter.js"),window.loadLib=require,window.screenOrientation="sensor_landscape",loadLib("libs/laya.opendata.min.js"),loadLib("js/bundle.js");;

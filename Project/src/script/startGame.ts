@@ -53,8 +53,9 @@ export default class startGame extends Laya.Script {
     /**开始按钮抖动次数*/
     private startBNum: number;
 
-    /**开始游戏点击一次就结束，不可多次点击*/
-    private againClik: boolean;
+
+    /**排行榜的prefab*/
+    private ranking: Laya.Prefab;
 
     constructor() { super(); }
 
@@ -93,7 +94,7 @@ export default class startGame extends Laya.Script {
         let heightL = Laya.stage.height;
         this.antiAddiction.y = heightL * 7 / 8 + (this.self.height - heightL) / 2;
 
-        this.againClik = true;
+        this.ranking = this.selfScene['MainSceneControl'].ranking as Laya.Prefab;
     }
 
     /**进入界面的动画节点属性*/
@@ -368,6 +369,14 @@ export default class startGame extends Laya.Script {
 
     }
 
+    /**创建排行榜界面*/
+    createRing(): void {
+        this.btnClink();
+        let ranking = Laya.Pool.getItemByCreateFun('ranking', this.ranking.create, this.ranking) as Laya.Sprite;
+        this.selfScene.addChild(ranking);
+        ranking.pos(0, 0);
+    }
+
     /**按钮点击事件*/
     btnClink(): void {
         // 开始游戏
@@ -423,15 +432,15 @@ export default class startGame extends Laya.Script {
     up(event): void {
         event.currentTarget.scale(1, 1);
         if (event.currentTarget.name === 'btn_Start') {
+            this.closeBtnClink();
             this.starVanish();
             this.vanishAni();
         } else if (event.currentTarget.name === 'btn_Participate') {
 
         } else if (event.currentTarget.name === 'btn_Ranking') {
-
+            this.createRing();
         }
         Laya.timer.resume();
-        this.closeBtnClink();
     }
     /**出屏幕*/
     out(event): void {
@@ -458,8 +467,6 @@ export default class startGame extends Laya.Script {
         }
 
     }
-
-
 
     onDisable(): void {
         Laya.Tween.clearAll(this);

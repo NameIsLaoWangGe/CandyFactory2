@@ -10,11 +10,12 @@ import Enemy from "./script/Enemy"
 import EnemyBullet from "./script/EnemyBullet"
 import Explode from "./script/Explode"
 import HintWord from "./script/HintWord"
+import Ranking from "./script/Ranking"
 import Resurgence from "./script/Resurgence"
 import RewardWords from "./script/RewardWords"
 import RoleBullet from "./script/RoleBullet"
 import Settlement from "./script/Settlement"
-import startGame from "./script/startGame"
+import StartGame from "./script/StartGame"
 /*
 * 游戏初始化配置;
 */
@@ -45,11 +46,12 @@ export default class GameConfig{
         reg("script/EnemyBullet.ts",EnemyBullet);
         reg("script/Explode.ts",Explode);
         reg("script/HintWord.ts",HintWord);
+        reg("script/Ranking.ts",Ranking);
         reg("script/Resurgence.ts",Resurgence);
         reg("script/RewardWords.ts",RewardWords);
         reg("script/RoleBullet.ts",RoleBullet);
         reg("script/Settlement.ts",Settlement);
-        reg("script/startGame.ts",startGame);
+        reg("script/StartGame.ts",StartGame);
     }
 }
 GameConfig.init();

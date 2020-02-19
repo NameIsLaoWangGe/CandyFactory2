@@ -72,6 +72,9 @@ export default class MainSceneControl extends Laya.Script {
     /** @prop {name:startInterface , tips:"开始游戏界面", type:Prefab}*/
     public startInterface: Laya.Prefab;
 
+    /** @prop {name:ranking , tips:"排行榜界面", type:Prefab}*/
+    public ranking: Laya.Prefab;
+
     /** @prop {name:score , tips:"分数节点", type:Prefab}*/
     public score: Laya.Prefab;
 
