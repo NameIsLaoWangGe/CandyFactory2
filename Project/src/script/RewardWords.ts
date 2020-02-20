@@ -42,37 +42,38 @@ export default class RewardWords extends Laya.Script {
         let url_02 = 'candy/提示文字/太棒了.png';
         let url_03 = 'candy/提示文字/干得漂亮.png';
         // 避免从对象池拿出来后重复添加
-        let sprite: Laya.Image;
+        let wordImg: Laya.Image;
         if (!this.self.getChildByName('word')) {
-            sprite = new Laya.Image;
-            this.self.addChild(sprite);
+            wordImg = new Laya.Image;
+            this.self.addChild(wordImg);
         } else {
-            sprite = this.self.getChildByName('word') as Laya.Image;
+            wordImg = this.self.getChildByName('word') as Laya.Image;
         }
 
-        sprite.name = 'word';
-        sprite.anchorX = 0.5;
-        sprite.anchorY = 0.5;
+        wordImg.name = 'word';
         switch (word) {
             case '牛皮':
-                sprite.loadImage(url_01);
-                sprite.pos(150, 20);
+                wordImg.skin = url_01;
+                wordImg.pos(150, 20);
                 this.addScoreNumber = 500;
                 break;
             case '太棒了':
-                sprite.loadImage(url_02);
-                sprite.pos(105, 20);
+                wordImg.skin = url_02;
+                wordImg.pos(105, 20);
                 this.addScoreNumber = 1000;
                 break;
             case '干得漂亮':
-                sprite.loadImage(url_03);
-                sprite.pos(55, 20);
+                wordImg.skin = url_03;
+                wordImg.pos(55, 20);
                 this.addScoreNumber = 2000;
                 break;
             default:
                 break;
         }
+        wordImg.pivotX = wordImg.width / 2;
+        wordImg.pivotY = wordImg.height / 2;
         this.wordsType = word;
+
         this.RewardWordsMove();
 
     };
@@ -133,7 +134,7 @@ export default class RewardWords extends Laya.Script {
         let timeLine_self = new Laya.TimeLine;
         timeLine_self.addLabel('appear', -300).to(this.self, { rotation: 360, x: Laya.stage.width / 2, alpha: 1 }, 400, null, 0)
             .addLabel('pause', 0).to(this.self, { x: Laya.stage.width / 2 }, standingTime - 400, null, 0)
-            .addLabel('vanish_02', 0).to(this.self, { rotation: -360, x: -1200 }, 650, Laya.Ease.circInOut, 0)
+            .addLabel('vanish_02', 0).to(this.self, { rotation: -720, x: -1200 }, 650, Laya.Ease.circInOut, 0)
         timeLine_self.play('appear', false);
         timeLine_self.on(Laya.Event.COMPLETE, this, function () {
             this.self.removeSelf();

@@ -6,4 +6,5 @@
    <item name="candy/糖果机器/candyLaunch.png" type="Sprite" compress="0" pack="2" quality="80" props="" picType="0" scale="0"/>
    <item name="candy/ui/属性战士框.png" type="Sprite" compress="0" pack="2" quality="80" props="" picType="0" scale="0"/>
    <item name="candy/糖果/redCandy.png" type="Sprite" compress="0" pack="2" quality="80" props="" picType="0" scale="0"/>
+   <item name="candy/rank" type="" compress="0" pack="1" quality="80" props="" picType="0" scale="1"/>
 </res>

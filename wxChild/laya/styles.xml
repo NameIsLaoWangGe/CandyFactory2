@@ -1,0 +1,13 @@
+<res>
+   <item name="test/3.png" type="Sprite" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="test/2.png" type="Sprite" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="test/1.png" type="Sprite" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="test/排行栏.png" type="Sprite" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="test/Ui/排行栏.png" type="Sprite" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="test/Ui" type="" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="rank" type="" compress="0" pack="0" quality="80" props="" picType="0" scale="0"/>
+   <item name="rank/排行栏.png" type="Sprite" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="rank/第一名.png" type="Sprite" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="rank/4.png" type="Sprite" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+   <item name="rank/底板.png" type="Sprite" compress="0" pack="1" quality="80" props="" picType="0" scale="0"/>
+</res>

@@ -1,6 +1,8 @@
 D .
 D candy
-R F9212D1F 效果图.png
+P 546EE85A 子弹.png
+P 546EE85A 红色桶.png
+P 546EE85A 血条.png
 D comp
 P 316AD948 btn_close.png
 P 5B258D17 button.png
@@ -56,10 +58,11 @@ P 08ED2E03 复活倒计时底.png
 P BD211EF5 复活继续.png
 P 05F75E52 对话框.png
 R BBC12A8E 属性战士框.png
-R 39A2E466 底板.png
+R 514859DB 底板.png
 P DD3BB8F3 开始按钮1.png
 P 10767910 开始按钮2.png
 P AB788A6C 开始游戏标题.png
+R 36BB7C9E 排行栏.png
 P 684F9E31 排行榜.png
 P 594D9461 操作位置链接线.png
 P 4861FB87 敌人属性显示.png

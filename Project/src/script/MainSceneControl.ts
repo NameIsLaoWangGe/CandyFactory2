@@ -385,7 +385,6 @@ export default class MainSceneControl extends Laya.Script {
         // 随机创建一种颜色糖果
         // 糖果的名称结构是11位字符串加上索引值，方便查找，并且这样使他们的名称唯一
         let randomNum = Math.floor(Math.random() * 4);
-        let pic = (candy.getChildByName('pic') as Laya.Image);
         switch (randomNum) {
             case 0:
                 candy.name = 'yellowCandy' + this.candyCount;
