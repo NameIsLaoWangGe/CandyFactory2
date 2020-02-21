@@ -592,6 +592,7 @@ export default class MainSceneControl extends Laya.Script {
 
     /**复活*/
     createResurgence(): void {
+
         let resurgence = Laya.Pool.getItemByCreateFun('resurgence', this.resurgence.create, this.resurgence) as Laya.Sprite;
         this.self.addChild(resurgence);
         resurgence.zOrder = 1000;
@@ -684,10 +685,9 @@ export default class MainSceneControl extends Laya.Script {
             });
             candyDelayed += 20;
         }
-
     }
 
-    /**主角复活重新开始*/
+    /**主角复活继续游戏*/
     roleResurgenceAni(): void {
         let skeleton1 = this.role_01.getChildByName('skeleton') as Laya.Skeleton;
         skeleton1.play('speak', true);
@@ -714,6 +714,7 @@ export default class MainSceneControl extends Laya.Script {
         this.role_02['Role'].initProperty();
 
         this.operating['OperationControl'].initProperty();
+
     }
 
     /**返回主界面清理场景*/
@@ -743,6 +744,21 @@ export default class MainSceneControl extends Laya.Script {
 
         // 操作台重置
         this.operating['OperationControl'].initProperty();
+    }
+
+    /** 更新微信排行榜的数据*/
+    wxPostData() {
+        if (Laya.Browser.onMiniGame) {
+            let args = {
+                type: 'scores', data: { scores: this.scoreLabel.value }
+            }
+            let wx: any = Laya.Browser.window.wx;
+            let openDataContext: any = wx.getOpenDataContext();
+            openDataContext.postMessage(args);
+            console.log('上传了');
+        } else {
+            console.log('没有上传');
+        }
     }
 
     /**属性刷新显示规则*/

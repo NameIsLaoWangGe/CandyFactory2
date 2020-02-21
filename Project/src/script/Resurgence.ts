@@ -225,8 +225,11 @@ export default class Resurgence extends Laya.Script {
         event.currentTarget.scale(1, 1);
     }
 
-    /**创建结算界面*/
+    /**创建结算界面
+     * 并且上传分数到微信排行榜
+    */
     createSettlement(): void {
+        this.selfScene['MainSceneControl'].wxPostData();
         // 稍加延时
         Laya.timer.frameOnce(20, this, function () {
             let settlement = Laya.Pool.getItemByCreateFun('settlement', this.settlement.create, this.settlement) as Laya.Sprite;

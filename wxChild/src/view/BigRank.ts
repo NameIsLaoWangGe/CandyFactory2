@@ -23,19 +23,11 @@ export default class BigRank extends ui.test.BigUI {
 
 
     /**出场动画*/
-
-    /**出场动画*/
     appear(): void {
         console.log('出现动画开始播放！')
         Laya.stage.addChild(this);
         this.alpha = 0;
-        // this.scale(0, 0);
-        // this.pivotX = Laya.stage.width / 2;
-        // this.pivotY = Laya.stage.height / 2;
-        // // this.x = Laya.stage.width / 2;
-        // // this.y = Laya.stage.height / 2;
-        Laya.Tween.to(this, { /*rotation: 720, alpha: 1, scaleX: 1, scaleY: 1 */alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
-            this.rotation = 0;
+        Laya.Tween.to(this, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
         }, []), 500);
     }
 
@@ -46,12 +38,12 @@ export default class BigRank extends ui.test.BigUI {
         this.appear();
         //初始化list数据
         this.setlist(this.arr);
-        // if(Laya.Browser.onMiniGame){
-        //     //接受来自主域的信息
-        //     wx.onMessage(this.recevieData.bind(this));
-        //     // 直接展示数据
-        //     this.getFriendData();
-        // }
+        if (Laya.Browser.onMiniGame) {
+            //接受来自主域的信息
+            wx.onMessage(this.recevieData.bind(this));
+            // 直接展示数据
+            this.getFriendData();
+        }
     }
 
     /**
@@ -71,24 +63,51 @@ export default class BigRank extends ui.test.BigUI {
                 console.log('-----------------getFriendCloudStorage------------');
                 if (res.data) {
                     for (var i = 0; i < res.data.length; i++) {
+                        // res结构解析
+                        /*
+                        let res1: object = {
+                            data: [
+                                {
+                                    obj1: {
+                                        avatarIP: obj.avatarUrl,
+                                        UserName: obj.nickname,
+                                        openID: obj.openid,
+                                        KVDataList: [
+                                            {
+                                                kvData1: {
+                                                    'key': this._key,
+                                                    // data是我们上传的信息
+                                                    'value': "'wxgame': {value1: 5000,update_time: Laya.Browser.now(),}}"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
+                                { obj2: {} }, { obj3: {} }]
+                        }
+                        */
+
                         obj = res.data[i];
                         if (!(obj.KVDataList.length))
                             continue
                         //拉取数据是，使用了多少个key- KVDataList的数组就有多少
                         //更详细的KVData可以查看微信文档:https://developers.weixin.qq.com/minigame/dev/api/KVData.html
+
+                        //kv ="'wxgame': {value1: 5000,update_time: Laya.Browser.now(),}}"
                         kv = obj.KVDataList[0];
                         if (kv.key != _$this._key)
                             continue
+                        //kv.value ={'wxgame': {value1: 5000,update_time: Laya.Browser.now(),}}}
                         kv = JSON.parse(kv.value)
                         listData = {};
                         listData.avatarIP = obj.avatarUrl;
                         listData.UserName = obj.nickname;
                         listData.openID = obj.openid;
-                        listData.RankValue = kv.wxgame.value1;
+                        listData.RankValue = kv.wxgame.value1;//value1:5000
                         listData.update_time = kv.wxgame.update_time;
                         arr.push(listData);
                     }
-                    //根据RankValue排序
+                    //根据RankValue排序,字符串{value1: 5000}排序，省了一个步骤
                     arr = arr.sort(function (a, b) {
                         return b.RankValue - a.RankValue;
                     });
@@ -106,6 +125,7 @@ export default class BigRank extends ui.test.BigUI {
             }
         });
     }
+
     /**
      * 接收信息
      * @param message 收到的主域传过来的信息
@@ -114,21 +134,27 @@ export default class BigRank extends ui.test.BigUI {
         var _$this = this;
         var type: String = message.type;
         switch (type) {
+            case 'scores':
+                //展示好友的关卡数据
+                this.setSelfData(message.data);
+                break;
             default:
                 break;
         }
     }
+
     /**
      * 上报自己的数据
      * @param data 上报数据
      */
-    private setSelfData(data: String): void {
+    private setSelfData(data): void {
         var kvDataList = [];
         var obj: any = {};
         obj.wxgame = {};
-        obj.wxgame.value1 = data;
+        obj.wxgame.value1 = data['scores'];
         obj.wxgame.update_time = Laya.Browser.now();
         kvDataList.push({ "key": this._key, "value": JSON.stringify(obj) });
+
         wx.setUserCloudStorage({
             KVDataList: kvDataList,
             success: function (e): void {
@@ -141,7 +167,54 @@ export default class BigRank extends ui.test.BigUI {
                 console.log('-----complete:' + JSON.stringify(e));
             }
         });
+
+        // 最终obj和kvDataList的关系
+        // 最终obj的结构
+        /*
+        obj = {
+            'wxgame': {
+                value1: 5000,
+                update_time: Laya.Browser.now(),
+            }
+        }
+        kvDataList = [
+            {
+                kvData1: {
+                    "key": this._key,
+                    "value": "'wxgame': {value1: {data: {score: 5000},update_time: Laya.Browser.now(),}}"
+                }
+            },
+            {
+                kvData2: {
+                    "key": this._key,
+                    "value": "'wxgame': {value1: {data: {score: 5000},update_time: Laya.Browser.now(),}}"
+                }
+            }
+        ]
+        */
     }
+
+    /**上传前对比一下当前传入的分数和上次传入的分数对比，如果小于就不上传*/
+    sceorComparison(data): void {
+        let score = data['scores'];
+        // wx.getUserCloudStorage({
+        //     keyList: [this._key],
+        //     success: function (res): void {
+        //         //关于拿到的数据详细情况可以产看微信文档
+        //         //https://developers.weixin.qq.com/minigame/dev/api/UserGameData.html
+        //         var listData;
+        //         var obj;
+        //         var kv;
+        //         var arr = [];
+        //         console.log('-----------------getFriendCloudStorage------------');
+        //     }
+        //     , fail: function (data): void {
+        //         console.log('------------------获取托管数据失败--------------------');
+        //         console.log(data);
+        //     }
+        // });
+    }
+
     /**
      * 设置list arr
      * @param arr 赋值用的arr
