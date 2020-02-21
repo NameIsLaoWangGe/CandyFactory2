@@ -74,7 +74,7 @@ export default class BigRank extends ui.test.BigUI {
                                         openID: obj.openid,
                                         KVDataList: [
                                             {
-                                                kvData1: {
+                                                kvData: {
                                                     'key': this._key,
                                                     // data是我们上传的信息
                                                     'value': "'wxgame': {value1: 5000,update_time: Laya.Browser.now(),}}"
@@ -148,6 +148,7 @@ export default class BigRank extends ui.test.BigUI {
      * @param data 上报数据
      */
     private setSelfData(data): void {
+        // 上传所需格式
         var kvDataList = [];
         var obj: any = {};
         obj.wxgame = {};
@@ -155,16 +156,37 @@ export default class BigRank extends ui.test.BigUI {
         obj.wxgame.update_time = Laya.Browser.now();
         kvDataList.push({ "key": this._key, "value": JSON.stringify(obj) });
 
-        wx.setUserCloudStorage({
-            KVDataList: kvDataList,
-            success: function (e): void {
-                console.log('-----success:' + JSON.stringify(e));
-            },
-            fail: function (e): void {
-                console.log('-----fail:' + JSON.stringify(e));
-            },
-            complete: function (e): void {
-                console.log('-----complete:' + JSON.stringify(e));
+        // 先获取上次的得分
+        wx.getUserCloudStorage({
+            keyList: [this._key],
+            success: function (getres) {
+                let kv = getres.KVDataList[0];
+                let kvData = JSON.parse(kv.value);
+                let lastValue1 = kvData.wxgame.value1;
+                console.log("上次的得分是:" + lastValue1);
+                console.log("这次的得分是:" + data['scores']);
+                if (Number(data['scores']) < Number(lastValue1)) {
+                    console.log("这次的得分小于上的得分所以不上传!");
+                    return;
+                }
+                // 上传
+                wx.setUserCloudStorage({
+                    KVDataList: kvDataList,
+                    success: function (e): void {
+                        console.log('----新的得分大于以前的所以上传了:' + JSON.stringify(e));
+                    },
+                    fail: function (e): void {
+                        console.log('-----fail:' + JSON.stringify(e));
+                    },
+                    complete: function (e): void {
+                        console.log('-----complete:' + JSON.stringify(e));
+                    }
+                });
+
+            }
+            , fail: function (data): void {
+                console.log('------------------获取托管数据失败--------------------');
+                console.log(data);
             }
         });
 
@@ -179,13 +201,13 @@ export default class BigRank extends ui.test.BigUI {
         }
         kvDataList = [
             {
-                kvData1: {
+                kvData: {
                     "key": this._key,
                     "value": "'wxgame': {value1: {data: {score: 5000},update_time: Laya.Browser.now(),}}"
                 }
             },
             {
-                kvData2: {
+                kvData: {
                     "key": this._key,
                     "value": "'wxgame': {value1: {data: {score: 5000},update_time: Laya.Browser.now(),}}"
                 }
@@ -196,23 +218,21 @@ export default class BigRank extends ui.test.BigUI {
 
     /**上传前对比一下当前传入的分数和上次传入的分数对比，如果小于就不上传*/
     sceorComparison(data): void {
-        let score = data['scores'];
-        // wx.getUserCloudStorage({
-        //     keyList: [this._key],
-        //     success: function (res): void {
-        //         //关于拿到的数据详细情况可以产看微信文档
-        //         //https://developers.weixin.qq.com/minigame/dev/api/UserGameData.html
-        //         var listData;
-        //         var obj;
-        //         var kv;
-        //         var arr = [];
-        //         console.log('-----------------getFriendCloudStorage------------');
-        //     }
-        //     , fail: function (data): void {
-        //         console.log('------------------获取托管数据失败--------------------');
-        //         console.log(data);
-        //     }
-        // });
+        wx.getUserCloudStorage({
+            keyList: [this._key],
+            success: function (getres) {
+                let kv = getres.KVDataList[0];
+                let kvData = JSON.parse(kv.value);
+                let value1 = kvData.wxgame.value1;
+                console.log("上次的得分是:" + value1);
+                let score = data['scores'];
+
+            }
+            , fail: function (data): void {
+                console.log('------------------获取托管数据失败--------------------');
+                console.log(data);
+            }
+        });
     }
 
     /**
