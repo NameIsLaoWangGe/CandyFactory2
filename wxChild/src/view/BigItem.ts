@@ -32,10 +32,6 @@ export default class BigItem extends ui.test.BigItemUI {
         }
         // 头像
         this.img_head.skin = value.avatarIP;
-        this.img_head.scale(1.1, 1.1);
-        let contour = this.getChildByName('contour') as Laya.Sprite;
-        contour.scale(1.1, 1.1);
-        
 
         // 名字格式设置
         this.text_name.text = value.UserName;

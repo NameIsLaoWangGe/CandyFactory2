@@ -9,7 +9,8 @@ export default class BigRank extends ui.test.BigUI {
     }
 
     /**获取好友排行榜时的key */
-    private _key: String = 'test10086';
+    //已经使用的_key有test10087，test10086
+    private _key: String = 'test10088';
     /**list初始化使用的数据 */
     private arr: Array<any> = [
         { index: 1, avatarIP: 'rank/头像.png', UserName: "哥", RankValue: 10 },
@@ -135,12 +136,75 @@ export default class BigRank extends ui.test.BigUI {
         var type: String = message.type;
         switch (type) {
             case 'scores':
-                //展示好友的关卡数据
-                this.setSelfData(message.data);
+                //对比并且上传
+                this.correlationData(message.data);
                 break;
             default:
                 break;
         }
+    }
+
+    /**对比上次的数据上传数据*/
+    correlationData(data): void {
+        // 上传所需格式
+        var kvDataList = [];
+        var obj: any = {};
+        obj.wxgame = {};
+        obj.wxgame.value1 = data['scores'];
+        obj.wxgame.update_time = Laya.Browser.now();
+        kvDataList.push({ "key": this._key, "value": JSON.stringify(obj) });
+        // 先获取上次的得分
+        wx.getUserCloudStorage({
+            keyList: [this._key],
+            success: function (getres) {
+                console.log(getres);
+                if (getres.KVDataList.length === 0) {
+                    console.log('第一次上传无法获取值直接上传');
+                    // 上传
+                    wx.setUserCloudStorage({
+                        KVDataList: kvDataList,
+                        success: function (e): void {
+                            console.log('----第一次无论得了多少分都上传:' + JSON.stringify(e));
+                        },
+                        fail: function (e): void {
+                            console.log('-----fail:' + JSON.stringify(e));
+                        },
+                        complete: function (e): void {
+                            console.log('-----complete:' + JSON.stringify(e));
+                        }
+                    });
+                } else {
+                    console.log(getres);
+                    console.log('不是第一次上传');
+                    let kv = getres.KVDataList[0];
+                    let kvData = JSON.parse(kv.value);
+                    let lastValue1 = kvData.wxgame.value1;
+                    console.log("上次的得分是:" + lastValue1);
+                    console.log("这次的得分是:" + data['scores']);
+                    if (Number(data['scores']) < Number(lastValue1)) {
+                        console.log("这次的得分小于上的得分所以不上传!");
+                        return;
+                    }
+                    // 上传
+                    wx.setUserCloudStorage({
+                        KVDataList: kvDataList,
+                        success: function (e): void {
+                            console.log('----新的得分大于以前的所以上传了:' + JSON.stringify(e));
+                        },
+                        fail: function (e): void {
+                            console.log('-----fail:' + JSON.stringify(e));
+                        },
+                        complete: function (e): void {
+                            console.log('-----complete:' + JSON.stringify(e));
+                        }
+                    });
+                }
+            }
+            , fail: function (data): void {
+                console.log('------------------获取托管数据失败--------------------');
+                console.log(data);
+            }
+        });
     }
 
     /**
@@ -155,41 +219,19 @@ export default class BigRank extends ui.test.BigUI {
         obj.wxgame.value1 = data['scores'];
         obj.wxgame.update_time = Laya.Browser.now();
         kvDataList.push({ "key": this._key, "value": JSON.stringify(obj) });
-
-        // 先获取上次的得分
-        wx.getUserCloudStorage({
-            keyList: [this._key],
-            success: function (getres) {
-                let kv = getres.KVDataList[0];
-                let kvData = JSON.parse(kv.value);
-                let lastValue1 = kvData.wxgame.value1;
-                console.log("上次的得分是:" + lastValue1);
-                console.log("这次的得分是:" + data['scores']);
-                if (Number(data['scores']) < Number(lastValue1)) {
-                    console.log("这次的得分小于上的得分所以不上传!");
-                    return;
-                }
-                // 上传
-                wx.setUserCloudStorage({
-                    KVDataList: kvDataList,
-                    success: function (e): void {
-                        console.log('----新的得分大于以前的所以上传了:' + JSON.stringify(e));
-                    },
-                    fail: function (e): void {
-                        console.log('-----fail:' + JSON.stringify(e));
-                    },
-                    complete: function (e): void {
-                        console.log('-----complete:' + JSON.stringify(e));
-                    }
-                });
-
-            }
-            , fail: function (data): void {
-                console.log('------------------获取托管数据失败--------------------');
-                console.log(data);
+        // 上传
+        wx.setUserCloudStorage({
+            KVDataList: kvDataList,
+            success: function (e): void {
+                console.log('----新的得分大于以前的所以上传了:' + JSON.stringify(e));
+            },
+            fail: function (e): void {
+                console.log('-----fail:' + JSON.stringify(e));
+            },
+            complete: function (e): void {
+                console.log('-----complete:' + JSON.stringify(e));
             }
         });
-
         // 最终obj和kvDataList的关系
         // 最终obj的结构
         /*

@@ -229,7 +229,7 @@ export default class Enemy extends Laya.Script {
         }
     }
 
-    /** 近战攻击的敌人第二阶段移动到主角位置，并且进入主角射程范围的移动规则
+    /**近战攻击的敌人第二阶段移动到主角位置，并且进入主角射程范围的移动规则
      * 加入被子弹击退效果
     */
     infightingEnemyMove(): void {
@@ -314,7 +314,7 @@ export default class Enemy extends Laya.Script {
      * 如果当前攻击的主角死了，敌人会攻击另一个目标
     */
     replaceTarget(): void {
-        if (!this.slefTagRole['Role'].roleDeath) {
+        if (this.slefTagRole['Role'].roleDeath) {
             // 更换目标
             if (this.slefTagRole.name === 'role_01') {
                 this.slefTagRole = this.mainSceneControl.role_02;
@@ -391,7 +391,7 @@ export default class Enemy extends Laya.Script {
                 if (nowTime - this.recordTime > this.enemyProperty.attackSpeed) {
                     this.recordTime = nowTime;
                     // 血量判断，目标死亡后，会更换目标
-                    if (this.slefTagRole['Role'].role_property.blood > 0) {
+                    if (!this.slefTagRole['Role'].roleDeath) {
                         // 等上一个动画播放完毕
                         this.skeleton.play('attack', false);
                         this.playSpeedAdjust();
@@ -413,7 +413,7 @@ export default class Enemy extends Laya.Script {
                 if (nowTime - this.recordTime > this.enemyProperty.attackSpeed) {
                     this.recordTime = nowTime;
                     // 血量判断，目标死亡后，会更换目标
-                    if (this.slefTagRole['Role'].role_property.blood > 0) {
+                    if (!this.slefTagRole['Role'].roleDeath) {
                         this.skeleton.play('attack', false);
                         this.playSpeedAdjust();
                     } else {

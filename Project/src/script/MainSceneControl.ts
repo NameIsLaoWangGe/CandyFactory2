@@ -160,7 +160,7 @@ export default class MainSceneControl extends Laya.Script {
         this.enemyCount = 0;
         // 初始化怪物属性，依次为血量，攻击力，攻速，移动速度，攻击速度
         this.enemyProperty = {
-            blood: 200,
+            blood: 5000,
             attackValue: 200,
             attackSpeed: 1000,//暂时最小时间间隔为100
             defense: 10,
