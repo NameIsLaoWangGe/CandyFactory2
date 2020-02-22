@@ -34,26 +34,26 @@ export default class Assembly extends Laya.Script {
     private smokeTime: number;
 
     /**位移抖动频率，机器会按一定的时间抖动，这个时间间隔可能是随机的*/
-    private MshakeInterval: number;
-    /**位移抖动事件记录*/
-    private MshakeTime: number;
+    private mshakeInterval: number;
+    /**当前位移抖动时间记录*/
+    private mshakeTime: number;
     /**位移抖动开关*/
-    private MshakeSwitch: boolean;
+    private mshakeSwitch: boolean;
     /**位移抖动强度控制*/
-    private MshakesTre: number;
+    private mshakesTre: number;
     /**位移抖动方向记录*/
-    private MDirection: string;
+    private mDirection: string;
 
     /**角度抖动频率，机器会按一定的时间抖动，这个时间间隔可能是随机的*/
-    private RshakeInterval: number;
-    /**角度抖动事件记录*/
-    private RshakeTime: number;
+    private rshakeInterval: number;
+    /**当前角度抖动时间记录*/
+    private rshakeTime: number;
     /**角度抖动开关*/
-    private RshakeSwitch: boolean;
+    private rshakeSwitch: boolean;
     /**角度抖动强度控制*/
-    private RshakesTre: number;
+    private rshakesTre: number;
     /**角度抖动方向记录*/
-    private RDirection: string;
+    private rDirection: string;
 
     /**Machine初始位置*/
     private initialPX_Machine: number;
@@ -63,12 +63,19 @@ export default class Assembly extends Laya.Script {
     private timeSchedule: Laya.ProgressBar;
     /**时间抖动次数*/
     private timerShakeNum: number;
+
     /**管道1的骨骼动画*/
     private pipeSk_01: Laya.Skeleton;
     private pipeSk_01Tem: Laya.Templet;
     /**管道2的骨骼动画*/
     private pipeSk_02: Laya.Skeleton;
     private pipeSk_02Tem: Laya.Templet;
+    /**当前管道动画播放时间记录*/
+    private pipeTime: number;
+    /**水管动画播放时间间隔*/
+    private pipeIntervel: number;
+    /**水管动画开关*/
+    private pipeSwitch: boolean;
 
     constructor() { super(); }
 
@@ -83,6 +90,7 @@ export default class Assembly extends Laya.Script {
         this.smokeTime = Date.now();
         this.smokeInterval = 500;
         this.initialPX_Machine = this.machine.x;
+        this.self['Assembly'] = this;
 
         // 指示灯1的动画设置
         this.lamp_01 = this.energyLamp_01.getChildByName('lamp_01') as Laya.Sprite;
@@ -103,68 +111,71 @@ export default class Assembly extends Laya.Script {
         this.lampTime = Date.now();
         this.lampInterval = 1600;
 
+        this.lampAni_01();
+        this.lampAni_02();
+
         // 位移抖动参数
-        this.MDirection = Math.random() * 2 === 1 ? 'left' : 'right';
-        this.MshakeInterval = 30;
-        this.MshakeTime = Date.now();
-        this.MshakesTre = 1;
-        this.MshakeSwitch = true;
+        this.mDirection = Math.random() * 2 === 1 ? 'left' : 'right';
+        this.mshakeInterval = 30;
+        this.mshakeTime = Date.now();
+        this.mshakesTre = 1;
+        this.mshakeSwitch = true;
 
         // 角度抖动参数
-        this.RshakeInterval = 30;
-        this.RshakeTime = Date.now();
-        this.RshakesTre = 2;
-        this.RDirection = Math.random() * 2 === 1 ? 'left' : 'right';
-        this.RshakeSwitch = true;
+        this.rshakeInterval = 30;
+        this.rshakeTime = Date.now();
+        this.rshakesTre = 2;
+        this.rDirection = Math.random() * 2 === 1 ? 'left' : 'right';
+        this.rshakeSwitch = true;
 
+        // 时间进度条抖动
         this.timer = this.owner.getChildByName('timer') as Laya.Sprite;
         this.timeSchedule = this.timer.getChildByName('timeSchedule') as Laya.ProgressBar;
         this.timerShakeNum = 0;
 
+        // 水管动画
         this.pipeSk_01 = this.machine.getChildByName('pipeline_01') as Laya.Skeleton;
         this.pipeSk_02 = this.machine.getChildByName('pipeline_02') as Laya.Skeleton;
-        this.createPipeSk_01();
-        this.createPipeSk_02();
-        this.lampAni_01();
-        this.lampAni_02();
+        this.createPipeSk();
+        this.pipeSwitch = false;
+        this.pipeTime = Date.now();
+        this.pipeIntervel = 2500;
     }
-
-    /**开始机器运动*/
-    assemblyStart(): void {
-        this.pipeSk_01.play('flow', true);
-        this.pipeSk_02.play('flow', true);
-    }
-
     /**创建骨骼动画皮肤*/
-    createPipeSk_01(): void {
-        //创建动画模板
+    createPipeSk(): void {
+        //创建水管动画1模板
         this.pipeSk_01Tem = new Laya.Templet();
         this.pipeSk_01Tem.on(Laya.Event.COMPLETE, this, this.parseComplete_01);
         this.pipeSk_01Tem.on(Laya.Event.ERROR, this, this.onError);
         this.pipeSk_01Tem.loadAni("candy/糖果机器/pipeline_01.sk");
-    }
-
-    onError(): void {
-        console.log('骨骼动画加载错误');
-    }
-
-    parseComplete_01(): void {
-        // 水管动画
-        this.pipeSk_01.play('static', true);
-    }
-
-    /**创建骨骼动画皮肤*/
-    createPipeSk_02(): void {
-        //创建动画模板
+        //创建水管动画1模板
         this.pipeSk_02Tem = new Laya.Templet();
         this.pipeSk_02Tem.on(Laya.Event.COMPLETE, this, this.parseComplete_02);
         this.pipeSk_02Tem.on(Laya.Event.ERROR, this, this.onError);
         this.pipeSk_02Tem.loadAni("candy/糖果机器/pipeline_01.sk");
     }
 
+    onError(): void {
+        console.log('骨骼动画加载错误');
+    }
+    parseComplete_01(): void {
+        // 水管动画
+        this.pipeSk_01.play('static', true);
+    }
     parseComplete_02(): void {
         // 水管动画
         this.pipeSk_02.play('static', true);
+    }
+
+    /**水管动画*/
+    pipeAnimation(type): void {
+        if (type === 'static') {
+            this.pipeSk_01.play('static', true);
+            this.pipeSk_02.play('static', true);
+        } else if (type === 'flow') {
+            this.pipeSk_01.play('flow', true);
+            this.pipeSk_02.play('flow', true);
+        }
     }
 
     /**能量灯动画*/
@@ -209,25 +220,25 @@ export default class Assembly extends Laya.Script {
     * @param target 目标
     */
     moveShake(target) {
-        if (this.MshakeSwitch) {
+        if (this.mshakeSwitch) {
             let nowTime = Date.now();
-            if (nowTime - this.MshakeTime > this.MshakeInterval) {
-                this.MshakeTime = nowTime;
+            if (nowTime - this.mshakeTime > this.mshakeInterval) {
+                this.mshakeTime = nowTime;
                 // 判断目标是什么,然后对比他原来的位置
                 let initialPX;//target初始位置
                 if (target === this.machine) {
                     initialPX = this.initialPX_Machine;
                 }
-                let shakeX = this.MshakesTre;//强度
-                if (this.MDirection === "left") {
-                    target.x -= this.MshakesTre;
+                let shakeX = this.mshakesTre;//强度
+                if (this.mDirection === "left") {
+                    target.x -= this.mshakesTre;
                     if (this.machine.x < initialPX) {
-                        this.MDirection = "right";
+                        this.mDirection = "right";
                     }
-                } else if (this.MDirection === "right") {
-                    target.x += this.MshakesTre;
+                } else if (this.mDirection === "right") {
+                    target.x += this.mshakesTre;
                     if (this.machine.x > initialPX) {
-                        this.MDirection = "left";
+                        this.mDirection = "left";
                     }
                 }
             }
@@ -239,36 +250,36 @@ export default class Assembly extends Laya.Script {
     */
     timerShake() {
         if (this.timeSchedule.value > 0 && this.timeSchedule.value <= 0.15) {
-            this.RshakeInterval = 40;
-            this.RshakesTre = 2;
+            this.rshakeInterval = 40;
+            this.rshakesTre = 2;
         } else if (this.timeSchedule.value > 0.15 && this.timeSchedule.value <= 0.4) {
-            this.RshakeInterval = 50;
-            this.RshakesTre = 1.5;
+            this.rshakeInterval = 50;
+            this.rshakesTre = 1.5;
         } else if (this.timeSchedule.value > 0.4 && this.timeSchedule.value <= 0.7) {
-            this.RshakeInterval = 60;
-            this.RshakesTre = 1;
+            this.rshakeInterval = 60;
+            this.rshakesTre = 1;
         } else if (this.timeSchedule.value > 0.7 && this.timeSchedule.value <= 1) {
-            this.RshakeInterval = 70;
-            this.RshakesTre = 0.5;
+            this.rshakeInterval = 70;
+            this.rshakesTre = 0.5;
         } else {
-            this.RshakeInterval = 70;
-            this.RshakesTre = 0.5;
+            this.rshakeInterval = 70;
+            this.rshakesTre = 0.5;
         }
 
-        if (this.RshakeSwitch) {
+        if (this.rshakeSwitch) {
             let nowTime = Date.now();
-            if (nowTime - this.RshakeTime > this.RshakeInterval) {
-                this.RshakeTime = nowTime;
+            if (nowTime - this.rshakeTime > this.rshakeInterval) {
+                this.rshakeTime = nowTime;
                 // 目标判断
-                if (this.RDirection === "left") {
-                    this.timer.rotation = -this.RshakesTre;
+                if (this.rDirection === "left") {
+                    this.timer.rotation = -this.rshakesTre;
                     if (this.timer.rotation < 0) {
-                        this.RDirection = "right";
+                        this.rDirection = "right";
                     }
-                } else if (this.RDirection === "right") {
-                    this.timer.rotation = this.RshakesTre;
+                } else if (this.rDirection === "right") {
+                    this.timer.rotation = this.rshakesTre;
                     if (this.timer.rotation > 0) {
-                        this.RDirection = "left";
+                        this.rDirection = "left";
                     }
                 }
             }
@@ -311,6 +322,17 @@ export default class Assembly extends Laya.Script {
                 this.lampAni_02();
             }
         }
+
+        // 水管动画
+        if (this.pipeSwitch) {
+            let time = Date.now();
+            if (time - this.pipeTime > this.pipeIntervel) {
+                this.pipeTime = time;
+                this.pipeSk_01.play('flow', false);
+                this.pipeSk_02.play('flow', false);
+            }
+        }
+
     }
 
     onDisable(): void {

@@ -92,7 +92,7 @@ export default class startGame extends Laya.Script {
         this.startBNum = 0;
 
         let heightL = Laya.stage.height;
-        this.antiAddiction.y = heightL * 7 / 8 + (this.self.height - heightL) / 2;
+        this.antiAddiction.y = heightL * 7.2 / 8 + (this.self.height - heightL) / 2;
 
         this.ranking = this.selfScene['MainSceneControl'].ranking as Laya.Prefab;
     }
@@ -436,7 +436,7 @@ export default class startGame extends Laya.Script {
             this.starVanish();
             this.vanishAni();
         } else if (event.currentTarget.name === 'btn_Participate') {
-
+            this.selfScene['MainSceneControl'].wxShare();
         } else if (event.currentTarget.name === 'btn_Ranking') {
             this.createRing();
         }

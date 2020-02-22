@@ -161,7 +161,7 @@ export default class MainSceneControl extends Laya.Script {
         // 初始化怪物属性，依次为血量，攻击力，攻速，移动速度，攻击速度
         this.enemyProperty = {
             blood: 200,
-            attackValue: 5000,
+            attackValue: 200,
             attackSpeed: 1000,//暂时最小时间间隔为100
             defense: 10,
             moveSpeed: 10,
@@ -191,6 +191,8 @@ export default class MainSceneControl extends Laya.Script {
         this.suspend = false;
         this.startRow = 4;
         this.gameOver = false;
+        // 流水线水管动画
+        this.assembly['Assembly'].pipeAnimation('flow');
 
         this.candyMoveToDisplay();
     }
@@ -331,7 +333,10 @@ export default class MainSceneControl extends Laya.Script {
             Laya.Tween.to(candy, { x: HalfX, y: HalfY, scaleX: 1.3, scaleY: 1.3 }, timePar * 3 / 4, null, Laya.Handler.create(this, function () {
                 // 第三步降落
                 Laya.Tween.to(candy, { x: targetX, y: targetY, scaleX: 1, scaleY: 1 }, timePar, null, Laya.Handler.create(this, function () {
-                    this.replaceCandyMap(candy);
+                    // 落下特效并且播放禁止动画
+                    this.explodeAni(this.owner, candy.x, candy.y, 'disappear', 8, 1000);
+                    candy['Candy'].playSkeletonAni(1, 'static');
+                    // 最后一组发射完毕后
                     if (candy['Candy'].group === 3) {
                         this.operating['OperationControl'].operateSwitch = true;
                         this.operating['OperationControl'].clickHint();
@@ -341,7 +346,6 @@ export default class MainSceneControl extends Laya.Script {
                 }), 0);
             }), 0);
         }), 10);
-
         // 糖果的影子处理
         let shadow = candy.getChildByName('shadow') as Laya.Image;
         // 第一步放大
@@ -353,29 +357,6 @@ export default class MainSceneControl extends Laya.Script {
                 }), 0);
             }), 0);
         }), 10);
-    }
-
-    /**替换不同糖果贴图*/
-    replaceCandyMap(candy): void {
-        let skeleton = (candy.getChildByName('skeleton') as Laya.Skeleton);
-        // 创建消失变换特效
-        this.explodeAni(this.owner, candy.x, candy.y, 'disappear', 8, 1000);
-        switch (this.self.name.substring(0, 11)) {
-            case 'yellowCandy':
-                skeleton.play('yellow_static', true);
-                break;
-            case 'redCandy___':
-                skeleton.play('red_static', true);
-                break;
-            case 'blueCandy__':
-                skeleton.play('blue_static', true);
-                break;
-            case 'greenCandy_':
-                skeleton.play('green_static', true);
-                break;
-            default:
-                break;
-        }
     }
 
     /**产生糖果*/
@@ -592,7 +573,7 @@ export default class MainSceneControl extends Laya.Script {
 
     /**复活*/
     createResurgence(): void {
-
+        this.assembly['Assembly'].pipeAnimation('static');
         let resurgence = Laya.Pool.getItemByCreateFun('resurgence', this.resurgence.create, this.resurgence) as Laya.Sprite;
         this.self.addChild(resurgence);
         resurgence.zOrder = 1000;
@@ -760,6 +741,22 @@ export default class MainSceneControl extends Laya.Script {
             console.log('没有上传');
         }
     }
+
+    /**分享*/
+    wxShare() {
+        if (Laya.Browser.onMiniGame) {
+            let wx: any = Laya.Browser.window.wx;
+            //下次测试
+            wx.shareAppMessage({
+                title: '怪星大作战'
+            });
+            console.log("主动进行了转发");
+        } else {
+            console.log("仅支持微信客户端");
+        }
+
+    }
+
 
     /**属性刷新显示规则*/
     onUpdate(): void {

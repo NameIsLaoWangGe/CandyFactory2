@@ -31,6 +31,7 @@ export default class RewardWords extends Laya.Script {
         this.self.pivotY = this.self.height / 2;
         this.scoreLabel = this.selfScene['MainSceneControl'].scoreLabel;
         this.self.x = 1200;
+        this.self.alpha = 0;
         this.hintWord = this.selfScene['MainSceneControl'].hintWord;
     }
 
@@ -70,8 +71,6 @@ export default class RewardWords extends Laya.Script {
             default:
                 break;
         }
-        wordImg.pivotX = wordImg.width / 2;
-        wordImg.pivotY = wordImg.height / 2;
         this.wordsType = word;
 
         this.RewardWordsMove();
@@ -132,7 +131,7 @@ export default class RewardWords extends Laya.Script {
 
         // 字体动画
         let timeLine_self = new Laya.TimeLine;
-        timeLine_self.addLabel('appear', -300).to(this.self, { rotation: 360, x: Laya.stage.width / 2, alpha: 1 }, 400, null, 0)
+        timeLine_self.addLabel('appear', -300).to(this.self, { rotation: 360, x: Laya.stage.width / 2, alpha: 1 }, 550, null, 0)
             .addLabel('pause', 0).to(this.self, { x: Laya.stage.width / 2 }, standingTime - 400, null, 0)
             .addLabel('vanish_02', 0).to(this.self, { rotation: -720, x: -1200 }, 650, Laya.Ease.circInOut, 0)
         timeLine_self.play('appear', false);

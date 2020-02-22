@@ -295,7 +295,7 @@ export default class OperationButton extends Laya.Script {
     */
     timerControl(): void {
         if (this.timeSchedule.value > 0 && this.operateSwitch) {
-            this.timeSchedule.value -= 0.0025;
+            this.timeSchedule.value -= 0.0005;
         } else if (this.timeSchedule.value <= 0 && this.operateSwitch) {
             // 没有点击过的全部变成敌人,减去点错的糖果
             let groupArr = [0, 1, 2, 3, 4]
@@ -361,23 +361,7 @@ export default class OperationButton extends Laya.Script {
         }
         // 播放翻转动画
         if (candy['Candy'].skeleton) {
-            switch (candy.name.substring(0, 11)) {
-                case 'yellowCandy':
-                    candy['Candy'].skeleton.play('yellow_turnLeft', true);
-                    break;
-                case 'redCandy___':
-                    candy['Candy'].skeleton.play('red_turnLeft', true);
-                    break;
-                case 'blueCandy__':
-                    candy['Candy'].skeleton.play('blue_turnLeft', true);
-                    break;
-                case 'greenCandy_':
-                    candy['Candy'].skeleton.play('green_turnLeft', true);
-                    break;
-                default:
-                    break;
-            }
-            candy['Candy'].skeleton.playbackRate(4);
+            candy['Candy'].playSkeletonAni(4, 'turnLeft');
         }
         this.flewToGround(candy, point, explodeTarget);
     }

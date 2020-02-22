@@ -76,64 +76,43 @@ export default class Candy extends Laya.Script {
     }
 
     parseComplete(): void {
-        // 播放敌人动画
+        this.playSkeletonAni(2, 'turnDown');
+    }
+
+    /**播放骨骼动画
+     * @param speed 播放速度
+     * @param type 播放动画类型
+    */
+    playSkeletonAni(speed: number, type: string): void {
         switch (this.self.name.substring(0, 11)) {
             case 'yellowCandy':
-                this.skeleton.play('yellow_static', true);
+                this.skeleton.play('yellow_' + type, true);
                 break;
             case 'redCandy___':
-                this.skeleton.play('red_static', true);
+                this.skeleton.play('red_' + type, true);
                 break;
             case 'blueCandy__':
-                this.skeleton.play('blue_static', true);
+                this.skeleton.play('blue_' + type, true);
                 break;
             case 'greenCandy_':
-                this.skeleton.play('green_static', true);
+                this.skeleton.play('green_' + type, true);
                 break;
             default:
                 break;
         }
         this.skeleton.x = this.self.width / 2 + 3;
         this.skeleton.y = this.self.height / 2;
-        this.skeleton.playbackRate(1);
-    }
-
-    /**当第一个糖果被吃掉后的移动函数
-     * 移动速度要非常快
-    */
-    moveRules(): void {
-        Laya.Tween.to(this.self, { y: this.self.y + this.self.height + this.spaceY }, 10, null, Laya.Handler.create(this, function () {
-        }, []), 0);
+        this.skeleton.playbackRate(speed);
     }
 
     /**飞到主角身上增加主角属性
     * 并且播放属性增加动画
-   */
+    */
     candyFlyToRole(): void {
         if (this.candyTagRole === null) {
             return
         }
-        // 播放上下翻转动画
-        if (this.skeleton) {
-            switch (this.self.name.substring(0, 11)) {
-                case 'yellowCandy':
-                    this.skeleton.play('yellow_turnDown', true);
-                    break;
-                case 'redCandy___':
-                    this.skeleton.play('red_turnDown', true);
-                    break;
-                case 'blueCandy__':
-                    this.skeleton.play('blue_turnDown', true);
-                    break;
-                case 'greenCandy_':
-                    this.skeleton.play('green_turnDown', true);
-                    break;
-                default:
-                    break;
-            }
-            this.skeleton.playbackRate(2);
-        }
-
+        this.playSkeletonAni(2, 'turnDown');
         // 基础时间参数，动画的时间会随着位置边近而缩小
         let timePar = 500 + this.group * 100;
         let targetX;

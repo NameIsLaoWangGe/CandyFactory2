@@ -9,6 +9,10 @@ export default class Suspend extends Laya.Script {
     private roleParent: Laya.Sprite;
     /**敌人父节点*/
     private enemyParent: Laya.Sprite;
+    /**按下节点*/
+    private press: Laya.Image;
+    /**没有按下*/
+    private notPress: Laya.Image;
 
     constructor() { super(); }
 
@@ -23,6 +27,10 @@ export default class Suspend extends Laya.Script {
         this.selfScene = this.self.scene as Laya.Scene;
         this.roleParent = this.selfScene['MainSceneControl'].roleParent;
         this.enemyParent = this.selfScene['MainSceneControl'].enemyParent;
+        this.press = this.self.getChildByName('press') as Laya.Image;
+        this.notPress = this.self.getChildByName('notPress') as Laya.Image;
+        this.press.visible = false;
+        this.notPress.visible = true;
     }
 
     /**主角的点击事件
@@ -38,6 +46,8 @@ export default class Suspend extends Laya.Script {
     /**按下,给予目标位置，糖果走向目标位置;
      * 并且分数增加*/
     down(event): void {
+        this.press.visible = true;
+        this.notPress.visible = false;
         let suspend = this.selfScene['MainSceneControl'].suspend;
         if (!suspend) {
             this.selfScene['MainSceneControl'].suspend = true;
@@ -71,13 +81,19 @@ export default class Suspend extends Laya.Script {
     }
     /**移动*/
     move(event): void {
+        this.press.visible = true;
+        this.notPress.visible = false;
     }
     /**抬起*/
     up(): void {
+        this.press.visible = false;
+        this.notPress.visible = true;
         this.self.scale(1, 1);
     }
     /**出屏幕*/
     out(): void {
+        this.press.visible = false;
+        this.notPress.visible = true;
         this.self.scale(1, 1);
     }
     /**暂停状态显示所有属性框，非暂停状态不显示属性框*/
