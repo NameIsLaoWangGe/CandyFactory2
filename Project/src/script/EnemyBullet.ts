@@ -34,10 +34,8 @@ export default class EnemyBullet extends Laya.Script {
     init() {
         this.self = this.owner as Laya.Sprite;
         this.selfScene = this.self.scene;
-        this.mainSceneControl = this.selfScene.getComponent(MainSceneControl);
-        this.enemyParent = this.mainSceneControl.enemyParent;
         this.selfSpeed = 15;
-        this.attackValue = this.mainSceneControl.enemyProperty.attackValue;
+        this.enemyParent = this.selfScene['MainSceneControl'].enemyParent;
         this.roleParent = this.selfScene['MainSceneControl'].roleParent;
         this.self['EnemyBullet'] = this;
     }

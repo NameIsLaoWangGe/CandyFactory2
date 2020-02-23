@@ -274,8 +274,8 @@ export default class MainSceneControl extends Laya.Script {
         let delayed = 10;
         let candyHeiht = 100;
         let spacing = -1;
-        let startX_02 = Laya.stage.width / 2 - 42;
-        let startX_01 = Laya.stage.width / 2 + 58;
+        let startX_01 = Laya.stage.width / 2 + 60;
+        let startX_02 = Laya.stage.width / 2 - 50;
         //最远的那个位置
         let startY = this.displays.y + 4 * (candyHeiht + spacing) - 35;
         for (let i = 0; i < this.startRow; i++) {
@@ -333,9 +333,10 @@ export default class MainSceneControl extends Laya.Script {
             Laya.Tween.to(candy, { x: HalfX, y: HalfY, scaleX: 1.3, scaleY: 1.3 }, timePar * 3 / 4, null, Laya.Handler.create(this, function () {
                 // 第三步降落
                 Laya.Tween.to(candy, { x: targetX, y: targetY, scaleX: 1, scaleY: 1 }, timePar, null, Laya.Handler.create(this, function () {
-                    // 落下特效并且播放禁止动画
+                    // 落下特效并且播放禁止动画,并且显示点击次数
                     this.explodeAni(this.owner, candy.x, candy.y, 'disappear', 8, 1000);
                     candy['Candy'].playSkeletonAni(1, 'static');
+                    candy['Candy'].clicksLabel.alpha = 1;
                     // 最后一组发射完毕后
                     if (candy['Candy'].group === 3) {
                         this.operating['OperationControl'].operateSwitch = true;
@@ -382,10 +383,7 @@ export default class MainSceneControl extends Laya.Script {
             default:
                 break;
         }
-        // 随机点击次数
-        let clicksLabel = candy.getChildByName('clicksLabel') as Laya.Label;
-        clicksLabel.text = '';
-        candy.pos(Laya.stage.width / 2, -100);
+        candy.pos(0, 0);
         candy.pivotX = candy.width / 2;
         candy.pivotY = candy.height / 2;
         this.candyParent.addChild(candy);
@@ -787,7 +785,7 @@ export default class MainSceneControl extends Laya.Script {
             if (nowTime - this.enemyTime_01 > this.enemyProperty.creatInterval) {
                 this.enemyTime_01 = nowTime;
                 this.enemyTagRole = this.role_01;
-                this.careatEnemy('left', this.role_01, 'infighting');
+                this.careatEnemy('left', this.role_01, 'fighting');
                 this.careatEnemy('left', this.role_01, 'range');
                 this.enemyTagRole = null;
             }
@@ -798,7 +796,7 @@ export default class MainSceneControl extends Laya.Script {
             if (nowTime - this.enemyTime_02 > this.enemyProperty.creatInterval) {
                 this.enemyTime_02 = nowTime;
                 this.enemyTagRole = this.role_02;
-                this.careatEnemy('right', this.role_02, 'infighting');
+                this.careatEnemy('right', this.role_02, 'fighting');
                 this.careatEnemy('right', this.role_02, 'range');
                 this.enemyTagRole = null;
             }

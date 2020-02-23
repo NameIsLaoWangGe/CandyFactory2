@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":113,
-    "selecteID":175,
+    "selectedBox":2,
+    "selecteID":18,
     "searchKey":"Scene",
     "props":{"x":0,"width":750,"sceneColor":"#000000","height":1334},
     "nodeParent":-1,
@@ -330,16 +330,17 @@
                     "props":{"y":331,"x":381,"width":204,"pivotY":55,"pivotX":102,"name":"timer","height":109},
                     "nodeParent":18,
                     "label":"timer",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":92,
                     "child":[
                         {
+                            "x":45,
                             "type":"ProgressBar",
                             "searchKey":"ProgressBar,timeSchedule",
-                            "props":{"y":12,"x":36,"value":1,"skin":"candy/ui/时间.png","sizeGrid":"0,13,0,13","name":"timeSchedule"},
+                            "props":{"y":12,"x":38,"value":1,"skin":"candy/ui/时间.png","sizeGrid":"0,13,0,13","name":"timeSchedule"},
                             "nodeParent":92,
                             "label":"timeSchedule",
                             "isOpen":false,
@@ -351,6 +352,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,进度条高光",
                             "props":{"y":26,"x":41,"texture":"candy/ui/进度条白色高光.png","name":"进度条高光"},
@@ -364,9 +366,10 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,进度条装饰1",
-                            "props":{"y":-19,"x":-15,"texture":"candy/ui/进度条装饰1.png","name":"进度条装饰1"},
+                            "props":{"y":12,"x":-7,"texture":"candy/ui/进度条装饰1.png","name":"进度条装饰1"},
                             "nodeParent":92,
                             "label":"进度条装饰1",
                             "isDirectory":false,
@@ -384,14 +387,13 @@
                     "props":{"y":123,"x":30,"width":192,"texture":"candy/ui/分数牌.png","name":"分数牌","height":340},
                     "nodeParent":18,
                     "label":"分数牌",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":113,
                     "child":[
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,score",
                             "props":{"y":0,"x":0,"width":193,"name":"score","height":82},
@@ -404,7 +406,6 @@
                             "compId":175,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Sprite",
                                     "searchKey":"Sprite,分数字样",
                                     "props":{"y":30,"x":20,"texture":"candy/ui/分数：.png","scaleY":0.4,"scaleX":0.4,"name":"分数字样"},
@@ -419,7 +420,6 @@
                                         ]
                                 },
                                 {
-                                    "x":60,
                                     "type":"FontClip",
                                     "searchKey":"FontClip,scoreLabel",
                                     "props":{"y":44,"x":125,"width":138,"value":"250","spaceX":-8,"skin":"candy/字体/分数：+01234567892.png","sheet":"+0123456789k","scaleY":0.4,"scaleX":0.4,"pivotY":23,"pivotX":69,"name":"scoreLabel","height":45,"align":"center"},

@@ -2,6 +2,8 @@ import MainSceneControl from "./MainSceneControl";
 export default class Candy extends Laya.Script {
     /**自己*/
     private self: Laya.Sprite;
+    /**糖果点击次数节点*/
+    private clicksLabel: Laya.FontClip;
     /**所属场景*/
     private selfScene: Laya.Scene;
     /**场景脚本组件*/
@@ -50,6 +52,12 @@ export default class Candy extends Laya.Script {
         this.selfSpeed = 10;
         this.timerControl = 0;
         this.spaceY = 5;
+
+        // 随机点击次数暂定1~10次
+        let number = Math.floor(Math.random() * 10) + 1;
+        this.clicksLabel = this.self.getChildByName('clicksLabel') as Laya.FontClip;
+        this.clicksLabel.value = number.toString();
+        this.clicksLabel.alpha = 0;
 
         this.hintWord = this.mainSceneControl.hintWord;
 

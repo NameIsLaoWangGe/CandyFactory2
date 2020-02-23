@@ -65,8 +65,8 @@ P 684F9E31 排行榜.png
 P 594D9461 操作位置链接线.png
 P 4861FB87 敌人属性显示.png
 R 902F0C7A 文字提示底.png
-P 4CAD90AC 时间$bar.png
-P D6602089 时间.png
+P 057F9DD9 时间$bar.png
+P DF8BAA97 时间.png
 P 92DB0506 暂停按钮.png
 P 5DD52430 暂停按钮按下.png
 P 546EE85A 正确提示.png
@@ -77,7 +77,7 @@ P 47A9CC0D 血条$bar.png
 P 5BCAEF33 血条.png
 P C309F0D7 返回.png
 P 8F5327DD 进度条白色高光.png
-P ADB0D4CF 进度条装饰1.png
+P B8700732 进度条装饰1.png
 P BBE9EEDE 进度条装饰2.png
 P 91F837EB 重来.png
 P F7111ECD 错误提示.png
@@ -96,10 +96,11 @@ R D38BC281 分数：+01234567892.png
 P 21E46157 图片数字1.png
 P 8E35E482 属性标签.png
 P E23D833B 标签小.png
+P D2E13039 糖果上文字.png
 D candy/提示文字
-P B82A2BA2 太棒了.png
-P 6D2C76CD 干得漂亮.png
-P B10CCA4A 牛皮.png
+P 048FBB78 太棒了.png
+P 1C6B76C8 干得漂亮.png
+P 806E18E2 牛皮.png
 D candy/操作按钮
 P AA0D3C02 底座.png
 P A5B3DDE9 红色按钮.png
@@ -136,17 +137,9 @@ P 2A75C362 青色单元.png
 P DB8ABCB2 黄色单元.png
 P 69E3458C 黑色单元.png
 D candy/糖果
-R 74E9B0AA candyCompilations.png
-R 0EEB4945 candyCompilations.sk
+R 1AF7EEB8 candyCompilations.png
+R 247C41EE candyCompilations.sk
 P 409C94C6 糖果影子.png
-P DE0B069C 红色糖果.png
-P 72F7C216 红色糖果球.png
-P C04526AF 绿色糖果.png
-P 7BC6FD91 绿色糖果球.png
-P 943A23DB 蓝色糖果.png
-P BE375875 蓝色糖果球.png
-P F6E53DCD 黄色糖果.png
-P 5A403804 黄色糖果球.png
 D candy/糖果机器
 R DD8C5022 candyLaunch.png
 R 30F8BB9A candyLaunch.sk
@@ -157,7 +150,7 @@ R 8AE9CAAC pipeline_01.png
 R 75F76674 pipeline_01.sk
 R 73FFFE58 pipeline_02.png
 R BA823002 pipeline_02.sk
-P 5F186E65 指示灯.png
+P F66AF2B7 指示灯.png
 P 8068A284 提示.png
 P 295BA79A 水管流水遮罩.png
 P 3062B8BE 水管流水高光_01.png
@@ -165,8 +158,8 @@ P 1D1B0797 短指针.png
 P C6A8E23B 管道1.png
 P F60C6672 管道2.png
 P F97AF9D4 管道2高光.png
-R 64E70565 糖果制造机.png
-R BDA2AE65 糖果陈列台.png
+R 9E1FD701 糖果制造机.png
+R D249430A 糖果陈列台.png
 P E40FB387 红灯.png
 P 21E7E6A3 绿灯.png
 P E4AB60C7 长指针.png

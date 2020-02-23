@@ -2,11 +2,11 @@
     "x":0,
     "type":"Sprite",
     "selectedBox":8,
-    "selecteID":13,
+    "selecteID":20,
     "searchKey":"Sprite,candy",
     "props":{"y":50,"x":49,"width":100,"presetID":1,"preset":"laya/pages/prefab/candy.prefab","pivotY":50,"pivotX":50,"name":"candy","isPresetRoot":true,"height":100},
     "nodeParent":-1,
-    "maxID":21,
+    "maxID":22,
     "label":"candy",
     "isOpen":true,
     "isDirectory":true,
@@ -14,37 +14,6 @@
     "hasChild":true,
     "compId":8,
     "child":[
-        {
-            "x":15,
-            "type":"Script",
-            "switchAble":true,
-            "source":"src/script/Candy.ts",
-            "searchKey":"Script,Candy",
-            "removeAble":true,
-            "props":{"presetID":3,"preset":"laya/pages/prefab/candy.prefab"},
-            "nodeParent":8,
-            "label":"Candy",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":10,
-            "child":[
-                ]
-        },
-        {
-            "x":15,
-            "type":"Label",
-            "searchKey":"Label,clicksLabel",
-            "props":{"y":43,"x":54,"width":64,"valign":"middle","text":"1212","presetID":6,"preset":"laya/pages/prefab/candy.prefab","pivotY":17,"pivotX":32,"name":"clicksLabel","height":33,"fontSize":30,"align":"center"},
-            "nodeParent":8,
-            "label":"clicksLabel",
-            "isDirectory":false,
-            "isAniNode":true,
-            "hasChild":false,
-            "compId":13,
-            "child":[
-                ]
-        },
         {
             "x":15,
             "type":"Image",
@@ -71,6 +40,37 @@
             "isAniNode":true,
             "hasChild":false,
             "compId":20,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"FontClip",
+            "searchKey":"FontClip,clicksLabel",
+            "props":{"y":51,"x":53,"width":41,"value":"0123456789","spaceX":-5,"skin":"candy/字体/糖果上文字.png","sheet":"0123456789","presetID":9,"preset":"laya/pages/prefab/candy.prefab","pivotY":18,"pivotX":21,"name":"clicksLabel","height":35,"align":"center"},
+            "nodeParent":8,
+            "label":"clicksLabel",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":21,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Script",
+            "switchAble":true,
+            "source":"src/script/Candy.ts",
+            "searchKey":"Script,Candy",
+            "removeAble":true,
+            "props":{"y":0,"x":0,"presetID":3,"preset":"laya/pages/prefab/candy.prefab"},
+            "nodeParent":8,
+            "label":"Candy",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":10,
             "child":[
                 ]
         }],

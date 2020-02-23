@@ -102,7 +102,7 @@ export default class Enemy extends Laya.Script {
         this.templet = new Laya.Templet();
         this.templet.on(Laya.Event.COMPLETE, this, this.parseComplete);
         this.templet.on(Laya.Event.ERROR, this, this.onError);
-        if (this.enemyType === 'infighting') {
+        if (this.enemyType === 'fighting') {
             this.templet.loadAni("candy/敌人/fightingEnemy.sk");
         } else if (this.enemyType === 'range') {
             this.templet.loadAni("candy/敌人/rangeEnemy.sk");
@@ -120,7 +120,7 @@ export default class Enemy extends Laya.Script {
         this.skeletonListen();
         this.self.addChild(this.skeleton);
         //格式
-        if (this.enemyType === 'infighting') {
+        if (this.enemyType === 'fighting') {
             this.self.width = 120;
             this.self.height = 180;
             this.self.pivotX = this.self.width / 2;
@@ -149,7 +149,7 @@ export default class Enemy extends Laya.Script {
     /**监听*/
     skeletonListen(): void {
         this.skeleton.on(Laya.Event.LABEL, this, function (e) {
-            if (this.enemyType === 'infighting') {
+            if (this.enemyType === 'fighting') {
                 if (e.name === 'hitOut') {
                     this.enemyAttackRules();
                 }
@@ -159,27 +159,6 @@ export default class Enemy extends Laya.Script {
                 }
             }
         });
-    }
-
-    /**近战攻击的敌人攻击主角的时候，会随机在主角范围内停止然后攻击
-     * 远程攻击的敌人在主角的上面，他的y轴坐标比较高
-     * 并且这个坐标在开始的时候执行一次
-     * 更换主角的时候执行一次
-     * */
-    randomAttackPoint(): void {
-        let difference;
-        let number = Math.floor(Math.random() * 2);
-        if (number === 1) {
-            difference = -Math.floor(Math.random() * 50);
-        } else {
-            difference = Math.floor(Math.random() * 50);
-        }
-        this.attackX = this.slefTagRole.x + difference;
-        if (this.enemyType === 'infighting') {
-            this.attackY = this.slefTagRole.y - Math.floor(Math.random() * 50);
-        } else if ('range') {
-            this.attackY = this.slefTagRole.y - Math.floor(Math.random() * 50) - 450;
-        }
     }
 
     /**怪物等级包括的一些属性*/
@@ -229,10 +208,52 @@ export default class Enemy extends Laya.Script {
         }
     }
 
+    /**近战攻击的敌人攻击主角的时候，会随机在主角范围内停止然后攻击
+     * 远程攻击的敌人在主角的上面，他的y轴坐标比较高
+     * 并且这个坐标在开始的时候执行一次
+     * 更换主角的时候执行一次
+     * */
+    randomAttackPoint(): void {
+        let difference;
+        let number = Math.floor(Math.random() * 2);
+        if (number === 1) {
+            difference = -Math.floor(Math.random() * 50);
+        } else {
+            difference = Math.floor(Math.random() * 50);
+        }
+        this.attackX = this.slefTagRole.x + difference;
+        if (this.enemyType === 'fighting') {
+            this.attackY = this.slefTagRole.y - Math.floor(Math.random() * 50);
+        } else if ('range') {
+            this.attackY = this.slefTagRole.y - Math.floor(Math.random() * 50) - 450;
+        }
+    }
+
+    /**更换攻击目标
+    * 如果当前攻击的主角死了，敌人会攻击另一个目标
+    * 远程直接原地攻击
+    * 近战敌人会重新判断攻击地点
+   */
+    replaceTarget(): void {
+        if (this.slefTagRole['Role'].roleDeath) {
+            // 更换目标
+            if (this.slefTagRole.name === 'role_01') {
+                this.slefTagRole = this.mainSceneControl.role_02;
+                this.tagHealth = this.mainSceneControl.role_02.getChildByName('health');
+            } else if (this.slefTagRole.name === 'role_02') {
+                this.slefTagRole = this.mainSceneControl.role_01;
+                this.tagHealth = this.mainSceneControl.role_01.getChildByName('health');
+            }
+            if (this.enemyType === 'fighting') {
+                this.randomAttackPoint();
+            }
+        }
+    }
+
     /**近战攻击的敌人第二阶段移动到主角位置，并且进入主角射程范围的移动规则
      * 加入被子弹击退效果
     */
-    infightingEnemyMove(): void {
+    fightingEnemyMove(): void {
         // x,y分别相减是两点连线向量
         // 向量计算并且归一化，向量长度为1。
         let point = new Laya.Point(this.attackX - this.self.x, this.attackY - this.self.y);
@@ -249,8 +270,8 @@ export default class Enemy extends Laya.Script {
         if (this.repelTimer > 0) {
             this.repelTimer--;
             //反向移动
-            this.self.x -= point.x * 2;
-            this.self.y -= point.y * 2;
+            this.self.x -= point.x * 4;
+            this.self.y -= point.y * 4;
         } else {
             //向量相加移动
             this.self.x += point.x * this.selfSpeed;
@@ -306,29 +327,13 @@ export default class Enemy extends Laya.Script {
         let bulletParent = this.mainSceneControl.bulletParent;
         bulletParent.addChild(bullet);
         bullet.pos(this.self.x - 100, this.self.y);
-        bullet['EnemyBullet'].belongEnemy = this.self;
+        bullet['EnemyBullet'].attackValue = this.enemyProperty.attackValue;
         bullet['EnemyBullet'].bulletTarget = this.slefTagRole;
     }
 
-    /**更换攻击目标
-     * 如果当前攻击的主角死了，敌人会攻击另一个目标
-    */
-    replaceTarget(): void {
-        if (this.slefTagRole['Role'].roleDeath) {
-            // 更换目标
-            if (this.slefTagRole.name === 'role_01') {
-                this.slefTagRole = this.mainSceneControl.role_02;
-                this.tagHealth = this.mainSceneControl.role_02.getChildByName('health');
-            } else if (this.slefTagRole.name === 'role_02') {
-                this.slefTagRole = this.mainSceneControl.role_01;
-                this.tagHealth = this.mainSceneControl.role_01.getChildByName('health');
-            }
-        }
-    }
-
-    /**播放速度相对攻击速度进行调整
-     * 当播放间隔低于500后进行调整
-    */
+    /**骨骼动画播放速度相对攻击速度进行调整
+     * 当播放间隔低于500后达到峰值骼动画播放速度不会再加快
+     */
     playSpeedAdjust(): void {
         // 播放速度调整
         let playSpeed;
@@ -348,10 +353,26 @@ export default class Enemy extends Laya.Script {
         this.mainSceneControl.role_01['Role'].role_Warning = false;
         this.mainSceneControl.role_02['Role'].role_Warning = false;
         this.self.removeSelf();
-        if (this.enemyType === 'infighting') {
-            this.selfScene['MainSceneControl'].explodeAni(this.selfScene, this.self.x, this.self.y, 'infighting', 15, 100);
+        if (this.enemyType === 'fighting') {
+            this.selfScene['MainSceneControl'].explodeAni(this.selfScene, this.self.x, this.self.y, 'fighting', 15, 100);
         } else {
             this.selfScene['MainSceneControl'].explodeAni(this.selfScene, this.self.x, this.self.y, 'range', 15, 100);
+        }
+    }
+
+    /**敌人以属性的攻速为时间间隔进行攻击*/
+    launchAttack(): void {
+        let nowTime = Date.now();
+        if (nowTime - this.recordTime > this.enemyProperty.attackSpeed) {
+            this.recordTime = nowTime;
+            // 血量判断，目标死亡后，会更换目标
+            if (!this.slefTagRole['Role'].roleDeath) {
+                // 等上一个动画播放完毕
+                this.skeleton.play('attack', false);
+                this.playSpeedAdjust();
+            } else {
+                this.replaceTarget();
+            }
         }
     }
 
@@ -387,39 +408,18 @@ export default class Enemy extends Laya.Script {
                 this.role_01['Role'].role_Warning = true;
                 this.role_02['Role'].role_Warning = true;
                 this.selfSpeed = 0;
-                let nowTime = Date.now();
-                if (nowTime - this.recordTime > this.enemyProperty.attackSpeed) {
-                    this.recordTime = nowTime;
-                    // 血量判断，目标死亡后，会更换目标
-                    if (!this.slefTagRole['Role'].roleDeath) {
-                        // 等上一个动画播放完毕
-                        this.skeleton.play('attack', false);
-                        this.playSpeedAdjust();
-                    } else {
-                        this.replaceTarget();
-                    }
-                }
+                this.launchAttack();
             }
-        } else if (this.enemyType === 'infighting') {
+        } else if (this.enemyType === 'fighting') {
             // 近战移动
-            this.infightingEnemyMove();
+            this.fightingEnemyMove();
             // 到达对象位置后开启攻击开关进行攻击，攻击速度依照时间间隔而定
             // 此时移动速度为零
             let differenceX = Math.abs(this.self.x - this.attackX);
             let differenceY = Math.abs(this.self.y - this.attackY);
             if (differenceX < 100 && differenceY < 100) {
                 this.selfSpeed = 0;
-                let nowTime = Date.now();
-                if (nowTime - this.recordTime > this.enemyProperty.attackSpeed) {
-                    this.recordTime = nowTime;
-                    // 血量判断，目标死亡后，会更换目标
-                    if (!this.slefTagRole['Role'].roleDeath) {
-                        this.skeleton.play('attack', false);
-                        this.playSpeedAdjust();
-                    } else {
-                        this.replaceTarget();
-                    }
-                }
+                this.launchAttack();
             } else {
                 this.selfSpeed = 4;
             }
