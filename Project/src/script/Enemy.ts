@@ -246,6 +246,7 @@ export default class Enemy extends Laya.Script {
             }
             if (this.enemyType === 'fighting') {
                 this.randomAttackPoint();
+                this.skeleton.play('move', true);
             }
         }
     }

@@ -12,6 +12,8 @@ export default class OperationButton extends Laya.Script {
     private candy_Explode: Laya.Prefab;
     /**爆炸糖果父节点*/
     private candy_ExplodeParent: Laya.Sprite;
+    /**点击提示遮罩*/
+    private clickHintMask: Laya.Sprite;
     /**操作开关*/
     private operateSwitch: boolean;
     /**敌人*/
@@ -64,10 +66,10 @@ export default class OperationButton extends Laya.Script {
         this.candyNameArr = this.selfScene['MainSceneControl'].candyNameArr;
         this.timer = this.selfScene['MainSceneControl'].timer;
         this.rewardWords = this.selfScene['MainSceneControl'].rewardWords;
+        this.clickHintMask = this.selfScene['MainSceneControl'].clickHintMask;
 
         this.timeSchedule = this.timer.getChildByName('timeSchedule') as Laya.ProgressBar;
         this.timeSchedule.value = 1;
-        // this.operateSwitch = true;
         this.self['OperationControl'] = this;
     }
 
@@ -224,9 +226,6 @@ export default class OperationButton extends Laya.Script {
         } else {
             nowImg.pos(20 + candy.width, 50);
         }
-        // // 出现动画
-        // Laya.Tween.to(nowImg, { scaleX: 1, scaleY: 1 }, 100, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
-        // }), 0);
     }
 
     /**提示我应该点哪一组了
@@ -234,20 +233,27 @@ export default class OperationButton extends Laya.Script {
      * 然后这一组的提示消失
     */
     clickHint(): void {
+        let maskYArr = [277, 182, 81, -32.5];
+        this.clickHintMask.alpha = 1;
         for (let i = 0; i < this.candyParent._children.length; i++) {
+            // 当前点击到的组，是最后一个
             let presentGroup = this.alreadyGroup[this.alreadyGroup.length - 1];
             let candy = this.candyParent._children[i];
             let candyGroup = candy['Candy'].group;
+            // 如果还没有点击那么0组提示
             if (this.alreadyGroup.length === 0) {
                 if (candyGroup === 0) {
                     candy.scale(1.1, 1.1);
+                    this.clickHintMask.y = maskYArr[0];
                 }
             } else {
+                // 当前这一组
                 if (candyGroup === presentGroup) {
                     candy.scale(1, 1);
                 }
                 if (candyGroup === presentGroup + 1) {
                     candy.scale(1.1, 1.1);
+                    this.clickHintMask.y = maskYArr[presentGroup + 1];
                 }
             }
         }

@@ -52,6 +52,9 @@ export default class MainSceneControl extends Laya.Script {
     /** @prop {name:displays , tips:"陈列台", type:Node}*/
     public displays: Laya.Image;
 
+    /** @prop {name:clickHintMask, tips:"点击提示遮罩", type:Node}*/
+    public clickHintMask: Laya.Sprite;
+
     /** @prop {name:operating , tips:"操作节点", type:Node}*/
     public operating: Laya.Sprite;
 
@@ -248,7 +251,7 @@ export default class MainSceneControl extends Laya.Script {
     }
 
     /**发射口监听监听1
-     * 分开监听，因为有写操作只会执行一次
+     * 分开监听，因为有些操作只会执行一次
     */
     candyLaunchListen_01(e): void {
         if (e.name === 'launch') {
@@ -261,7 +264,6 @@ export default class MainSceneControl extends Laya.Script {
     /**发射口监听监听1*/
     candyLaunchListen_02(e): void {
         if (e.name === 'launch') {
-            console.log('发射！');
         } else if (e.name === 'getReady') {
         }
     }
@@ -292,7 +294,7 @@ export default class MainSceneControl extends Laya.Script {
                         this.candyLaunch_01.play('launchLeft', false);
                         // 移动到陈列台位置
                         let targetY = startY - i * (candyHeiht + spacing);
-                        this.candyFlipTheAni(candy, startX_01, targetY);
+                        this.candyFlipTheAni(i, j, candy, startX_01, targetY);
                     } else {
                         // 出生位置
                         candy.pos(this.displays.x - 160, this.displays.y - 50);
@@ -302,7 +304,7 @@ export default class MainSceneControl extends Laya.Script {
                         // 陈列台位置
                         // 移动到陈列台位置
                         let targetY = startY - i * (candyHeiht + spacing);
-                        this.candyFlipTheAni(candy, startX_02, targetY);
+                        this.candyFlipTheAni(i, j, candy, startX_02, targetY);
                     }
                 }
             })
@@ -311,11 +313,13 @@ export default class MainSceneControl extends Laya.Script {
     }
 
     /**糖果发射动画时间线
+     * @param i 当前组
+     * @param j 当前列
      * @param candy 当前糖果
      * @param targetX 目标x位置
      * @param targetY 目标y位置
     */
-    candyFlipTheAni(candy, targetX, targetY): void {
+    candyFlipTheAni(i, j, candy, targetX, targetY): void {
         // 基础时间参数，动画的时间会随着位置边近而缩小
         let timePar = 500 - candy['Candy'].group * 100;
         // 糖果本身
@@ -338,11 +342,9 @@ export default class MainSceneControl extends Laya.Script {
                     candy['Candy'].playSkeletonAni(1, 'static');
                     candy['Candy'].clicksLabel.alpha = 1;
                     // 最后一组发射完毕后
-                    if (candy['Candy'].group === 3) {
+                    if (i === 3 && j === 1) {
                         this.operating['OperationControl'].operateSwitch = true;
                         this.operating['OperationControl'].clickHint();
-                        this.launchNum = 0;
-                        this.launchSwitch = false;
                     }
                 }), 0);
             }), 0);
