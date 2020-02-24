@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"View",
-    "selectedBox":2,
-    "selecteID":30,
+    "selectedBox":30,
+    "selecteID":31,
     "searchKey":"View",
     "props":{"width":593,"sceneWidth":556,"sceneHeight":100,"sceneColor":"#000000","height":122},
     "nodeParent":-1,
@@ -115,6 +115,20 @@
             "child":[
                 {
                     "x":30,
+                    "type":"FontClip",
+                    "searchKey":"FontClip,rankNum_Num",
+                    "props":{"y":64,"x":54,"width":70,"spaceX":-9,"skin":"rank/排行字体.png","sheet":"0123456789","pivotY":23,"pivotX":35,"name":"rankNum_Num","height":45,"align":"center"},
+                    "nodeParent":30,
+                    "label":"rankNum_Num",
+                    "isDirectory":false,
+                    "isAniNode":true,
+                    "hasChild":false,
+                    "compId":31,
+                    "child":[
+                        ]
+                },
+                {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,rankNum_pic",
                     "props":{"y":20,"x":16,"skin":"rank/NO1.png","name":"rankNum_pic"},
@@ -124,20 +138,6 @@
                     "isAniNode":true,
                     "hasChild":false,
                     "compId":32,
-                    "child":[
-                        ]
-                },
-                {
-                    "x":30,
-                    "type":"FontClip",
-                    "searchKey":"FontClip,rankNum_Num",
-                    "props":{"y":64,"x":54,"width":70,"value":"99","spaceX":-9,"skin":"rank/排行字体.png","sheet":"0123456789","pivotY":23,"pivotX":35,"name":"rankNum_Num","height":45,"align":"center"},
-                    "nodeParent":30,
-                    "label":"rankNum_Num",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":31,
                     "child":[
                         ]
                 }]

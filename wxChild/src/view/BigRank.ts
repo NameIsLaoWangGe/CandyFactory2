@@ -10,10 +10,10 @@ export default class BigRank extends ui.test.BigUI {
 
     /**获取好友排行榜时的key */
     //已经使用的_key有test10087，test10086
-    private _key: String = 'test10088';
+    public _key: String = 'test10088';
     /**list初始化使用的数据 */
     private arr: Array<any> = [
-        { index: 1, avatarIP: 'rank/头像.png', UserName: "老王哥", RankValue:0 },
+        { index: 1, avatarIP: 'rank/头像.png', UserName: "老王哥", RankValue: 0 },
         // { index: 2, avatarIP: 'rank/头像.png', UserName: "王哥", RankValue: 100 },
         // { index: 3, avatarIP: 'rank/头像.png', UserName: "老王哥", RankValue: 1000 },
         // { index: 4, avatarIP: 'rank/头像.png', UserName: "狭路相逢", RankValue: 10000 },

@@ -728,16 +728,27 @@ export default class MainSceneControl extends Laya.Script {
         this.operating['OperationControl'].initProperty();
     }
 
-    /** 微信接受消息初始化*/
+    /** 微信排行榜初始化*/
     wxPostInit() {
         if (Laya.Browser.onMiniGame) {
-            let wx: any = Laya.Browser.window.wx;
-            let openDataContext: any = wx.getOpenDataContext();
-            openDataContext.postMessage({ action: 'init' });
-            console.log('微信接受消息初始化');
-        } else {
-            console.log('微信接受消息初始化没有成功');
+            Laya.loader.load(["res/atlas/rank.atlas"], Laya.Handler.create(null, function () {
+                //加载完成
+                //使用接口将图集透传到子域
+                Laya.MiniAdpter.sendAtlasToOpenDataContext("res/atlas/rank.atlas");
+
+                let wx: any = Laya.Browser.window.wx;
+                let openDataContext: any = wx.getOpenDataContext();
+                openDataContext.postMessage({ action: 'init' });
+            }));
         }
+        // if (Laya.Browser.onMiniGame) {
+        //     let wx: any = Laya.Browser.window.wx;
+        //     let openDataContext: any = wx.getOpenDataContext();
+        //     openDataContext.postMessage({ action: 'init' });
+        //     console.log('微信接受消息初始化');
+        // } else {
+        //     console.log('微信接受消息初始化没有成功');
+        // }
     }
 
     /** 更新微信排行榜的数据*/

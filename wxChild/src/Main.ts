@@ -16,15 +16,10 @@ class Main {
 			wx.onMessage(function (data) {
 				console.log("子域收到消息： " + JSON.stringify(data));
 				if (data.action == "ranking") {
-					if (BigRank.instance == null) {
-						Laya.loader.load("res/atlas/rank.atlas", Laya.Handler.create(this, this.onComplete));
-					} else {
-						BigRank.instance.visible = true;
-						BigRank.instance.init();
-					}
+					BigRank.instance.visible = true;
+					BigRank.instance.init();
 				} else if (data.action == "init") {//第一次初始化接受数据监听
-					//初始化rank排行榜
-					wx.onMessage(this.recevieData.bind(this));
+					Laya.loader.load("res/atlas/rank.atlas", Laya.Handler.create(this, this.onComplete));
 				} else if (data.action == "close") {
 					BigRank.instance.visible = false;
 				}
@@ -38,6 +33,7 @@ class Main {
 		var rank = new BigRank();
 		//初始化
 		rank.init();
+		console.log('进游戏就初始化子域接受数据');
 	}
 }
 //激活启动类

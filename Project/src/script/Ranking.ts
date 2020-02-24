@@ -32,15 +32,19 @@ export default class Ranking extends Laya.Script {
     onAwake() {
         if (Laya.Browser.onMiniGame) {
             //加载一个json和图集
-            Laya.loader.load(["res/atlas/rank.atlas"], Laya.Handler.create(null, function () {
-                //加载完成
-                //使用接口将图集透传到子域
-                Laya.MiniAdpter.sendAtlasToOpenDataContext("res/atlas/rank.atlas");
+            // Laya.loader.load(["res/atlas/rank.atlas"], Laya.Handler.create(null, function () {
+            //     //加载完成
+            //     //使用接口将图集透传到子域
+            //     Laya.MiniAdpter.sendAtlasToOpenDataContext("res/atlas/rank.atlas");
 
-                let wx: any = Laya.Browser.window.wx;
-                let openDataContext: any = wx.getOpenDataContext();
-                openDataContext.postMessage({ action: 'ranking' });
-            }));
+            //     let wx: any = Laya.Browser.window.wx;
+            //     let openDataContext: any = wx.getOpenDataContext();
+            //     openDataContext.postMessage({ action: 'ranking' });
+            // }));
+
+            let wx: any = Laya.Browser.window.wx;
+            let openDataContext: any = wx.getOpenDataContext();
+            openDataContext.postMessage({ action: 'ranking' });
         }
     }
 
