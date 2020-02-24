@@ -52,8 +52,8 @@ export default class MainSceneControl extends Laya.Script {
     /** @prop {name:displays , tips:"陈列台", type:Node}*/
     public displays: Laya.Image;
 
-    /** @prop {name:clickHintMask, tips:"点击提示遮罩", type:Node}*/
-    public clickHintMask: Laya.Sprite;
+    /** @prop {name:clickHintSign, tips:"点击提示标志", type:Node}*/
+    public clickHintSign: Laya.Sprite;
 
     /** @prop {name:operating , tips:"操作节点", type:Node}*/
     public operating: Laya.Sprite;
@@ -154,6 +154,7 @@ export default class MainSceneControl extends Laya.Script {
     onEnable(): void {
         this.noStarted();
         this.createStartInterface('start');
+        this.wxPostInit();
     }
 
     /**场景初始化*/
@@ -725,6 +726,18 @@ export default class MainSceneControl extends Laya.Script {
 
         // 操作台重置
         this.operating['OperationControl'].initProperty();
+    }
+
+    /** 微信接受消息初始化*/
+    wxPostInit() {
+        if (Laya.Browser.onMiniGame) {
+            let wx: any = Laya.Browser.window.wx;
+            let openDataContext: any = wx.getOpenDataContext();
+            openDataContext.postMessage({ action: 'init' });
+            console.log('微信接受消息初始化');
+        } else {
+            console.log('微信接受消息初始化没有成功');
+        }
     }
 
     /** 更新微信排行榜的数据*/

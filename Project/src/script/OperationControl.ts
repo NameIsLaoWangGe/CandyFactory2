@@ -12,8 +12,6 @@ export default class OperationButton extends Laya.Script {
     private candy_Explode: Laya.Prefab;
     /**爆炸糖果父节点*/
     private candy_ExplodeParent: Laya.Sprite;
-    /**点击提示遮罩*/
-    private clickHintMask: Laya.Sprite;
     /**操作开关*/
     private operateSwitch: boolean;
     /**敌人*/
@@ -22,6 +20,8 @@ export default class OperationButton extends Laya.Script {
     private timer: Laya.Sprite;
     /**计时器进度条*/
     private timeSchedule: Laya.ProgressBar;
+    /** @prop {name:clickHintSign, tips:"点击提示遮罩", type:Node}*/
+    public clickHintSign: Laya.Sprite;
 
     /**点击次数记录*/
     private clicksCount: number;
@@ -66,10 +66,9 @@ export default class OperationButton extends Laya.Script {
         this.candyNameArr = this.selfScene['MainSceneControl'].candyNameArr;
         this.timer = this.selfScene['MainSceneControl'].timer;
         this.rewardWords = this.selfScene['MainSceneControl'].rewardWords;
-        this.clickHintMask = this.selfScene['MainSceneControl'].clickHintMask;
+        this.clickHintSign.alpha = 0;
 
         this.timeSchedule = this.timer.getChildByName('timeSchedule') as Laya.ProgressBar;
-        this.timeSchedule.value = 1;
         this.self['OperationControl'] = this;
     }
 
@@ -233,8 +232,8 @@ export default class OperationButton extends Laya.Script {
      * 然后这一组的提示消失
     */
     clickHint(): void {
-        let maskYArr = [277, 182, 81, -32.5];
-        this.clickHintMask.alpha = 1;
+        let maskYArr = [753, 651.5, 550, 449];
+        this.clickHintSign.alpha = 1;
         for (let i = 0; i < this.candyParent._children.length; i++) {
             // 当前点击到的组，是最后一个
             let presentGroup = this.alreadyGroup[this.alreadyGroup.length - 1];
@@ -244,7 +243,7 @@ export default class OperationButton extends Laya.Script {
             if (this.alreadyGroup.length === 0) {
                 if (candyGroup === 0) {
                     candy.scale(1.1, 1.1);
-                    this.clickHintMask.y = maskYArr[0];
+                    this.clickHintSign.y = maskYArr[0];
                 }
             } else {
                 // 当前这一组
@@ -253,7 +252,7 @@ export default class OperationButton extends Laya.Script {
                 }
                 if (candyGroup === presentGroup + 1) {
                     candy.scale(1.1, 1.1);
-                    this.clickHintMask.y = maskYArr[presentGroup + 1];
+                    this.clickHintSign.y = maskYArr[presentGroup + 1];
                 }
             }
         }
@@ -262,6 +261,7 @@ export default class OperationButton extends Laya.Script {
     /**结算，当10个都点击完毕后，执行吃糖果或者是变成爆炸糖果过的动画*/
     settlement(): void {
         this.operateSwitch = false;
+        this.clickHintSign.alpha = 0;
         // 正确移动到主角处加属性
         if (this.rightName.length > 0) {
             for (let i = 0; i < this.rightName.length; i++) {

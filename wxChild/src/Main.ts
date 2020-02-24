@@ -22,8 +22,10 @@ class Main {
 						BigRank.instance.visible = true;
 						BigRank.instance.init();
 					}
-				}
-				if (data.action == "close") {
+				} else if (data.action == "init") {//第一次初始化接受数据监听
+					//初始化rank排行榜
+					wx.onMessage(this.recevieData.bind(this));
+				} else if (data.action == "close") {
 					BigRank.instance.visible = false;
 				}
 			}.bind(this));
