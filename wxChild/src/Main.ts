@@ -15,11 +15,13 @@ class Main {
 		if (Laya.Browser.onMiniGame)
 			wx.onMessage(function (data) {
 				console.log("子域收到消息： " + JSON.stringify(data));
-				if (data.action == "ranking") {
+				if (data.action == "init") {//第一次初始化接受数据监听
+					Laya.loader.load("res/atlas/rank.atlas", Laya.Handler.create(this, this.onComplete));
+
+				} else if (data.action == "ranking") {
 					BigRank.instance.visible = true;
 					BigRank.instance.init();
-				} else if (data.action == "init") {//第一次初始化接受数据监听
-					Laya.loader.load("res/atlas/rank.atlas", Laya.Handler.create(this, this.onComplete));
+
 				} else if (data.action == "close") {
 					BigRank.instance.visible = false;
 				}

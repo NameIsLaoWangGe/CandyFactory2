@@ -118,9 +118,12 @@ export default class Candy extends Laya.Script {
     */
     candyFlyToRole(): void {
         if (this.candyTagRole === null) {
-            return
+            return;
         }
+
+      
         this.playSkeletonAni(2, 'turnDown');
+
         // 基础时间参数，动画的时间会随着位置边近而缩小
         let timePar = 500 + this.group * 100;
         let targetX;

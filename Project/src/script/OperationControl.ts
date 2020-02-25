@@ -94,6 +94,8 @@ export default class OperationButton extends Laya.Script {
         }
         this.clicksCount++;
         // 通过点击的按钮匹配对应的糖果类型
+        // let btn_name = event.currentTarget.name;
+        // this.clickJudge(btn_name);
         switch (event.currentTarget.name) {
             case 'redButton':
                 this.clicksNameArr.push('redCandy___');
@@ -114,12 +116,90 @@ export default class OperationButton extends Laya.Script {
             this.clickTwoCompareName();//第二次点击对比
         } else {
             this.clickOneCompareName();//第一次点击对比
+
         }
         // 点完结算
         if (this.clicksCount === this.selfScene['MainSceneControl'].startRow * 2) {
             this.settlement();
         }
         event.currentTarget.scale(0.9, 0.9);
+    }
+
+    /**点击判断*/
+    clickJudge(btn_name) {
+        let pairName;
+        switch (btn_name) {
+            case 'redButton':
+                pairName = 'redCandy___';
+                break;
+            case 'yellowButton':
+                pairName = 'yellowCandy';
+                break;
+            case 'greenButton':
+                pairName = 'greenCandy_';
+                break;
+            case 'blueButton':
+                pairName = 'blueCandy__';
+                break;
+            default: break;
+        }
+        let groupArr = [];
+        // 当前需要点击的组
+        let groupClick: number;
+        let len = this.candyParent._children.length;
+        if (len === 1 || len === 2) {
+            groupClick = 3;
+        } else if (len === 3 || len === 4) {
+            groupClick = 2;
+        } else if (len === 5 || len === 6) {
+            groupClick = 1;
+        } else if (len === 7 || len === 8) {
+            groupClick = 0;
+        }
+        // 记录有几个名字个相同
+        let nameCount = 0;
+        // 记录相同名字的两个索引值
+        let i1;
+        let i2
+        // 找出当前需要点击的组和配对的名字
+        for (let i = 0; i < this.candyParent._children.length; i++) {
+            let candy = this.candyParent._children[i];
+            let group = candy['Candy'].group;
+            let name = candy.name.substring(0, 11);
+            // 的组和配对的名字都相同的时候,那么clickLebal-1；
+            if (group === groupClick && name === pairName) {
+                nameCount++;
+                // 如果点击对了直接break，因为点击一次只判断一次，后面不管他
+                if (nameCount === 1) {
+                    let clicksLabel = candy.getChildByName('clicksLabel') as Laya.FontClip;
+                    clicksLabel.value = (Number(clicksLabel.value) - 1).toString();
+                    // 当clicksLabel等于零的时候直接去向主角然后增加属性,并且零这个数字消失
+                    // 或者变为一个有图标的糖果然后飞向主角
+                    if (clicksLabel.value === '0') {
+                        // 更换父节点
+                        if (candy.x < Laya.stage.width / 2) {
+                            candy['Candy'].candyTagRole = this.selfScene['MainSceneControl'].role_01;
+                            candy['Candy'].candyFlyToRole();
+                        } else {
+                            candy['Candy'].candyTagRole = this.selfScene['MainSceneControl'].role_02;
+                            candy['Candy'].candyFlyToRole();
+                        }
+                        clicksLabel.value = '';
+                    }
+                }
+            }
+        }
+
+        // 如果这个nameCount=0；那么说明这组没有点击正确，那么直接变成敌人
+        if (nameCount === 0) {
+            for (let i = 0; i < this.candyParent._children.length; i++) {
+                let candy = this.candyParent._children[i];
+                let group = candy['Candy'].group;
+                if (group === groupClick) {
+                    this.candybecomeEnemy(candy);
+                }
+            }
+        }
     }
 
     /**点击两次之后对比名称
@@ -138,13 +218,13 @@ export default class OperationButton extends Laya.Script {
                     let compareArr = [nameArr[0].substring(0, 11), nameArr[1].substring(0, 11)]
                     // 对比两个数组看看是否相等，排序，转成字符串方可对比；
                     if (compareArr.sort().toString() === this.clicksNameArr.sort().toString()) {
-                        this.rightAndWrongShow('right', firstCandy);
-                        this.rightAndWrongShow('right', candy);
+                        // this.rightAndWrongShow('right', firstCandy);
+                        // this.rightAndWrongShow('right', candy);
                         // 正确的糖果名称保存
                         this.rightName.push(nameArr[0], nameArr[1]);
                     } else {
-                        this.rightAndWrongShow('wrong', firstCandy);
-                        this.rightAndWrongShow('wrong', candy);
+                        // this.rightAndWrongShow('wrong', firstCandy);
+                        // this.rightAndWrongShow('wrong', candy);
                         // 错误的糖果名保存
                         this.errorName.push(nameArr[0], nameArr[1]);
                     }
@@ -171,7 +251,7 @@ export default class OperationButton extends Laya.Script {
             let candy = this.candyParent._children[i];
             if (candy["Candy"].group === (this.clicksCount - 1) / 2) {//每点一次对应的糖果组
                 if (candy.name.substring(0, 11) === this.clicksNameArr[0]) { //只判断一次，然后返回
-                    this.rightAndWrongShow('right', candy);
+                    // this.rightAndWrongShow('right', candy);
                     break;
                 } else {
                     // number用于记录第几次循环，最多两次循环
@@ -179,8 +259,8 @@ export default class OperationButton extends Laya.Script {
                     if (nameArr.length === 2) {
                         // 当nameArr.length=2的时候说明一个都不对，那么直接结束本组
                         let firstCandy = this.candyParent.getChildByName(nameArr[0]) as Laya.Sprite;
-                        this.rightAndWrongShow('wrong', firstCandy);
-                        this.rightAndWrongShow('wrong', candy);
+                        // this.rightAndWrongShow('wrong', firstCandy);
+                        // this.rightAndWrongShow('wrong', candy);
                         //重新初始化下一组
                         this.clicksNameArr = [];
                         this.clicksCount++;
@@ -341,6 +421,7 @@ export default class OperationButton extends Laya.Script {
             this.creatRewardWords('牛皮');
         }
     }
+
     /**提示奖励文字的创建*/
     creatRewardWords(word): void {
         let rewardWords = Laya.Pool.getItemByCreateFun('rewardWords', this.rewardWords.create, this.rewardWords) as Laya.Sprite;

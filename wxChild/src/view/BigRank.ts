@@ -14,12 +14,14 @@ export default class BigRank extends ui.test.BigUI {
     /**list初始化使用的数据 */
     private arr: Array<any> = [
         { index: 1, avatarIP: 'rank/头像.png', UserName: "老王哥", RankValue: 0 },
-        // { index: 2, avatarIP: 'rank/头像.png', UserName: "王哥", RankValue: 100 },
-        // { index: 3, avatarIP: 'rank/头像.png', UserName: "老王哥", RankValue: 1000 },
-        // { index: 4, avatarIP: 'rank/头像.png', UserName: "狭路相逢", RankValue: 10000 },
-        // { index: 5, avatarIP: 'rank/头像.png', UserName: "我们来做游戏", RankValue: 100000 },
-        // { index: 6, avatarIP: 'rank/头像.png', UserName: "相逢何必曾相识", RankValue: 1000000 },
-        // { index: 7, avatarIP: 'rank/头像.png', UserName: "玩我游戏我很开心", RankValue: 10000000 }
+        { index: 2, avatarIP: 'rank/头像.png', UserName: "王哥", RankValue: 100 },
+        { index: 3, avatarIP: 'rank/头像.png', UserName: "老王哥", RankValue: 1000 },
+        { index: 4, avatarIP: 'rank/头像.png', UserName: "狭路相逢", RankValue: 10000 },
+        { index: 5, avatarIP: 'rank/头像.png', UserName: "我们来做游戏", RankValue: 100000 },
+        { index: 6, avatarIP: 'rank/头像.png', UserName: "相逢何必曾相识", RankValue: 1000000 },
+        { index: 7, avatarIP: 'rank/头像.png', UserName: "玩我游戏我很开心", RankValue: 10000000 },
+        { index: 8, avatarIP: 'rank/头像.png', UserName: "玩我游戏我很开心", RankValue: 10000000 },
+        { index: 9, avatarIP: 'rank/头像.png', UserName: "玩我游戏我很开心", RankValue: 10000000 }
     ]
 
 
