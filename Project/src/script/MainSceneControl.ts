@@ -173,11 +173,11 @@ export default class MainSceneControl extends Laya.Script {
         }
         this.enemyInterval_01 = 500;
         this.enemyTime_01 = Date.now();
-        this.enemySwitch_01 = true;
+        this.enemySwitch_01 = false;
 
         this.enemyInterval_02 = 500;
         this.enemyTime_02 = Date.now();
-        this.enemySwitch_02 = true;
+        this.enemySwitch_02 = false;
 
         this.candy_interval = 1000;
         this.creatTime = Date.now();
@@ -345,7 +345,7 @@ export default class MainSceneControl extends Laya.Script {
                     // 最后一组发射完毕后
                     if (i === 3 && j === 1) {
                         this.operating['OperationControl'].operateSwitch = true;
-                        this.operating['OperationControl'].clickHint();
+                        this.operating['OperationControl'].initHint();
                     }
                 }), 0);
             }), 0);

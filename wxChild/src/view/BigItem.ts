@@ -14,15 +14,15 @@ export default class BigItem extends ui.test.BigItemUI {
         let rankNum_pic = this.rankNum.getChildByName('rankNum_pic') as Laya.Image;
         switch (value.index) {
             case 1:
-                rankNum_Num.value = '';
+                rankNum_Num.value = ' ';
                 rankNum_pic.skin = 'rank/NO1.png';
                 break;
             case 2:
-                rankNum_Num.value = '';
+                rankNum_Num.value = ' ';
                 rankNum_pic.skin = 'rank/NO2.png';
                 break;
             case 3:
-                rankNum_Num.value = '';
+                rankNum_Num.value = ' ';
                 rankNum_pic.skin = 'rank/NO3.png';
                 break;
             default:
