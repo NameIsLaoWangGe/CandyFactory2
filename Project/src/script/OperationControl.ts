@@ -43,8 +43,10 @@ export default class OperationButton extends Laya.Script {
     private createCandy: boolean;
     /**当前点击的组记录*/
     private clicksGroup: number;
-    /**当前正确点击了几个糖果*/
+    /**当前组正确点击了几个糖果*/
     private zeroCount: number;
+    /**所有糖果中，有多少个错误的糖果*/
+    private erroCount: number;
 
     constructor() { super(); }
 
@@ -77,6 +79,7 @@ export default class OperationButton extends Laya.Script {
 
         this.clicksGroup = 0;
         this.zeroCount = 0;
+        this.erroCount = 0;
     }
 
     /**操作按钮的点击事件*/
@@ -126,7 +129,7 @@ export default class OperationButton extends Laya.Script {
         let nameCount = 0;
         // 记录点击正确次数
         let rightCount = 0;
-
+        let mainSceneControl = this.selfScene['MainSceneControl'];
         // 找出当前需要点击的组和配对的名字
         for (let i = 0; i < this.candyParent._children.length; i++) {
             let candy = this.candyParent._children[i];
@@ -142,6 +145,8 @@ export default class OperationButton extends Laya.Script {
                         rightCount++;
                         clicksLabel.value = (Number(clicksLabel.value) - 1).toString();
                         if (Number(clicksLabel.value) === 0) {
+                            mainSceneControl.explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 1000);
+                            candy['Candy'].playSkeletonAni(1, 'turnDown');
                             clicksLabel.value = ' ';
                             this.zeroCount++;
                         }
@@ -152,7 +157,9 @@ export default class OperationButton extends Laya.Script {
                         rightCount++;
                         clicksLabel.value = (Number(clicksLabel.value) - 1).toString();
                         if (Number(clicksLabel.value) === 0) {
+                            mainSceneControl.explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 1000);
                             clicksLabel.value = ' ';
+                            candy['Candy'].playSkeletonAni(1, 'turnDown');
                             this.zeroCount++;
                         }
                         break;
@@ -163,15 +170,17 @@ export default class OperationButton extends Laya.Script {
 
         // 两个糖果都不相同的时候，和点的不正确的时候直接结算
         if (nameCount === 0 || rightCount === 0) {
+            this.erroCount += 2;
             for (let i = 0; i < this.candyParent._children.length; i++) {
                 let candy = this.candyParent._children[i];
                 let group = candy['Candy'].group;
                 if (group === this.clicksGroup) {
                     // 生成1个爆炸糖果
-                    let explodeCandy = this.selfScene['MainSceneControl'].createExplodeCandy(candy.name);
-                    explodeCandy.pos(candy.x, candy.y);
-                    candy.removeSelf();
-                    i--;
+                    mainSceneControl.explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 1000);
+                    candy['Candy'].group = 'error';
+                    candy['Candy'].playSkeletonAni(1, 'explode');
+                    let clicksLabel = candy.getChildByName('clicksLabel') as Laya.FontClip;
+                    clicksLabel.value = ' ';
                 }
             }
             this.groupHint();
@@ -184,7 +193,7 @@ export default class OperationButton extends Laya.Script {
 
         // 都点完了最终结算
         if (this.clicksGroup === 4) {
-            this.settlement();
+            this.settlement('finished');
         }
     }
 
@@ -205,41 +214,84 @@ export default class OperationButton extends Laya.Script {
         let maskYArr = [753, 651.5, 550, 449];
         this.clickHintSign.alpha = 1;
         this.clickHintSign.y = maskYArr[this.clicksGroup];
+        this.erroCount = 0;
     }
 
-    /**结算
-     * 结算的时候，点击错误的糖果已经变成了爆炸糖果
-     * 所以，第一步让糖果飞到主角身上
-     * 第二步让爆炸糖果炸主角
+    /**结算分为两种
+     * 一种是点击完成了，分别对应变成爆炸或者是吃糖果进行动画播放
+     * 一种是时间到了，先把没有点击完成的糖果变成爆炸，然后再进行动画播放
+     * 这些动画都是延时播放的，并且从最近的开始
+     * @param type 是两种结算类型
     */
-    settlement(): void {
-        for (let i = 0; i < this.candyParent._children.length; i++) {
-            let candy = this.candyParent._children[i];
-            if (candy.x < Laya.stage.width / 2) {
-                candy['Candy'].candyTagRole = this.selfScene['MainSceneControl'].role_01;
-                candy['Candy'].candyFlyToRole();
-            } else {
-                candy['Candy'].candyTagRole = this.selfScene['MainSceneControl'].role_02;
-                candy['Candy'].candyFlyToRole();
+    settlement(type): void {
+        this.clickHintSign.alpha = 0;
+        this.operateSwitch = false;//结算的时候不可点击
+        if (type === 'finished') {
+            if (this.erroCount === 0) {
+                this.additionAward();
+            }
+            this.settlementAni();
+        } else if ('unfinished') {
+            // 第一步把不是'error'的都变成'error'和爆炸糖果
+            let delayed = 0;//对于需要变成爆炸糖果的给与延迟动画
+            for (let i = this.candyParent._children.length - 1; i >= 0; i--) {
+                let candy = this.candyParent._children[i];
+                let group = candy['Candy'].group;
+                // 点击错误的直接飞向敌人
+                if (group !== 'error') {
+                    // 如果没有点击错误，那么数字没有点击完毕的也变成爆炸糖果
+                    let clicksLabel = candy.getChildByName('clicksLabel') as Laya.FontClip;
+                    if (clicksLabel.value !== ' ') {
+                        delayed += 15;
+                        // 延时进行
+                        Laya.timer.frameOnce(delayed, this, function () {
+                            this.selfScene['MainSceneControl'].explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 1000);
+                            clicksLabel.value = ' ';
+                            candy['Candy'].group = 'error';
+                            candy['Candy'].playSkeletonAni(1, 'explode');
+
+                            // 等这些动画都结束了再依次飞向主角
+                            if (i === 0) {
+                                this.settlementAni();
+                            }
+                        })
+                    }
+                }
             }
         }
-        for (let j = 0; j < this.candy_ExplodeParent._children.length; j++) {
-            let explodeCandy = this.candy_ExplodeParent._children[j];
-            this.explodeCandyFlyToRole(explodeCandy);
+    }
+
+    /**结算动画
+     * 延时进行结算动画
+    */
+    settlementAni(): void {
+        let delayed = 10;
+        for (let i = this.candyParent._children.length - 1; i >= 0; i--) {
+            delayed += 15;
+            Laya.timer.frameOnce(delayed, this, function () {
+                let candy = this.candyParent._children[i];
+                let group = candy['Candy'].group;
+                // 只有错误和正确之分
+                if (group === 'error') {
+                    this.explodeCandyFlyToRole(candy);
+                } else {
+                    candy['Candy'].candyFlyToRole();
+                }
+
+                // 当最后一个执行的时候就播放下一组
+                if (i === 0) {
+                    this.selfScene['MainSceneControl'].candyLaunch_01.play('prepare', false);
+                    this.selfScene['MainSceneControl'].candyLaunch_02.play('prepare', false);
+                    this.initHint();
+                }
+            })
         }
-
-        //发射糖果预备动画，监听这个动画完成后发射糖果
-        this.selfScene['MainSceneControl'].candyLaunch_01.play('prepare', false);
-        this.selfScene['MainSceneControl'].candyLaunch_02.play('prepare', false);
-
-        this.groupHint();
-                  
     }
 
     /**爆炸糖果移动路径
-    * @param explodeCandy 爆炸糖果
+    * @param candy 爆炸糖果
    */
-    explodeCandyFlyToRole(explodeCandy: Laya.Sprite): void {
+    explodeCandyFlyToRole(candy: Laya.Sprite): void {
         // 左右两个方向
         let point;//飞向固定点的左右位置
         let explodeTarget;//攻击对象
@@ -248,35 +300,35 @@ export default class OperationButton extends Laya.Script {
         let HalfY;
         // 抛物线最高点位置站整个x移动位置的比例
         let distancePer = 2;
-        if (explodeCandy.x < Laya.stage.width / 2) {
+        if (candy.x < Laya.stage.width / 2) {
             explodeTarget = this.selfScene['MainSceneControl'].role_01;
-            point = new Laya.Point(explodeCandy.x - 200, explodeCandy.y + 80);
-            HalfX = explodeCandy.x - (explodeCandy.x - point.x) / distancePer;
+            point = new Laya.Point(candy.x - 200, candy.y + 80);
+            HalfX = candy.x - (candy.x - point.x) / distancePer;
         } else {
             explodeTarget = this.selfScene['MainSceneControl'].role_02;
-            point = new Laya.Point(explodeCandy.x + 200, explodeCandy.y + 80);
-            HalfX = explodeCandy.x + (point.x - explodeCandy.x) / distancePer;
+            point = new Laya.Point(candy.x + 200, candy.y + 80);
+            HalfX = candy.x + (point.x - candy.x) / distancePer;
         }
-        HalfY = explodeCandy.y - 100;
+        HalfY = candy.y - 100;
 
         // 第一步飞天放大
-        Laya.Tween.to(explodeCandy, { x: HalfX, y: HalfY, scaleX: 1.3, scaleY: 1.3 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(candy, { x: HalfX, y: HalfY, scaleX: 1.3, scaleY: 1.3 }, 500, null, Laya.Handler.create(this, function () {
 
             // 第二步降落缩小
-            Laya.Tween.to(explodeCandy, { x: point.x, y: point.y, scaleX: 0.9, scaleY: 0.9 }, 400, null, Laya.Handler.create(this, function () {
-                explodeCandy.scale(0.9, 0.9);
-                this.selfScene['MainSceneControl'].explodeAni(this.selfScene, explodeCandy.x, explodeCandy.y, 'disappear', 8, 1000);
+            Laya.Tween.to(candy, { x: point.x, y: point.y, scaleX: 0.9, scaleY: 0.9 }, 400, null, Laya.Handler.create(this, function () {
+                candy.scale(0.9, 0.9);
+                this.selfScene['MainSceneControl'].explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 1000);
                 // 层级排序
                 this.selfScene['MainSceneControl'].explodeCandyzOrder();
                 // 第三步停留，延迟给予爆炸目标
-                Laya.Tween.to(explodeCandy, {}, 500, null, Laya.Handler.create(this, function () {
-                    explodeCandy['Candy_Explode'].explodeTarget = explodeTarget;
+                Laya.Tween.to(candy, {}, 500, null, Laya.Handler.create(this, function () {
+                    candy['Candy'].candyTagRole = explodeTarget;
                 }, []), 0);
             }, []), 0);
         }, []), 0);
 
         // 糖果的影子处理
-        let shadow = explodeCandy.getChildByName('shadow') as Laya.Image;
+        let shadow = candy.getChildByName('shadow') as Laya.Image;
         // 拉开距离并缩小
         Laya.Tween.to(shadow, { x: -20, y: 80, scaleX: 0.8, scaleY: 0.8, }, 300, null, Laya.Handler.create(this, function () {
             // 第二部回归
@@ -295,7 +347,7 @@ export default class OperationButton extends Laya.Script {
             this.timeSchedule.value -= 0.0001;
         } else if (this.timeSchedule.value <= 0 && this.operateSwitch) {
             // 点击过的结算
-            this.settlement();
+            this.settlement('unfinished');
         }
     }
 

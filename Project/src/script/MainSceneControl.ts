@@ -581,7 +581,9 @@ export default class MainSceneControl extends Laya.Script {
         resurgence.pos(0, 0);
     }
 
-    /**属性增减动画*/
+    /**属性增减动画
+     * @param target 
+    */
     createHintWord(target, proPertyType, numberValue): void {
         let hintWord = Laya.Pool.getItemByCreateFun('hintWord', this.hintWord.create, this.hintWord) as Laya.Sprite;
         target.addChild(hintWord);

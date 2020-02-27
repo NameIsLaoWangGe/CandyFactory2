@@ -200,8 +200,7 @@ export default class Candy extends Laya.Script {
             this.self.removeSelf();
             this.selfScene['MainSceneControl'].explodeAni(this.self.x, this.self.y, this.self.name.substring(0, 11));
         }
-        // 飞到主角身上
-        this.flyToRole();
+     
     }
 
     onDisable(): void {

@@ -27,7 +27,7 @@ export default class Candy extends Laya.Script {
     private hintWord: Laya.Prefab;
 
     /**组数，他是属于哪一组的*/
-    private group: number;
+    private group;
     /**是否已经被点击了*/
     private selected: boolean;
 
@@ -50,11 +50,10 @@ export default class Candy extends Laya.Script {
         this.roleParent = this.mainSceneControl.roleParent;
         this.scoreLabel = this.mainSceneControl.scoreLabel;
         this.selfSpeed = 10;
-        this.timerControl = 0;
         this.spaceY = 5;
 
         // 随机点击次数暂定1~10次
-        let number = Math.floor(Math.random() * 10) + 1;
+        let number = Math.floor(Math.random() * 5) + 1;
         this.clicksLabel = this.self.getChildByName('clicksLabel') as Laya.FontClip;
         this.clicksLabel.value = number.toString();
         this.clicksLabel.alpha = 0;
@@ -117,19 +116,17 @@ export default class Candy extends Laya.Script {
     * 并且播放属性增加动画
     */
     candyFlyToRole(): void {
-        if (this.candyTagRole === null) {
-            return;
+        if (this.self.x < Laya.stage.width / 2) {
+            this.candyTagRole = this.selfScene['MainSceneControl'].role_01;
+        } else {
+            this.candyTagRole = this.selfScene['MainSceneControl'].role_02;
         }
-
-      
         this.playSkeletonAni(2, 'turnDown');
-
         // 基础时间参数，动画的时间会随着位置边近而缩小
         let timePar = 500 + this.group * 100;
-        let targetX;
-        let targetY = this.candyTagRole.y;
         // x轴的位置偏移
-        targetX = this.candyTagRole.x - 50;
+        let targetX = this.candyTagRole.x - 50;
+        let targetY = this.candyTagRole.y;
 
         let HalfX;
         let distancePer = 4;
@@ -144,10 +141,9 @@ export default class Candy extends Laya.Script {
         Laya.Tween.to(this.self, { x: HalfX, y: HalfY, scaleX: 1.5, scaleY: 1.5 }, timePar * 3 / 4, null, Laya.Handler.create(this, function () {
             // 第二步降落
             Laya.Tween.to(this.self, { x: targetX, y: this.candyTagRole.y, scaleX: 0.6, scaleY: 0.6 }, timePar / 2, null, Laya.Handler.create(this, function () {
-                this.self.removeSelf();
                 this.hintWordMove();
                 this.roleAddProperty();
-                this.candyTagRole = null;
+                this.self.removeSelf();
             }), 0);
         }), 0);
 
@@ -164,6 +160,11 @@ export default class Candy extends Laya.Script {
     /**属性增加提示动画*/
     hintWordMove(): void {
         let MainSceneControl = this.selfScene['MainSceneControl'];
+        if (this.self.x < Laya.stage.width / 2) {
+            this.candyTagRole = MainSceneControl.role_01;
+        } else {
+            this.candyTagRole = MainSceneControl.role_02;
+        }
         switch (this.self.name.substring(0, 11)) {
             case 'yellowCandy':
                 MainSceneControl.createHintWord(this.candyTagRole, '攻击里', 10);
@@ -180,7 +181,6 @@ export default class Candy extends Laya.Script {
             default:
         }
     }
-
     /**根据糖果的种类增加主角属性规则
      * 并且播放增加属性文字提示动画
     */
@@ -208,7 +208,105 @@ export default class Candy extends Laya.Script {
         }
     }
 
+    /**飞到主角身上并且爆炸
+    * 被消灭后会原地爆炸，但是不对主角造成伤害
+    * 爆炸后通过对应的糖果减少主角的属性
+   */
+    asExplodeCandy(): void {
+        // 如果是暂停或者是游戏结束,则不会移动
+        if (this.selfScene['MainSceneControl'].gameOver) {
+            return;
+        }
+        if (this.candyTagRole !== null) {
+            // x,y分别相减是两点连线向量
+            // 向量计算并且归一化，向量长度为1。
+            let point = new Laya.Point(this.candyTagRole.x - this.self.x, this.candyTagRole.y - this.self.y);
+            point.normalize();
+            //向量相加移动
+            this.self.x += point.x * this.selfSpeed;
+            this.self.y += point.y * this.selfSpeed;
+            // 到达对象位置后开启攻击开关进行攻击，攻击速度依照时间间隔而定
+            // 此时移动速度为零
+            let differenceX = Math.abs(this.self.x - this.candyTagRole.x);
+            let differenceY = Math.abs(this.self.y - this.candyTagRole.y);
+            if (differenceX < 50 && differenceY < 50) {
+                this.selfScene['MainSceneControl'].explodeAni(this.selfScene, this.self.x, this.self.y, this.self.name.substring(0, 11), 15, 100);
+                this.propertyHintWord();
+                this.roleReduceProperty();
+                this.self.removeSelf();
+                // 关闭预警
+                this.selfScene['MainSceneControl'].role_01['Role'].role_Warning = true;
+                this.selfScene['MainSceneControl'].role_02['Role'].role_Warning = true;
+                this.candyTagRole = null;
+            }
+        }
+    }
+
+    /**属性减少提示动画*/
+    propertyHintWord(): void {
+        let MainSceneControl = this.selfScene['MainSceneControl'];
+        switch (this.self.name.substring(0, 11)) {
+            case 'yellowCandy':
+                MainSceneControl.createHintWord(this.candyTagRole, '减少攻击里', 10);
+                break;
+            case 'redCandy___':
+                MainSceneControl.createHintWord(this.candyTagRole, '减少生命', 5);
+                break;
+            case 'blueCandy__':
+                MainSceneControl.createHintWord(this.candyTagRole, '减少公鸡速度', 10);
+                break;
+            case 'greenCandy_':
+                MainSceneControl.createHintWord(this.candyTagRole, '减少防御力', 5);
+                break;
+            default:
+        }
+    }
+
+    /**根据糖果的种类增加主角属性规则
+     * 并且播放增加属性文字提示动画
+    */
+    roleReduceProperty(): void {
+        this.self.name = this.self.name.substring(0, 11);
+        let role_01 = this.selfScene['MainSceneControl'].role_01;
+        let role_02 = this.selfScene['MainSceneControl'].role_02;
+        switch (this.self.name) {
+            case 'yellowCandy':
+                if (this.candyTagRole === role_01) {
+                    role_01['Role'].role_property.attackValue -= 10;
+                } else {
+                    role_02['Role'].role_property.attackValue -= 10;
+                }
+                break;
+            case 'redCandy___':
+                if (this.candyTagRole === role_01) {
+                    role_01['Role'].role_property.blood -= 5;
+                } else {
+                    role_02['Role'].role_property.blood -= 5;
+                }
+
+                break;
+            case 'blueCandy__':
+                if (this.candyTagRole === role_01) {
+                    role_01['Role'].role_property.attackSpeed -= 10;
+                } else {
+                    role_02['Role'].role_property.attackSpeed -= 10;
+                }
+                break;
+            case 'greenCandy_':
+                if (this.candyTagRole === role_01) {
+                    role_01['Role'].role_property.defense -= 5;
+                } else {
+                    role_02['Role'].role_property.defense -= 5;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
     onUpdate(): void {
+        // 爆炸飞到主角身上
+        this.asExplodeCandy();
     }
 
     onDisable(): void {
