@@ -164,20 +164,20 @@ export default class MainSceneControl extends Laya.Script {
         this.enemyCount = 0;
         // 初始化怪物属性，依次为血量，攻击力，攻速，移动速度，攻击速度
         this.enemyProperty = {
-            blood: 5000,
-            attackValue: 200,
-            attackSpeed: 1000,//暂时最小时间间隔为100
+            blood: 200,
+            attackValue: 50,
+            attackSpeed: 1500,//暂时最小时间间隔为100
             defense: 10,
             moveSpeed: 10,
-            creatInterval: 5000
+            creatInterval: 8000
         }
         this.enemyInterval_01 = 500;
         this.enemyTime_01 = Date.now();
-        this.enemySwitch_01 = false;
+        this.enemySwitch_01 = true;
 
         this.enemyInterval_02 = 500;
         this.enemyTime_02 = Date.now();
-        this.enemySwitch_02 = false;
+        this.enemySwitch_02 = true;
 
         this.candy_interval = 1000;
         this.creatTime = Date.now();
@@ -743,14 +743,6 @@ export default class MainSceneControl extends Laya.Script {
                 openDataContext.postMessage({ action: 'init' });
             }));
         }
-        // if (Laya.Browser.onMiniGame) {
-        //     let wx: any = Laya.Browser.window.wx;
-        //     let openDataContext: any = wx.getOpenDataContext();
-        //     openDataContext.postMessage({ action: 'init' });
-        //     console.log('微信接受消息初始化');
-        // } else {
-        //     console.log('微信接受消息初始化没有成功');
-        // }
     }
 
     /** 更新微信排行榜的数据*/
@@ -782,7 +774,10 @@ export default class MainSceneControl extends Laya.Script {
         }
 
     }
-
+    /**得分*/
+    addScores(number: number): void {
+        this.scoreLabel.value = (Number(this.scoreLabel.value) + number).toString();
+    }
 
     /**属性刷新显示规则*/
     onUpdate(): void {

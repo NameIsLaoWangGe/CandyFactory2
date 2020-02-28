@@ -8,14 +8,9 @@ export default class OperationButton extends Laya.Script {
     private selfScene: Laya.Scene;
     /**糖果父节点*/
     private candyParent: Laya.Sprite;
-    /**爆炸糖果*/
-    private candy_Explode: Laya.Prefab;
-    /**爆炸糖果父节点*/
-    private candy_ExplodeParent: Laya.Sprite;
     /**操作开关*/
     private operateSwitch: boolean;
-    /**敌人*/
-    private enemy: Laya.Prefab;
+
     /**计时器*/
     private timer: Laya.Sprite;
     /**计时器进度条*/
@@ -23,24 +18,10 @@ export default class OperationButton extends Laya.Script {
     /** @prop {name:clickHintSign, tips:"点击提示遮罩", type:Node}*/
     public clickHintSign: Laya.Sprite;
 
-    /**点击次数记录*/
-    private clicksCount: number;
-    /**每点两次后的糖果颜色名称*/
-    private clicksNameArr: Array<string>;
-    /**正确糖果的名字*/
-    private rightName: Array<string>;
-    /**错误糖果的名字*/
-    private errorName: Array<string>;
-    /**糖果总名称合集*/
-    private candyNameArr: Array<string>;
-    /**糖果总名称合集*/
-    private alreadyGroup: Array<number>;
-    /**分数*/
+    /**分数节点*/
     private scoreLabel: Laya.FontClip;
     /**奖励提示文字*/
     private rewardWords: Laya.Prefab;
-    /**新建糖果的开关*/
-    private createCandy: boolean;
     /**当前点击的组记录*/
     private clicksGroup: number;
     /**当前组正确点击了几个糖果*/
@@ -59,17 +40,9 @@ export default class OperationButton extends Laya.Script {
     initProperty(): void {
         this.self = this.owner as Laya.Sprite;
         this.selfScene = this.self.scene;
-        this.clicksCount = 0;
-        this.clicksNameArr = [];
-        this.rightName = [];
-        this.errorName = [];
-        this.alreadyGroup = [];
 
         this.candyParent = this.selfScene['MainSceneControl'].candyParent;
-        this.candy_Explode = this.selfScene['MainSceneControl'].candy_Explode
-        this.candy_ExplodeParent = this.selfScene['MainSceneControl'].candy_ExplodeParent;
         this.scoreLabel = this.selfScene['MainSceneControl'].scoreLabel;
-        this.candyNameArr = this.selfScene['MainSceneControl'].candyNameArr;
         this.timer = this.selfScene['MainSceneControl'].timer;
         this.rewardWords = this.selfScene['MainSceneControl'].rewardWords;
         this.clickHintSign.alpha = 0;
@@ -100,7 +73,6 @@ export default class OperationButton extends Laya.Script {
         if (!this.operateSwitch) {
             return;
         }
-        this.clicksCount++;
         // 通过点击的按钮匹配对应的糖果类型
         let btn_name = event.currentTarget.name;
         this.clickJudge(btn_name);
@@ -109,6 +81,7 @@ export default class OperationButton extends Laya.Script {
 
     /**点击判断*/
     clickJudge(btn_name): void {
+        // 按钮颜色需要配对的糖果颜色名字
         let pairName;
         switch (btn_name) {
             case 'redButton':
@@ -139,27 +112,17 @@ export default class OperationButton extends Laya.Script {
             let clicksLabel = candy.getChildByName('clicksLabel') as Laya.FontClip;
             if (group === this.clicksGroup && name === pairName) {
                 nameCount++;
-                // 第一次点击正确了
-                if (nameCount === 1) {
+                // 第一次点击正确了break
+                // 第一次点击不正确，可能会进入第二次，点击正确了也会break
+                if (nameCount === 1 || nameCount === 2) {
                     if (Number(clicksLabel.value) > 0) {
                         rightCount++;
                         clicksLabel.value = (Number(clicksLabel.value) - 1).toString();
+                        this.clicksRightAni(candy);
                         if (Number(clicksLabel.value) === 0) {
-                            mainSceneControl.explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 1000);
+                            mainSceneControl.explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 100);
                             candy['Candy'].playSkeletonAni(1, 'turnDown');
                             clicksLabel.value = ' ';
-                            this.zeroCount++;
-                        }
-                        break;
-                    }
-                } else if (nameCount === 2) {//第一次点击不正确则到第二次，因为break了
-                    if (Number(clicksLabel.value) > 0) {
-                        rightCount++;
-                        clicksLabel.value = (Number(clicksLabel.value) - 1).toString();
-                        if (Number(clicksLabel.value) === 0) {
-                            mainSceneControl.explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 1000);
-                            clicksLabel.value = ' ';
-                            candy['Candy'].playSkeletonAni(1, 'turnDown');
                             this.zeroCount++;
                         }
                         break;
@@ -167,7 +130,6 @@ export default class OperationButton extends Laya.Script {
                 }
             }
         }
-
         // 两个糖果都不相同的时候，和点的不正确的时候直接结算
         if (nameCount === 0 || rightCount === 0) {
             this.erroCount += 2;
@@ -185,16 +147,22 @@ export default class OperationButton extends Laya.Script {
             }
             this.groupHint();
         }
-
         // 两个都点成了零，说明这组点对了，到下一组
         if (this.zeroCount === 2) {
             this.groupHint();
         }
-
         // 都点完了最终结算
         if (this.clicksGroup === 4) {
             this.settlement('finished');
         }
+    }
+    /**点击正确时，糖果的动画*/
+    clicksRightAni(candy): void {
+        // 第二步降落缩小
+        Laya.Tween.to(candy, { scaleX: 1.1, scaleY: 1.1 }, 50, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(candy, { scaleX: 1, scaleY: 1 }, 50, null, Laya.Handler.create(this, function () {
+            }, []), 0);
+        }, []), 0);
     }
 
     /**组提示*/
@@ -249,7 +217,6 @@ export default class OperationButton extends Laya.Script {
                             clicksLabel.value = ' ';
                             candy['Candy'].group = 'error';
                             candy['Candy'].playSkeletonAni(1, 'explode');
-
                             // 等这些动画都结束了再依次飞向主角
                             if (i === 0) {
                                 this.settlementAni();
@@ -277,7 +244,6 @@ export default class OperationButton extends Laya.Script {
                 } else {
                     candy['Candy'].candyFlyToRole();
                 }
-
                 // 当最后一个执行的时候就播放下一组
                 if (i === 0) {
                     this.selfScene['MainSceneControl'].candyLaunch_01.play('prepare', false);
@@ -312,18 +278,15 @@ export default class OperationButton extends Laya.Script {
         HalfY = candy.y - 100;
 
         // 第一步飞天放大
-        Laya.Tween.to(candy, { x: HalfX, y: HalfY, scaleX: 1.3, scaleY: 1.3 }, 500, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(candy, { x: HalfX, y: HalfY, scaleX: 1.3, scaleY: 1.3 }, 250, null, Laya.Handler.create(this, function () {
 
             // 第二步降落缩小
-            Laya.Tween.to(candy, { x: point.x, y: point.y, scaleX: 0.9, scaleY: 0.9 }, 400, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(candy, { x: point.x, y: point.y, scaleX: 0.9, scaleY: 0.9 }, 300, null, Laya.Handler.create(this, function () {
                 candy.scale(0.9, 0.9);
                 this.selfScene['MainSceneControl'].explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 1000);
                 // 层级排序
                 this.selfScene['MainSceneControl'].explodeCandyzOrder();
-                // 第三步停留，延迟给予爆炸目标
-                Laya.Tween.to(candy, {}, 500, null, Laya.Handler.create(this, function () {
-                    candy['Candy'].candyTagRole = explodeTarget;
-                }, []), 0);
+                candy['Candy'].asExplodeCandy();
             }, []), 0);
         }, []), 0);
 
@@ -332,10 +295,9 @@ export default class OperationButton extends Laya.Script {
         // 拉开距离并缩小
         Laya.Tween.to(shadow, { x: -20, y: 80, scaleX: 0.8, scaleY: 0.8, }, 300, null, Laya.Handler.create(this, function () {
             // 第二部回归
-            Laya.Tween.to(shadow, { x: 0, y: 0, scaleX: 1, scaleY: 1 }, 500, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(shadow, { x: 0, y: 0, scaleX: 1, scaleY: 1 }, 300, null, Laya.Handler.create(this, function () {
             }), 0);
         }), 0);
-
     }
 
     /**计时器控制
@@ -356,9 +318,6 @@ export default class OperationButton extends Laya.Script {
      * 如果有一个点错了，都不会给予特殊奖励
     */
     additionAward(): void {
-        if (this.errorName.length > 0) {
-            return;
-        }
         if (this.timeSchedule.value > 0.8) {
             this.creatRewardWords('干得漂亮');
         } else if (this.timeSchedule.value > 0.6) {

@@ -81,7 +81,6 @@ export default class Explode extends Laya.Script {
         this.img.pivotY = this.img.height / 2;
     }
 
-
     /**敌人和糖果通用*/
     commonEnmeyAndCandy(): void {
         this.moveSwitch = true;
@@ -131,16 +130,17 @@ export default class Explode extends Laya.Script {
     * 减速
     * 停留在地上
     * 消失
+    * 爆炸都在这里，包括敌人和糖果
    */
     commonExplosion(): void {
-        this.accelerated += 0.3;
+        this.accelerated += 0.2;
         if (this.timer > 0 && this.timer <= 5) {
             this.commonSpeedXYByAngle(this.initialAngle, this.randomSpeed);
-        } else if (this.timer > 5 && this.timer < 15) {
+        } else if (this.timer > 5 && this.timer < 10) {
             this.self.alpha -= 0.01;
             this.commonSpeedXYByAngle(this.initialAngle, this.randomSpeed);
-        } else if (this.timer >= 15 && this.timer < 17) {
-        } else if (this.timer >= 17) {
+        } else if (this.timer >= 10 && this.timer < 12) {
+        } else if (this.timer >= 12) {
             this.vinshTime -= 0.1;
             if (this.vinshTime < 0) {
                 this.self.removeSelf();
@@ -395,6 +395,7 @@ export default class Explode extends Laya.Script {
         } else if (this.effectsType === 'starShining') {
             this.starShiningEffects();
         } else {
+           
             this.commonExplosion();
         }
     }

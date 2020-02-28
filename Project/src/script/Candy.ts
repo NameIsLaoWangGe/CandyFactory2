@@ -20,17 +20,10 @@ export default class Candy extends Laya.Script {
     private timerControl: number;
     /**每个糖果之间的间距*/
     private spaceY: number;
-
-    /**初始化的10个糖果的位置记录*/
-    private posYArr: Array<number>;
     /**属性飘字提示*/
     private hintWord: Laya.Prefab;
-
-    /**组数，他是属于哪一组的*/
-    private group;
-    /**是否已经被点击了*/
-    private selected: boolean;
-
+    /**组数，他是属于哪一组的,这个值可能会被标记成非number*/
+    private group: any;
     /**骨骼动画模板*/
     private templet: Laya.Templet;
     /**骨骼动画*/
@@ -46,21 +39,18 @@ export default class Candy extends Laya.Script {
         this.self = this.owner as Laya.Sprite;
         this.selfScene = this.self.scene as Laya.Scene;
         this.candyTagRole = null;
-        this.mainSceneControl = this.selfScene.getComponent(MainSceneControl);
-        this.roleParent = this.mainSceneControl.roleParent;
-        this.scoreLabel = this.mainSceneControl.scoreLabel;
         this.selfSpeed = 10;
         this.spaceY = 5;
 
-        // 随机点击次数暂定1~10次
+        // 随机点击次数
         let number = Math.floor(Math.random() * 5) + 1;
         this.clicksLabel = this.self.getChildByName('clicksLabel') as Laya.FontClip;
         this.clicksLabel.value = number.toString();
         this.clicksLabel.alpha = 0;
 
-        this.hintWord = this.mainSceneControl.hintWord;
+        this.hintWord = this.selfScene['MainSceneControl'].hintWord;
+        this.scoreLabel = this.selfScene['MainSceneControl'].scoreLabel;
 
-        this.selected = false;
         this.group = null;
 
         this.skeleton = this.self.getChildByName('skeleton') as Laya.Skeleton;
@@ -121,9 +111,10 @@ export default class Candy extends Laya.Script {
         } else {
             this.candyTagRole = this.selfScene['MainSceneControl'].role_02;
         }
+
         this.playSkeletonAni(2, 'turnDown');
         // 基础时间参数，动画的时间会随着位置边近而缩小
-        let timePar = 500 + this.group * 100;
+        let timePar = 300 + this.group * 100;
         // x轴的位置偏移
         let targetX = this.candyTagRole.x - 50;
         let targetY = this.candyTagRole.y;
@@ -144,6 +135,7 @@ export default class Candy extends Laya.Script {
                 this.hintWordMove();
                 this.roleAddProperty();
                 this.self.removeSelf();
+                this.selfScene['MainSceneControl'].addScores(100);
             }), 0);
         }), 0);
 
@@ -213,33 +205,18 @@ export default class Candy extends Laya.Script {
     * 爆炸后通过对应的糖果减少主角的属性
    */
     asExplodeCandy(): void {
-        // 如果是暂停或者是游戏结束,则不会移动
-        if (this.selfScene['MainSceneControl'].gameOver) {
-            return;
+        if (this.self.x < Laya.stage.width / 2) {
+            this.candyTagRole = this.selfScene['MainSceneControl'].role_01;
+        } else {
+            this.candyTagRole = this.selfScene['MainSceneControl'].role_02;
         }
-        if (this.candyTagRole !== null) {
-            // x,y分别相减是两点连线向量
-            // 向量计算并且归一化，向量长度为1。
-            let point = new Laya.Point(this.candyTagRole.x - this.self.x, this.candyTagRole.y - this.self.y);
-            point.normalize();
-            //向量相加移动
-            this.self.x += point.x * this.selfSpeed;
-            this.self.y += point.y * this.selfSpeed;
-            // 到达对象位置后开启攻击开关进行攻击，攻击速度依照时间间隔而定
-            // 此时移动速度为零
-            let differenceX = Math.abs(this.self.x - this.candyTagRole.x);
-            let differenceY = Math.abs(this.self.y - this.candyTagRole.y);
-            if (differenceX < 50 && differenceY < 50) {
-                this.selfScene['MainSceneControl'].explodeAni(this.selfScene, this.self.x, this.self.y, this.self.name.substring(0, 11), 15, 100);
-                this.propertyHintWord();
-                this.roleReduceProperty();
-                this.self.removeSelf();
-                // 关闭预警
-                this.selfScene['MainSceneControl'].role_01['Role'].role_Warning = true;
-                this.selfScene['MainSceneControl'].role_02['Role'].role_Warning = true;
-                this.candyTagRole = null;
-            }
-        }
+        // 第二部回归
+        Laya.Tween.to(this.self, { x: this.candyTagRole.x, y: this.candyTagRole.y }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+            this.selfScene['MainSceneControl'].explodeAni(this.selfScene, this.self.x, this.self.y, this.self.name.substring(0, 11), 15, 100);
+            this.propertyHintWord();
+            this.roleReduceProperty();
+            this.self.removeSelf();
+        }), 0);
     }
 
     /**属性减少提示动画*/
@@ -305,8 +282,12 @@ export default class Candy extends Laya.Script {
     }
 
     onUpdate(): void {
-        // 爆炸飞到主角身上
-        this.asExplodeCandy();
+        // 如果目标主角存在且死亡，那么立即爆炸
+        if (this.candyTagRole !== null && this.candyTagRole['Role'].roleDeath) {
+            this.selfScene['MainSceneControl'].explodeAni(this.selfScene, this.self.x, this.self.y, this.self.name.substring(0, 11), 15, 100);
+            this.self.removeSelf();
+            this.candyFlyToRole = null;
+        }
     }
 
     onDisable(): void {

@@ -152,7 +152,7 @@ export default class HintWord extends Laya.Script {
         timeLine.play('appear', false);
         timeLine.on(Laya.Event.COMPLETE, this, function () {
             this.self.removeSelf();
-            this.scoreLabel.value = (Number(this.scoreLabel.value) + numberValue).toString();
+            this.selfScene['MainSceneControl'].addScores(numberValue);
         });
     }
 
