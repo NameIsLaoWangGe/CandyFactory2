@@ -159,16 +159,16 @@ export default class Candy extends Laya.Script {
         }
         switch (this.self.name.substring(0, 11)) {
             case 'yellowCandy':
-                MainSceneControl.createHintWord(this.candyTagRole, '攻击里', 10);
+                MainSceneControl.createHintWord(this.candyTagRole, 100, -10, '攻击里', 10, 1);
                 break;
             case 'redCandy___':
-                MainSceneControl.createHintWord(this.candyTagRole, '生命', 5);
+                MainSceneControl.createHintWord(this.candyTagRole, 100, -10, '生命', 5, 1);
                 break;
             case 'blueCandy__':
-                MainSceneControl.createHintWord(this.candyTagRole, '公鸡速度', 10);
+                MainSceneControl.createHintWord(this.candyTagRole, 100, -10, '公鸡速度', 10, 1);
                 break;
             case 'greenCandy_':
-                MainSceneControl.createHintWord(this.candyTagRole, '防御力', 5);
+                MainSceneControl.createHintWord(this.candyTagRole, 100, -10, '防御力', 5, 1);
                 break;
             default:
         }
@@ -224,16 +224,16 @@ export default class Candy extends Laya.Script {
         let MainSceneControl = this.selfScene['MainSceneControl'];
         switch (this.self.name.substring(0, 11)) {
             case 'yellowCandy':
-                MainSceneControl.createHintWord(this.candyTagRole, '减少攻击里', 10);
+                MainSceneControl.createHintWord(this.candyTagRole, 100, -10, '减少攻击里', 10, 1);
                 break;
             case 'redCandy___':
-                MainSceneControl.createHintWord(this.candyTagRole, '减少生命', 5);
+                MainSceneControl.createHintWord(this.candyTagRole, 100, -10, '减少生命', 5, 1);
                 break;
             case 'blueCandy__':
-                MainSceneControl.createHintWord(this.candyTagRole, '减少公鸡速度', 10);
+                MainSceneControl.createHintWord(this.candyTagRole, 100, -10, '减少公鸡速度', 10, 1);
                 break;
             case 'greenCandy_':
-                MainSceneControl.createHintWord(this.candyTagRole, '减少防御力', 5);
+                MainSceneControl.createHintWord(this.candyTagRole, 100, -10, '减少防御力', 5, 1);
                 break;
             default:
         }

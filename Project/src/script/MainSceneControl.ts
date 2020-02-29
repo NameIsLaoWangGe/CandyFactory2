@@ -396,24 +396,24 @@ export default class MainSceneControl extends Laya.Script {
     }
 
     /**产生爆炸糖果*/
-    createExplodeCandy(candyName: string): Laya.Sprite {
-        // 通过对象池创建
-        let explodeCandy = Laya.Pool.getItemByCreateFun('candy_Explode', this.candy_Explode.create, this.candy_Explode) as Laya.Sprite;
-        explodeCandy.pos(Laya.stage.width / 2, -100);
-        this.candy_ExplodeParent.addChild(explodeCandy);
-        explodeCandy.rotation = 0;
-        this.candyCount++;
-        explodeCandy.name = candyName.substring(0, 11);
-        return explodeCandy;
-    }
+    // createExplodeCandy(candyName: string): Laya.Sprite {
+    //     // 通过对象池创建
+    //     let explodeCandy = Laya.Pool.getItemByCreateFun('candy_Explode', this.candy_Explode.create, this.candy_Explode) as Laya.Sprite;
+    //     explodeCandy.pos(Laya.stage.width / 2, -100);
+    //     this.candy_ExplodeParent.addChild(explodeCandy);
+    //     explodeCandy.rotation = 0;
+    //     this.candyCount++;
+    //     explodeCandy.name = candyName.substring(0, 11);
+    //     return explodeCandy;
+    // }
 
     /**对爆炸糖果进行排序*/
-    explodeCandyzOrder(): void {
-        let len = this.candy_ExplodeParent._children.length;
-        for (let i = 0; i < len; i++) {
-            this.candy_ExplodeParent._children[i].zOrder = Math.round(this.candy_ExplodeParent._children[i].y);
-        }
-    }
+    // explodeCandyzOrder(): void {
+    //     let len = this.candy_ExplodeParent._children.length;
+    //     for (let i = 0; i < len; i++) {
+    //         this.candy_ExplodeParent._children[i].zOrder = Math.round(this.candy_ExplodeParent._children[i].y);
+    //     }
+    // }
 
     /**两个主角对话框的初始化*/
     roleSpeakBoxs(): void {
@@ -534,18 +534,18 @@ export default class MainSceneControl extends Laya.Script {
     enemyPropertyUpdate(): void {
         if (this.timerControl % 600 === 0) {
             // 血量增长
-            this.enemyProperty.blood += 50;
+            this.enemyProperty.blood += 25;
             // 攻击力增长
             this.enemyProperty.attackValue += 1;
             // 攻击速度增长，最短时间间隔为100
-            this.enemyProperty.attackSpeed += 10;
+            this.enemyProperty.attackSpeed += 5;
             if (this.enemyProperty.attackSpeed < 100) {
                 this.enemyProperty.attackSpeed = 100;
             }
             // 防御力增长
             this.enemyProperty.defense += 1;
             // 出怪时间增长,最短时间间隔为500
-            this.enemyProperty.creatInterval += 50;
+            this.enemyProperty.creatInterval += 25;
             if (this.enemyProperty.creatInterval < 500) {
                 this.enemyProperty.creatInterval = 500;
             }
@@ -581,13 +581,18 @@ export default class MainSceneControl extends Laya.Script {
         resurgence.pos(0, 0);
     }
 
-    /**属性增减动画
-     * @param target 
+    /**属性增减动画和分数增加动画
+     * @param target 父节点
+     * @param x 位置
+     * @param y 类型
+     * @param proPertyType 类型
+     * @param numberValue 增减动画值
     */
-    createHintWord(target, proPertyType, numberValue): void {
+    createHintWord(target, x, y, proPertyType, numberValue, scale): void {
         let hintWord = Laya.Pool.getItemByCreateFun('hintWord', this.hintWord.create, this.hintWord) as Laya.Sprite;
         target.addChild(hintWord);
-        hintWord.pos(100, -10);
+        hintWord.pos(x, y);
+        hintWord.scale(scale, scale);
         hintWord['HintWord'].initProperty(proPertyType, numberValue);
     }
 
@@ -778,6 +783,8 @@ export default class MainSceneControl extends Laya.Script {
     addScores(number: number): void {
         this.scoreLabel.value = (Number(this.scoreLabel.value) + number).toString();
     }
+
+    /**得分的动画*/
 
     /**属性刷新显示规则*/
     onUpdate(): void {

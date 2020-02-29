@@ -284,8 +284,6 @@ export default class OperationButton extends Laya.Script {
             Laya.Tween.to(candy, { x: point.x, y: point.y, scaleX: 0.9, scaleY: 0.9 }, 300, null, Laya.Handler.create(this, function () {
                 candy.scale(0.9, 0.9);
                 this.selfScene['MainSceneControl'].explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 1000);
-                // 层级排序
-                this.selfScene['MainSceneControl'].explodeCandyzOrder();
                 candy['Candy'].asExplodeCandy();
             }, []), 0);
         }, []), 0);

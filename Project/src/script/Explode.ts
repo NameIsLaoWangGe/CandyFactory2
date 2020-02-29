@@ -56,8 +56,8 @@ export default class Explode extends Laya.Script {
             case 'smokeEffects':
                 this.smokeProperty();
                 break;
-            case 'infighting':
-                this.infightingProperty();
+            case 'fighting':
+                this.fightingProperty();
                 break;
             case 'range':
                 this.rangeProperty();
@@ -95,7 +95,7 @@ export default class Explode extends Laya.Script {
         this.rotationD = Math.floor(Math.random() * 2) === 1 ? -20 : 20;
     }
     /**近战敌人爆炸属性*/
-    infightingProperty(): void {
+    fightingProperty(): void {
         this.commonEnmeyAndCandy();
         this.img.skin = 'candy/特效/白色单元.png';
     }
@@ -137,10 +137,9 @@ export default class Explode extends Laya.Script {
         if (this.timer > 0 && this.timer <= 5) {
             this.commonSpeedXYByAngle(this.initialAngle, this.randomSpeed);
         } else if (this.timer > 5 && this.timer < 10) {
-            this.self.alpha -= 0.01;
+            this.self.alpha -= 0.02;
             this.commonSpeedXYByAngle(this.initialAngle, this.randomSpeed);
-        } else if (this.timer >= 10 && this.timer < 12) {
-        } else if (this.timer >= 12) {
+        } else if (this.timer >= 10) {
             this.vinshTime -= 0.1;
             if (this.vinshTime < 0) {
                 this.self.removeSelf();
@@ -395,7 +394,7 @@ export default class Explode extends Laya.Script {
         } else if (this.effectsType === 'starShining') {
             this.starShiningEffects();
         } else {
-           
+
             this.commonExplosion();
         }
     }

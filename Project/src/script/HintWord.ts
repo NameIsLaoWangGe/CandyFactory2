@@ -22,6 +22,8 @@ export default class HintWord extends Laya.Script {
         this.selfScene = this.self.scene;
         this.self.alpha = 0;//出现的时候隐身，方便做动画
         this.self.pivotX = this.self.width / 2;
+        this.self.rotation = 0;
+        this.self.scale(1, 1);
 
         this.propertyType = this.self.getChildByName('propertyType') as Laya.FontClip;
         this.addNumber = this.self.getChildByName('addNumber') as Laya.FontClip;
@@ -114,9 +116,15 @@ export default class HintWord extends Laya.Script {
                 break;
 
             // 增加分数
-            case '增加分数':
+            case '额外奖励分数':
                 this.addScore.value = "+" + numberValue;
-                this.addScoreMove(numberValue);
+                this.rewardScoreMove(numberValue);
+                break;
+
+            // 杀怪获得的分数
+            case '杀怪分数':
+                this.addScore.value = "+" + numberValue;
+                this.killEnemy(numberValue);
                 break;
             default:
                 break;
@@ -136,7 +144,7 @@ export default class HintWord extends Laya.Script {
     }
 
     /**增加分数时的动画*/
-    addScoreMove(numberValue): void {
+    rewardScoreMove(numberValue): void {
         // 把scoreLabel的坐标转换成全局坐标
         let scoreLabel_p = this.scoreLabel.parent as Laya.Sprite;
         let scoreLabel_p_p = scoreLabel_p.parent as Laya.Sprite;
@@ -148,7 +156,21 @@ export default class HintWord extends Laya.Script {
             .addLabel('pause', 0).to(this.self, { y: this.self.y - 120 }, 600, null, 0)
             .addLabel('moveUp', 0).to(this.self, { y: this.self.y - 150, alpha: 1 }, 100, null, 0)
             .addLabel('moveTo', 0).to(this.self, { scaleX: 0.5, scaleY: 0.5, rotation: -360, x: stageX, y: stageY, alpha: 1 }, 600, Laya.Ease.cubicIn, 0)
-            .addLabel('vanish', 0).to(this.self, { y: stageY - 100, alpha: 0 }, 100, Laya.Ease.cubicIn, 0)
+            .addLabel('vanish', 0).to(this.self, { y: stageY - 100, alpha: 0 }, 300, Laya.Ease.cubicIn, 0)
+
+        timeLine.play('appear', false);
+        timeLine.on(Laya.Event.COMPLETE, this, function () {
+            this.self.removeSelf();
+            this.selfScene['MainSceneControl'].addScores(numberValue);
+        });
+    }
+    /**杀怪奖励分数*/
+    killEnemy(numberValue): void {
+        let timeLine = new Laya.TimeLine;
+        timeLine.addLabel('appear', 0).to(this.self, { y: this.self.y - 60, alpha: 1 }, 100, null, 0)
+            .addLabel('pause', 0).to(this.self, { y: this.self.y - 120 }, 600, null, 0)
+            .addLabel('moveUp', 0).to(this.self, { y: this.self.y - 150, alpha: 0 }, 100, null, 0)
+
         timeLine.play('appear', false);
         timeLine.on(Laya.Event.COMPLETE, this, function () {
             this.self.removeSelf();
@@ -158,5 +180,7 @@ export default class HintWord extends Laya.Script {
 
     onDisable(): void {
         Laya.Pool.recover('hintWord', this.self);
+        Laya.timer.clearAll(this);
+        Laya.Tween.clearAll(this);
     }
 }

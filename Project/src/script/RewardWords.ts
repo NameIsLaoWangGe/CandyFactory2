@@ -126,7 +126,7 @@ export default class RewardWords extends Laya.Script {
 
         // 增加分数延迟用于配合上面的动画
         Laya.timer.frameOnce(150, this, function () {
-            this.addScoreAni();
+            this.selfScene['MainSceneControl'].createHintWord(this.selfScene, Laya.stage.width / 2, this.locationY, '额外奖励分数',this.addScoreNumber);
         });
 
         // 字体动画
@@ -175,18 +175,9 @@ export default class RewardWords extends Laya.Script {
         }
     }
 
-    /**分数增加动画*/
-    addScoreAni(): void {
-        let hintWord = Laya.Pool.getItemByCreateFun('candy', this.hintWord.create, this.hintWord) as Laya.Sprite;
-        this.selfScene.addChild(hintWord);
-        hintWord.zOrder = 110;
-        hintWord.pos(Laya.stage.width / 2, this.locationY);
-        let proPertyType: string = '增加分数';
-        hintWord['HintWord'].initProperty(proPertyType, this.addScoreNumber);
-    }
-
     onDisable(): void {
         Laya.Pool.recover('rewardWords', this.self);
         Laya.Tween.clearAll(this);
+        Laya.timer.clearAll(this);
     }
 }

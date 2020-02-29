@@ -119,6 +119,7 @@ export default class Enemy extends Laya.Script {
         this.skeleton = this.templet.buildArmature(0);//模板0
         this.skeletonListen();
         this.self.addChild(this.skeleton);
+        this.skeleton.zOrder = -1;
         //格式
         if (this.enemyType === 'fighting') {
             this.self.width = 120;
@@ -359,6 +360,7 @@ export default class Enemy extends Laya.Script {
         } else {
             this.selfScene['MainSceneControl'].explodeAni(this.selfScene, this.self.x, this.self.y, 'range', 15, 100);
         }
+        this.selfScene['MainSceneControl'].createHintWord(this.selfScene, this.self.x, this.self.y, '杀怪分数', 100, 0.5);
     }
 
     /**敌人以属性的攻速为时间间隔进行攻击*/
