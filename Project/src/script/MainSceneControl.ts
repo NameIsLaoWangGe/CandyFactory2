@@ -81,6 +81,9 @@ export default class MainSceneControl extends Laya.Script {
     /** @prop {name:score , tips:"分数节点", type:Prefab}*/
     public score: Laya.Prefab;
 
+    /** @prop {name:enemyHint , tips:"倒计时", type:Prefab}*/
+    public enemyHint: Laya.Prefab;
+
     /**两个主角的对话框*/
     private role_01speak: Laya.Sprite;
     private role_02speak: Laya.Sprite;
@@ -165,7 +168,7 @@ export default class MainSceneControl extends Laya.Script {
         // 初始化怪物属性，依次为血量，攻击力，攻速，移动速度，攻击速度
         this.enemyProperty = {
             blood: 200,
-            attackValue: 50,
+            attackValue: 200,
             attackSpeed: 1500,//暂时最小时间间隔为100
             defense: 10,
             moveSpeed: 10,
@@ -173,11 +176,11 @@ export default class MainSceneControl extends Laya.Script {
         }
         this.enemyInterval_01 = 500;
         this.enemyTime_01 = Date.now();
-        this.enemySwitch_01 = true;
+        this.enemySwitch_01 = false;
 
         this.enemyInterval_02 = 500;
         this.enemyTime_02 = Date.now();
-        this.enemySwitch_02 = true;
+        this.enemySwitch_02 = false;
 
         this.candy_interval = 1000;
         this.creatTime = Date.now();
@@ -199,6 +202,8 @@ export default class MainSceneControl extends Laya.Script {
         this.assembly['Assembly'].pipeAnimation('flow');
 
         this.candyMoveToDisplay();
+        this.createEnemyHint();
+        
     }
 
     /**游戏没有开始的时候设置的属性*/
@@ -221,7 +226,9 @@ export default class MainSceneControl extends Laya.Script {
         startInterface['startGame'].aniTypeInit(type);
     }
 
-    /**两个发射口的骨骼动画*/
+    /**两个发射口的骨骼动画
+     * 这两个骨骼动画播放意味着发射出糖果
+    */
     createLaunchAni(): void {
         //创建动画模板1
         this.launchTemp_01 = new Laya.Templet();
@@ -395,26 +402,6 @@ export default class MainSceneControl extends Laya.Script {
         return candy;
     }
 
-    /**产生爆炸糖果*/
-    // createExplodeCandy(candyName: string): Laya.Sprite {
-    //     // 通过对象池创建
-    //     let explodeCandy = Laya.Pool.getItemByCreateFun('candy_Explode', this.candy_Explode.create, this.candy_Explode) as Laya.Sprite;
-    //     explodeCandy.pos(Laya.stage.width / 2, -100);
-    //     this.candy_ExplodeParent.addChild(explodeCandy);
-    //     explodeCandy.rotation = 0;
-    //     this.candyCount++;
-    //     explodeCandy.name = candyName.substring(0, 11);
-    //     return explodeCandy;
-    // }
-
-    /**对爆炸糖果进行排序*/
-    // explodeCandyzOrder(): void {
-    //     let len = this.candy_ExplodeParent._children.length;
-    //     for (let i = 0; i < len; i++) {
-    //         this.candy_ExplodeParent._children[i].zOrder = Math.round(this.candy_ExplodeParent._children[i].y);
-    //     }
-    // }
-
     /**两个主角对话框的初始化*/
     roleSpeakBoxs(): void {
         for (let i = 0; i < 2; i++) {
@@ -480,12 +467,19 @@ export default class MainSceneControl extends Laya.Script {
         }
     }
 
+    /**敌人出现倒计时*/
+    createEnemyHint(): void {
+        let enemyHint = Laya.Pool.getItemByCreateFun('enemyHint', this.enemyHint.create, this.enemyHint) as Laya.Sprite;
+        this.owner.addChild(enemyHint);
+        enemyHint.zOrder = 1000;
+    }
+
     /**出现敌人
      * 创建方式决定了敌人出生的位置
      * @param mode 创建模式是左边还是右边
      * @param tagRole 目标是哪个主角
     */
-    careatEnemy(mode: string, tagRole: Laya.Sprite, type: string): Laya.Sprite {
+    createEnemy(mode: string, tagRole: Laya.Sprite, type: string): Laya.Sprite {
         this.enemyCount++;
         if (tagRole !== null) {
             let enemy = Laya.Pool.getItemByCreateFun('enemy', this.enemy.create, this.enemy) as Laya.Sprite;
@@ -815,8 +809,8 @@ export default class MainSceneControl extends Laya.Script {
             if (nowTime - this.enemyTime_01 > this.enemyProperty.creatInterval) {
                 this.enemyTime_01 = nowTime;
                 this.enemyTagRole = this.role_01;
-                this.careatEnemy('left', this.role_01, 'fighting');
-                this.careatEnemy('left', this.role_01, 'range');
+                this.createEnemy('left', this.role_01, 'fighting');
+                this.createEnemy('left', this.role_01, 'range');
                 this.enemyTagRole = null;
             }
         }
@@ -826,8 +820,8 @@ export default class MainSceneControl extends Laya.Script {
             if (nowTime - this.enemyTime_02 > this.enemyProperty.creatInterval) {
                 this.enemyTime_02 = nowTime;
                 this.enemyTagRole = this.role_02;
-                this.careatEnemy('right', this.role_02, 'fighting');
-                this.careatEnemy('right', this.role_02, 'range');
+                this.createEnemy('right', this.role_02, 'fighting');
+                this.createEnemy('right', this.role_02, 'range');
                 this.enemyTagRole = null;
             }
         }

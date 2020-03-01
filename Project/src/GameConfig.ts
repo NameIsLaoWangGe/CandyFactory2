@@ -8,6 +8,7 @@ import Candy from "./script/Candy"
 import Candy_Explode from "./script/Candy_Explode"
 import Enemy from "./script/Enemy"
 import EnemyBullet from "./script/EnemyBullet"
+import EnemyHint from "./script/EnemyHint"
 import Explode from "./script/Explode"
 import HintWord from "./script/HintWord"
 import Ranking from "./script/Ranking"
@@ -44,6 +45,7 @@ export default class GameConfig{
         reg("script/Candy_Explode.ts",Candy_Explode);
         reg("script/Enemy.ts",Enemy);
         reg("script/EnemyBullet.ts",EnemyBullet);
+        reg("script/EnemyHint.ts",EnemyHint);
         reg("script/Explode.ts",Explode);
         reg("script/HintWord.ts",HintWord);
         reg("script/Ranking.ts",Ranking);
