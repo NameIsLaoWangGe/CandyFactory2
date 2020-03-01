@@ -23,7 +23,9 @@ export default class EnemyHint extends Laya.Script {
     init(): void {
         this.self = this.owner as Laya.Sprite;
         this.self.rotation = 0;
-        this.self.x = 1500;
+        this.self.x = -20;
+        this.self.scale(0, 0);
+        this.self.alpha = 0;
         this.self.y = Laya.stage.height / 3;
         this.selfScene = this.owner.scene as Laya.Scene;
         this.numTime = Date.now();
@@ -33,10 +35,10 @@ export default class EnemyHint extends Laya.Script {
     /**出现动画*/
     appear(): void {
         // 第一步出现
-        Laya.Tween.to(this.self, { x: -20 }, 800, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.self, { alpha: 1, scaleX: 1, scaleY: 1 }, 400, null, Laya.Handler.create(this, function () {
         }), 0);
         // 内容旋转
-        Laya.Tween.to(this.baseboard, { rotation: 720 }, 800, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.baseboard, { rotation: 720 }, 400, null, Laya.Handler.create(this, function () {
             this.baseboard.rotation = 0;
             this.seconds.value = '10' + 's';
             this.numSwitch = true;

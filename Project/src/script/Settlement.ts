@@ -224,7 +224,6 @@ export default class Settlement extends Laya.Script {
     }
 
     onDisable(): void {
-        Laya.Pool.recover(this.self.name, this.self);
         Laya.Tween.clearAll(this);
     }
 }

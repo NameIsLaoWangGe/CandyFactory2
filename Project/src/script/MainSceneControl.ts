@@ -203,7 +203,7 @@ export default class MainSceneControl extends Laya.Script {
 
         this.candyMoveToDisplay();
         this.createEnemyHint();
-        
+
     }
 
     /**游戏没有开始的时候设置的属性*/
@@ -587,6 +587,7 @@ export default class MainSceneControl extends Laya.Script {
         target.addChild(hintWord);
         hintWord.pos(x, y);
         hintWord.scale(scale, scale);
+        hintWord.zOrder = 200;
         hintWord['HintWord'].initProperty(proPertyType, numberValue);
     }
 
@@ -618,27 +619,6 @@ export default class MainSceneControl extends Laya.Script {
                 }
             });
             enemyDelayed += 20;
-        }
-
-        // 消除爆炸糖果
-        // 先隐藏在一并删除，否则可能会有length变化造成错误
-        let candyExpoleDelayed = 0;
-        let len2 = this.candy_ExplodeParent._children.length;
-        for (let j = 0; j < len2; j++) {
-            Laya.timer.frameOnce(candyExpoleDelayed, this, function () {
-                if (!this.candy_ExplodeParent._children[j]) {
-                    return;
-                }
-                this.candy_ExplodeParent._children[j].alpha = 0;
-                let name = this.candy_ExplodeParent._children[j].name.substring(0, 11);
-                let x = this.candy_ExplodeParent._children[j].x;
-                let y = this.candy_ExplodeParent._children[j].y;
-                this.explodeAni(this.owner, x, y, 'disappear', 8, 1000);
-                if (j === len2 - 1) {
-                    this.candy_ExplodeParent.removeChildren(0, len2 - 1);
-                }
-            });
-            candyExpoleDelayed += 20;
         }
 
         // 消除糖果,如果此时没有糖果直接初始化
