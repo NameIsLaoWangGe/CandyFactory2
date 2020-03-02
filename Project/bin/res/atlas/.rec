@@ -87,10 +87,11 @@ P F7111ECD 错误提示.png
 R 129BD0E2 防沉迷文字.png
 P 670E5314 黑色底.png
 D candy/主角
-R E088D4B9 role_01.png
-R E4A35181 role_01.sk
-R 6CD540C9 role_02.png
-R 0D821AF9 role_02.sk
+R EDE21485 role_01.png
+R 628CFA0D role_01.sk
+R D085C0E9 role_01_ske.json
+R A7CF44DB role_02.png
+R 2E53C7DF role_02.sk
 P 0F05F937 主角1子弹.png
 P 58DAE67D 主角2子弹.png
 D candy/字体

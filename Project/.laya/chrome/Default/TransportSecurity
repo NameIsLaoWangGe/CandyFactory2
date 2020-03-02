@@ -1,11 +1,11 @@
 {
    "8/RrMmQlCD2Gsp14wUCE1P8r7B2C5+yE0+g79IPyRsc=": {
       "dynamic_spki_hashes_expiry": 0.0,
-      "expiry": 1614429775.845416,
+      "expiry": 1614609573.777454,
       "mode": "force-https",
       "pkp_include_subdomains": false,
       "pkp_observed": 0.0,
       "sts_include_subdomains": false,
-      "sts_observed": 1582893775.845419
+      "sts_observed": 1583073573.777456
    }
 }

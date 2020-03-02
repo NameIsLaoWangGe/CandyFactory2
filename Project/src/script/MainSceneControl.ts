@@ -201,6 +201,7 @@ export default class MainSceneControl extends Laya.Script {
         // 流水线水管动画
         this.assembly['Assembly'].pipeAnimation('flow');
 
+        this.roleAppear();
         this.candyMoveToDisplay();
         this.createEnemyHint();
 
@@ -211,6 +212,8 @@ export default class MainSceneControl extends Laya.Script {
         this.self = this.owner as Laya.Scene;
         this.owner['MainSceneControl'] = this;//脚本赋值
         this.gameOver = true;
+        this.role_01.x = -500;
+        this.role_02.x = 1834;
         this.createLaunchAni();
     }
 
@@ -400,6 +403,25 @@ export default class MainSceneControl extends Laya.Script {
         candy.rotation = 0;
         this.candyCount++;
         return candy;
+    }
+
+    /**主角出现动画*/
+    roleAppear(): void {
+        Laya.Tween.to(this.role_01, { x: 139 }, 1000, null, Laya.Handler.create(this, function () {
+            this.role_01['Role'].skeleton.play('speak', true);
+        }, []), 0);
+        Laya.Tween.to(this.role_02, { x: 669 }, 1000, null, Laya.Handler.create(this, function () {
+            this.role_02['Role'].skeleton.play('speak', true);
+        }, []), 0);
+    }
+    /**主角消失动画*/
+    roleVanish(): void {
+        Laya.Tween.to(this.role_01, { x: -500 }, 1000, null, Laya.Handler.create(this, function () {
+            this.role_01['Role'].skeleton.play('frontMove', true);
+        }, []), 0);
+        Laya.Tween.to(this.role_02, { x: 1834 }, 1000, null, Laya.Handler.create(this, function () {
+            this.role_02['Role'].skeleton.play('frontMove', true);
+        }, []), 0);
     }
 
     /**两个主角对话框的初始化*/

@@ -186,6 +186,21 @@ export default class Settlement extends Laya.Script {
         this.btn_Return.on(Laya.Event.MOUSE_UP, this, this.up);
         this.btn_Return.on(Laya.Event.MOUSE_OUT, this, this.out);
     }
+
+    /**关闭按钮点击事件*/
+    btnOffClink(): void {
+        // 重来
+        this.btn_Again.off(Laya.Event.MOUSE_DOWN, this, this.down);
+        this.btn_Again.off(Laya.Event.MOUSE_MOVE, this, this.move);
+        this.btn_Again.off(Laya.Event.MOUSE_UP, this, this.up);
+        this.btn_Again.off(Laya.Event.MOUSE_OUT, this, this.out);
+        // 返回
+        this.btn_Return.off(Laya.Event.MOUSE_DOWN, this, this.down);
+        this.btn_Return.off(Laya.Event.MOUSE_MOVE, this, this.move);
+        this.btn_Return.off(Laya.Event.MOUSE_UP, this, this.up);
+        this.btn_Return.off(Laya.Event.MOUSE_OUT, this, this.out);
+    }
+
     down(event): void {
         Laya.timer.pause();
         event.currentTarget.scale(0.95, 0.95);
@@ -196,6 +211,7 @@ export default class Settlement extends Laya.Script {
     }
     /**抬起增加属性*/
     up(event): void {
+        this.btnOffClink();
         event.currentTarget.scale(1, 1);
         if (event.currentTarget.name === 'btn_Again') {
             this.cutTnterface('restart');

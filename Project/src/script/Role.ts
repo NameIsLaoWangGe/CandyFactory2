@@ -89,7 +89,7 @@ export default class Role extends Laya.Script {
         this.skeleton = this.templet.buildArmature(0);//模板0
         this.skeletonListen();
         this.self.addChild(this.skeleton);
-        this.skeleton.play('speak', true);
+        this.skeleton.play('frontMove', true);
         this.skeleton.name = 'skeleton';
         if (this.self.name === 'role_01') {
             this.skeleton.x = 60;

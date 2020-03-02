@@ -100,7 +100,7 @@ export default class Resurgence extends Laya.Script {
         // 数字地板
         Laya.Tween.to(this.digitalPlate, { x: 375, rotation: 720 }, 550, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             this.digitalPlate.rotation = 0;
-            this.resurgence_BtnClink();
+            this.btnonClink();
         }, []), 0);
         // 背景
         Laya.Tween.to(this.background, { alpha: 0.7 }, 550, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
@@ -116,6 +116,7 @@ export default class Resurgence extends Laya.Script {
      * @param type 切换到什么界面
     */
     cutTnterface(type): void {
+        this.btnOffClink();
         this.self.pivotX = Laya.stage.width / 2;
         this.self.pivotY = Laya.stage.height / 2;
         this.self.x = this.self.pivotX;
@@ -156,26 +157,26 @@ export default class Resurgence extends Laya.Script {
             Laya.timer.frameOnce(delayed, this, function () {
                 switch (i) {
                     case 0:
-                        MainSceneControl.createHintWord(role_01, '攻击里', 20);
-                        MainSceneControl.createHintWord(role_02, '攻击里', 20);
+                        MainSceneControl.createHintWord(role_01, 100, -10, '攻击里', 20, 1);
+                        MainSceneControl.createHintWord(role_02, 100, -10, '攻击里', 20, 1);
                         role_01['Role'].role_property.attackValue += 20;
                         role_02['Role'].role_property.attackValue += 20;
                         break;
                     case 1:
-                        MainSceneControl.createHintWord(role_01, '生命', 1000);
-                        MainSceneControl.createHintWord(role_02, '生命', 1000);
+                        MainSceneControl.createHintWord(role_01, 100, -10, '生命', 1000, 1);
+                        MainSceneControl.createHintWord(role_02, 100, -10, '生命', 1000, 1);
                         role_01['Role'].role_property.blood = 1000;
                         role_02['Role'].role_property.blood = 1000;
                         break;
                     case 2:
-                        MainSceneControl.createHintWord(role_01, '公鸡速度', 20);
-                        MainSceneControl.createHintWord(role_02, '公鸡速度', 20);
+                        MainSceneControl.createHintWord(role_01, 100, -10, '公鸡速度', 20, 1);
+                        MainSceneControl.createHintWord(role_02, 100, -10, '公鸡速度', 20, 1);
                         role_01['Role'].role_property.attackSpeed += 20;
                         role_02['Role'].role_property.attackSpeed += 20;
                         break;
                     case 3:
-                        MainSceneControl.createHintWord(role_01, '防御力', 10);
-                        MainSceneControl.createHintWord(role_02, '防御力', 10);
+                        MainSceneControl.createHintWord(role_01, 100, -10, '防御力', 10, 1);
+                        MainSceneControl.createHintWord(role_02, 100, -10, '防御力', 10, 1);
                         role_01['Role'].role_property.defense += 10;
                         role_02['Role'].role_property.defense += 10;
                         break;
@@ -201,11 +202,18 @@ export default class Resurgence extends Laya.Script {
     }
 
     /**复活按钮点击事件*/
-    resurgence_BtnClink(): void {
+    btnonClink(): void {
         this.resurgence_Btn.on(Laya.Event.MOUSE_DOWN, this, this.down);
         this.resurgence_Btn.on(Laya.Event.MOUSE_MOVE, this, this.move);
         this.resurgence_Btn.on(Laya.Event.MOUSE_UP, this, this.up);
         this.resurgence_Btn.on(Laya.Event.MOUSE_OUT, this, this.out);
+    }
+    /**关闭复活按钮点击事件*/
+    btnOffClink(): void {
+        this.resurgence_Btn.off(Laya.Event.MOUSE_DOWN, this, this.down);
+        this.resurgence_Btn.off(Laya.Event.MOUSE_MOVE, this, this.move);
+        this.resurgence_Btn.off(Laya.Event.MOUSE_UP, this, this.up);
+        this.resurgence_Btn.off(Laya.Event.MOUSE_OUT, this, this.out);
     }
     down(event): void {
         event.currentTarget.scale(0.95, 0.95);
@@ -216,6 +224,7 @@ export default class Resurgence extends Laya.Script {
     }
     /**抬起增加属性*/
     up(event): void {
+        this.btnOffClink();
         event.currentTarget.scale(1, 1);
         this.countdown = false;//停止读秒
         this.cutTnterface('main');
@@ -234,6 +243,7 @@ export default class Resurgence extends Laya.Script {
         Laya.timer.frameOnce(20, this, function () {
             let settlement = Laya.Pool.getItemByCreateFun('settlement', this.settlement.create, this.settlement) as Laya.Sprite;
             this.selfScene.addChild(settlement);
+            this.selfScene['MainSceneControl'].roleVanish();//主角移动到两边
             settlement.pos(0, 0);
         })
     }
