@@ -414,10 +414,12 @@ export default class MainSceneControl extends Laya.Script {
             this.role_02['Role'].skeleton.play('speak', true);
         }, []), 0);
     }
+
     /**主角消失动画*/
     roleVanish(): void {
         Laya.Tween.to(this.role_01, { x: -500 }, 1000, null, Laya.Handler.create(this, function () {
             this.role_01['Role'].skeleton.play('frontMove', true);
+
         }, []), 0);
         Laya.Tween.to(this.role_02, { x: 1834 }, 1000, null, Laya.Handler.create(this, function () {
             this.role_02['Role'].skeleton.play('frontMove', true);
@@ -672,16 +674,14 @@ export default class MainSceneControl extends Laya.Script {
         }
     }
 
-    /**主角复活继续游戏*/
+    /**重新开始主角所初始化的属性*/
     roleResurgenceAni(): void {
         let skeleton1 = this.role_01.getChildByName('skeleton') as Laya.Skeleton;
-        skeleton1.play('speak', true);
         Laya.Tween.to(this.role_01, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
             this.restartProperties();
         }, []), 0);
 
         let skeleton2 = this.role_02.getChildByName('skeleton') as Laya.Skeleton;
-        skeleton2.play('speak', true);
         Laya.Tween.to(this.role_02, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
         }, []), 0);
     }

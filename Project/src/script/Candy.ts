@@ -120,7 +120,7 @@ export default class Candy extends Laya.Script {
         let targetY = this.candyTagRole.y;
 
         let HalfX;
-        let distancePer = 4;
+        let distancePer = 2;
         if (this.self.x > Laya.stage.width / 2) {
             HalfX = this.self.x + (this.candyTagRole.x - this.self.x) * 3 / 5;
         } else {

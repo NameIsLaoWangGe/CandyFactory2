@@ -2,11 +2,11 @@
     "x":0,
     "type":"Sprite",
     "selectedBox":181,
-    "selecteID":187,
+    "selecteID":204,
     "searchKey":"Sprite,startInterface",
     "props":{"y":0,"x":0,"width":750,"presetID":1,"preset":"laya/pages/prefab/startInterface.prefab","name":"startInterface","isPresetRoot":true,"height":1640},
     "nodeParent":-1,
-    "maxID":204,
+    "maxID":205,
     "label":"startInterface",
     "isOpen":true,
     "isDirectory":true,
@@ -14,6 +14,20 @@
     "hasChild":true,
     "compId":181,
     "child":[
+        {
+            "x":15,
+            "type":"Sprite",
+            "searchKey":"Sprite,maskBg",
+            "props":{"y":0,"x":0,"width":750,"texture":"candy/ui/黑色底.png","presetID":22,"preset":"laya/pages/prefab/startInterface.prefab","name":"maskBg","height":1640},
+            "nodeParent":181,
+            "label":"maskBg",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":204,
+            "child":[
+                ]
+        },
         {
             "x":15,
             "type":"Sprite",
@@ -203,7 +217,7 @@
             "source":"src/script/StartGame.ts",
             "searchKey":"Script,StartGame",
             "removeAble":true,
-            "props":{"starParent":"@node:201","presetID":21,"preset":"laya/pages/prefab/startInterface.prefab","btn_Start":"@node:192","btn_Ranking":"@node:188","btn_Participate":"@node:187","bg_Pure":"@node:185","bg_04":"@node:199","bg_03":"@node:198","bg_02":"@node:183","bg_01":"@node:197","antiAddiction":"@node:202","LoGo":"@node:200"},
+            "props":{"starParent":"@node:201","presetID":21,"preset":"laya/pages/prefab/startInterface.prefab","maskBg":"@node:204","btn_Start":"@node:192","btn_Ranking":"@node:188","btn_Participate":"@node:187","bg_Pure":"@node:185","bg_04":"@node:199","bg_03":"@node:198","bg_02":"@node:183","bg_01":"@node:197","antiAddiction":"@node:202","LoGo":"@node:200"},
             "nodeParent":181,
             "label":"StartGame",
             "isDirectory":false,

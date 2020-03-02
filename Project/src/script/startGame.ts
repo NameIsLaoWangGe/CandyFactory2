@@ -4,6 +4,9 @@ export default class startGame extends Laya.Script {
     /**所属场景*/
     private selfScene: Laya.Scene;
 
+    /** @prop {name:maskBg, tips:"黑色遮罩背景", type:Node}*/
+    public maskBg: Laya.Image;
+
     /** @prop {name:bg_01, tips:"背景1", type:Node}*/
     public bg_01: Laya.Image;
 
@@ -99,6 +102,8 @@ export default class startGame extends Laya.Script {
 
     /**进入界面的动画节点属性*/
     startAniInit(): void {
+        this.maskBg.alpha = 1;
+
         this.bg_01.x = 187;
         this.bg_01.y = 410;
 
@@ -168,31 +173,30 @@ export default class startGame extends Laya.Script {
         this.btn_Start.alpha = 0;
         this.btn_Ranking.alpha = 0;
         this.btn_Participate.alpha = 0;
+        this.maskBg.alpha = 0.6;
 
-        // 防沉迷文字小时
+        // 防沉迷文字消失
         Laya.Tween.to(this.antiAddiction, { alpha: 0 }, 200, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
         }, []), 0);
 
-        // 4个背景拉开
-        Laya.Tween.to(this.bg_01, { x: -1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: -720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
-            this.bg_01.rotation = 0;
+        //黑色遮罩渐变缓冲
+        Laya.Tween.to(this.maskBg, { alpha: 0 }, 1200, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
             this.self.removeSelf();
             this.selfScene['MainSceneControl'].startGame();
         }, []), 0);
 
-        Laya.Tween.to(this.bg_02, { x: 1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: -720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
-            this.bg_02.rotation = 0;
-        }, []), 0);
-
-        Laya.Tween.to(this.bg_03, { x: -1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: -720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
-            this.bg_03.rotation = 0;
-        }, []), 0);
-
-        Laya.Tween.to(this.bg_04, { x: 1500, alpha: 0, scaleX: 0, scaleY: 0, rotation: -720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
-            this.bg_04.rotation = 0;
+        // 4个背景拉开
+        this.bg_VanishAni(this.bg_01, -1500);
+        this.bg_VanishAni(this.bg_02, 1500);
+        this.bg_VanishAni(this.bg_03, -1500);
+        this.bg_VanishAni(this.bg_04, 1500);
+    }
+    /**4个背景的通用返回主界面的消失动画*/
+    bg_VanishAni(bg, posX): void {
+        Laya.Tween.to(bg, { x: posX, alpha: 0, scaleX: 0, scaleY: 0, rotation: -720 }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
+            bg.rotation = 0;
         }, []), 0);
     }
-
 
     /**返回主界面初始化一些节点的位置*/
     returnStartInit(): void {
@@ -239,6 +243,8 @@ export default class startGame extends Laya.Script {
         this.bg_04.x = 562;
         this.bg_04.y = 1230;
 
+        this.maskBg.alpha = 0;
+
         // 4个背景合并
         Laya.Tween.to(this.bg_01, { x: 187, alpha: 1, scaleX: 1, scaleY: 1, rotation: -720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
             // 显示其他元素
@@ -260,17 +266,18 @@ export default class startGame extends Laya.Script {
             }, []), 0);
 
         }, []), 0);
-
-        Laya.Tween.to(this.bg_02, { x: 562, alpha: 1, scaleX: 1, scaleY: 1, rotation: 720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
-            this.bg_02.rotation = 0;
+        this.bg_ReturnAni(this.bg_02, 562, 720);
+        this.bg_ReturnAni(this.bg_03, 187, 720);
+        this.bg_ReturnAni(this.bg_04, 562, -720);
+        // 黑色遮罩缓慢出现
+        Laya.Tween.to(this.maskBg, { alpha: 0.8 }, 800, null, Laya.Handler.create(this, function () {
         }, []), 0);
+    }
 
-        Laya.Tween.to(this.bg_03, { x: 187, alpha: 1, scaleX: 1, scaleY: 1, rotation: 720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
-            this.bg_03.rotation = 0;
-        }, []), 0);
-
-        Laya.Tween.to(this.bg_04, { x: 562, alpha: 1, scaleX: 1, scaleY: 1, rotation: -720 }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
-            this.bg_04.rotation = 0;
+    /**4个背景的通用返回主界面的消失动画*/
+    bg_ReturnAni(bg, posX, rotate): void {
+        Laya.Tween.to(bg, { x: posX, alpha: 1, scaleX: 1, scaleY: 1, rotation: rotate }, 800, Laya.Ease.cubicOut, Laya.Handler.create(this, function () {
+            bg.rotation = 0;
         }, []), 0);
     }
 
