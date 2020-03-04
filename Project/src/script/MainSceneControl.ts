@@ -168,7 +168,7 @@ export default class MainSceneControl extends Laya.Script {
         // 初始化怪物属性，依次为血量，攻击力，攻速，移动速度，攻击速度
         this.enemyProperty = {
             blood: 200,
-            attackValue: 200,
+            attackValue: 10,
             attackSpeed: 1500,//暂时最小时间间隔为100
             defense: 10,
             moveSpeed: 10,
@@ -350,7 +350,7 @@ export default class MainSceneControl extends Laya.Script {
                 Laya.Tween.to(candy, { x: targetX, y: targetY, scaleX: 1, scaleY: 1 }, timePar, null, Laya.Handler.create(this, function () {
                     // 落下特效并且播放禁止动画,并且显示点击次数
                     this.explodeAni(this.owner, candy.x, candy.y, 'disappear', 8, 1000);
-                    candy['Candy'].playSkeletonAni(1, 'static');
+                    candy['Candy'].playSkeletonAni(1, 'bonbonniere');
                     candy['Candy'].clicksLabel.alpha = 1;
                     // 最后一组发射完毕后
                     if (i === 3 && j === 1) {
@@ -365,9 +365,9 @@ export default class MainSceneControl extends Laya.Script {
         // 第一步放大
         Laya.Tween.to(shadow, {}, timePar / 2, null, Laya.Handler.create(this, function () {
             // 第二步和糖果拉开距离
-            Laya.Tween.to(shadow, { x: -20, y: 100, scaleX: 0.5, scaleY: 0.5, }, timePar * 3 / 4, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(shadow, { x: -20 + 52, y: 100 + 60, scaleX: 0.5, scaleY: 0.5, }, timePar * 3 / 4, null, Laya.Handler.create(this, function () {
                 // 第三步降落
-                Laya.Tween.to(shadow, { x: 0, y: 0, scaleX: 1, scaleY: 1 }, timePar, null, Laya.Handler.create(this, function () {
+                Laya.Tween.to(shadow, { x: 0 + 52, y: 0 + 60, scaleX: 1, scaleY: 1 }, timePar, null, Laya.Handler.create(this, function () {
                 }), 0);
             }), 0);
         }), 10);
@@ -402,6 +402,7 @@ export default class MainSceneControl extends Laya.Script {
         this.candyParent.addChild(candy);
         candy.rotation = 0;
         this.candyCount++;
+      
         return candy;
     }
 

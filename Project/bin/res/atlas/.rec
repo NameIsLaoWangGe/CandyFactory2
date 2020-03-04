@@ -142,9 +142,10 @@ P 2A75C362 青色单元.png
 P DB8ABCB2 黄色单元.png
 P 69E3458C 黑色单元.png
 D candy/糖果
-R EB647B5F candyCompilations.png
-R 70202FFC candyCompilations.sk
-P 409C94C6 糖果影子.png
+R A22BAF4C candyCompilations.png
+R E1A5C99E candyCompilations.sk
+P 060CFBC8 糖果影子.png
+P E970C911 糖果盒影子.png
 D candy/糖果机器
 R DD8C5022 candyLaunch.png
 R 30F8BB9A candyLaunch.sk

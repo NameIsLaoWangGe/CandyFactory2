@@ -1,11 +1,12 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":2,
+    "selectedBox":92,
+    "selecteID":205,
     "searchKey":"Scene",
     "props":{"x":0,"width":750,"sceneColor":"#000000","height":1334},
     "nodeParent":-1,
-    "maxID":205,
+    "maxID":206,
     "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
@@ -48,13 +49,14 @@
             "props":{"y":0,"x":0,"width":751,"var":"assembly","name":"assembly","height":1067},
             "nodeParent":2,
             "label":"assembly",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":18,
             "child":[
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,陈列台影子",
                     "props":{"y":387,"x":213,"skin":"candy/糖果机器/陈列台影子.png","name":"陈列台影子"},
@@ -69,6 +71,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,machine",
                     "props":{"y":-64,"x":10,"name":"machine","alpha":1},
@@ -81,6 +84,7 @@
                     "compId":142,
                     "child":[
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,机器图片",
                             "props":{"y":41,"x":15,"texture":"candy/糖果机器/糖果制造机.png","name":"机器图片"},
@@ -94,6 +98,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,suspend",
                             "props":{"y":201,"x":484,"width":109,"pivotY":42,"pivotX":55,"name":"suspend","height":102},
@@ -106,6 +111,7 @@
                             "compId":81,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,press",
                                     "props":{"y":1,"x":1,"skin":"candy/ui/暂停按钮按下.png","name":"press"},
@@ -119,6 +125,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,notPress",
                                     "props":{"y":36,"x":56,"width":109,"skin":"candy/ui/暂停按钮.png","pivotY":41,"pivotX":55,"name":"notPress","height":102},
@@ -132,6 +139,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Script",
                                     "switchAble":true,
                                     "source":"src/script/Suspend.ts",
@@ -149,6 +157,7 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_02",
                             "props":{"y":16,"x":195,"texture":"candy/糖果机器/管道2.png","name":"flow_02"},
@@ -162,6 +171,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_01",
                             "props":{"y":119,"x":67,"texture":"candy/糖果机器/管道1.png","name":"flow_01"},
@@ -175,6 +185,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"SkeletonPlayer",
                             "searchKey":"SkeletonPlayer,pipeline_02",
                             "props":{"y":122,"x":282,"url":"candy/糖果机器/pipeline_02.sk","name":"pipeline_02"},
@@ -188,6 +199,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_02高光",
                             "props":{"y":39,"x":274,"texture":"candy/糖果机器/管道2高光.png","name":"flow_02高光"},
@@ -201,6 +213,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"SkeletonPlayer",
                             "searchKey":"SkeletonPlayer,pipeline_01",
                             "props":{"y":189,"x":197,"url":"candy/糖果机器/pipeline_01.sk","name":"pipeline_01"},
@@ -214,6 +227,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_01高光",
                             "props":{"y":141,"x":211,"width":121,"texture":"candy/糖果机器/水管流水高光_01.png","rotation":1,"pivotY":17,"pivotX":61,"name":"flow_01高光","height":33},
@@ -228,6 +242,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite",
                             "props":{"y":157.5,"x":91,"texture":"candy/糖果机器/指示灯.png"},
@@ -241,6 +256,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,energyLamp_01",
                             "props":{"y":314,"x":430,"width":79,"name":"energyLamp_01","height":16},
@@ -294,6 +310,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,进度条装饰2",
                     "props":{"y":292,"x":267,"texture":"candy/ui/进度条装饰2.png","name":"进度条装饰2"},
@@ -307,6 +324,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,timer",
                     "props":{"y":331,"x":381,"width":204,"pivotY":55,"pivotX":102,"name":"timer","height":109},
@@ -319,20 +337,21 @@
                     "compId":92,
                     "child":[
                         {
+                            "x":45,
                             "type":"ProgressBar",
                             "searchKey":"ProgressBar,timeSchedule",
-                            "props":{"y":12,"x":38,"value":1,"skin":"candy/ui/时间.png","sizeGrid":"0,13,0,13","name":"timeSchedule"},
+                            "props":{"y":12,"x":38,"value":1,"skin":"candy/ui/时间.png","name":"timeSchedule"},
                             "nodeParent":92,
                             "label":"timeSchedule",
-                            "isOpen":false,
                             "isDirectory":false,
                             "isAniNode":true,
                             "hasChild":false,
-                            "compId":140,
+                            "compId":205,
                             "child":[
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,进度条高光",
                             "props":{"y":26,"x":41,"texture":"candy/ui/进度条白色高光.png","name":"进度条高光"},
@@ -346,6 +365,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,进度条装饰1",
                             "props":{"y":12,"x":-7,"texture":"candy/ui/进度条装饰1.png","name":"进度条装饰1"},
@@ -360,6 +380,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,分数牌",
                     "props":{"y":123,"x":30,"width":192,"texture":"candy/ui/分数牌.png","name":"分数牌","height":340},
@@ -414,6 +435,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"SkeletonPlayer",
                     "searchKey":"SkeletonPlayer,candyLaunch_01",
                     "props":{"y":359,"x":225.5,"url":"candy/糖果机器/candyLaunch.sk","name":"candyLaunch_01"},
@@ -428,6 +450,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"SkeletonPlayer",
                     "searchKey":"SkeletonPlayer,candyLaunch_02",
                     "props":{"y":358,"x":536,"url":"candy/糖果机器/candyLaunch.sk","name":"candyLaunch_02"},
@@ -442,6 +465,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,链接线",
                     "props":{"y":839,"x":260,"texture":"candy/ui/操作位置链接线.png","name":"链接线","alpha":1},
@@ -455,6 +479,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,按钮底",
                     "props":{"y":1020,"x":135,"texture":"candy/操作按钮/底座.png","name":"按钮底","alpha":1},
@@ -469,6 +494,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Script",
                     "switchAble":true,
                     "source":"src/script/Assembly.ts",
@@ -485,6 +511,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,longPointer",
                     "props":{"y":304,"x":641,"width":5,"texture":"candy/糖果机器/长指针.png","pivotY":15,"pivotX":2.5,"name":"longPointer","height":18},
@@ -499,6 +526,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Image",
                     "searchKey":"Image,陈列台",
                     "props":{"y":390,"x":383,"width":268,"skin":"candy/糖果机器/糖果陈列台.png","pivotX":134,"name":"陈列台","height":525},
@@ -512,6 +540,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,clickHintSign",
                     "props":{"y":753,"x":255.5,"texture":"candy/ui/当前点击提示.png","name":"clickHintSign"},
@@ -526,6 +555,7 @@
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,energyLamp_02",
                     "props":{"y":872,"x":299.5,"name":"energyLamp_02"},
@@ -538,6 +568,7 @@
                     "compId":189,
                     "child":[
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,lamp_06",
                             "props":{"y":0,"texture":"candy/糖果机器/lamp_06.png","name":"lamp_06"},
@@ -551,6 +582,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,lamp_05",
                             "props":{"y":0,"x":14,"texture":"candy/糖果机器/lamp_05.png","name":"lamp_05"},
@@ -565,6 +597,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,lamp_04",
                             "props":{"y":0,"x":28,"texture":"candy/糖果机器/lamp_04.png","name":"lamp_04"},

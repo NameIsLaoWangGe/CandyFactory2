@@ -121,7 +121,7 @@ export default class OperationButton extends Laya.Script {
                         this.clicksRightAni(candy);
                         if (Number(clicksLabel.value) === 0) {
                             mainSceneControl.explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 100);
-                            candy['Candy'].playSkeletonAni(1, 'turnDown');
+                            candy['Candy'].playSkeletonAni(1, 'static');
                             clicksLabel.value = ' ';
                             this.zeroCount++;
                         }
@@ -218,7 +218,7 @@ export default class OperationButton extends Laya.Script {
                             candy['Candy'].group = 'error';
                             candy['Candy'].playSkeletonAni(1, 'explode');
                             // 等这些动画都结束了再依次飞向主角
-                            if (i === 0) {
+                            if (i === 1) {
                                 this.settlementAni();
                             }
                         })
@@ -248,7 +248,6 @@ export default class OperationButton extends Laya.Script {
                 if (i === 0) {
                     this.selfScene['MainSceneControl'].candyLaunch_01.play('prepare', false);
                     this.selfScene['MainSceneControl'].candyLaunch_02.play('prepare', false);
-                    this.initHint();
                 }
             })
         }
@@ -291,9 +290,9 @@ export default class OperationButton extends Laya.Script {
         // 糖果的影子处理
         let shadow = candy.getChildByName('shadow') as Laya.Image;
         // 拉开距离并缩小
-        Laya.Tween.to(shadow, { x: -20, y: 80, scaleX: 0.8, scaleY: 0.8, }, 300, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(shadow, { x: -20 + 52, y: 80 + 60, scaleX: 0.8, scaleY: 0.8, }, 300, null, Laya.Handler.create(this, function () {
             // 第二部回归
-            Laya.Tween.to(shadow, { x: 0, y: 0, scaleX: 1, scaleY: 1 }, 300, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(shadow, { x: 0 + 52, y: 0 + 60, scaleX: 1, scaleY: 1 }, 300, null, Laya.Handler.create(this, function () {
             }), 0);
         }), 0);
     }
@@ -304,7 +303,7 @@ export default class OperationButton extends Laya.Script {
     */
     timerControl(): void {
         if (this.timeSchedule.value > 0 && this.operateSwitch) {
-            this.timeSchedule.value -= 0.0001;
+            this.timeSchedule.value -= 0.0015;
         } else if (this.timeSchedule.value <= 0 && this.operateSwitch) {
             // 点击过的结算
             this.settlement('unfinished');

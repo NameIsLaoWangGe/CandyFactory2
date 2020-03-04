@@ -4,6 +4,8 @@ export default class Candy extends Laya.Script {
     private self: Laya.Sprite;
     /**糖果点击次数节点*/
     private clicksLabel: Laya.FontClip;
+    /**糖果点击次数节点*/
+    private shadow: Laya.Image;
     /**所属场景*/
     private selfScene: Laya.Scene;
     /**场景脚本组件*/
@@ -42,11 +44,7 @@ export default class Candy extends Laya.Script {
         this.selfSpeed = 10;
         this.spaceY = 5;
 
-        // 随机点击次数
-        let number = Math.floor(Math.random() * 5) + 1;
-        this.clicksLabel = this.self.getChildByName('clicksLabel') as Laya.FontClip;
-        this.clicksLabel.value = number.toString();
-        this.clicksLabel.alpha = 0;
+        this.shadow = this.self.getChildByName('shadow') as Laya.Image;
 
         this.hintWord = this.selfScene['MainSceneControl'].hintWord;
         this.scoreLabel = this.selfScene['MainSceneControl'].scoreLabel;
@@ -56,7 +54,19 @@ export default class Candy extends Laya.Script {
         this.skeleton = this.self.getChildByName('skeleton') as Laya.Skeleton;
 
         this.self['Candy'] = this;
+        this.randomCandyClicks(3, 1);
         this.createBoneAni();
+    }
+
+    /**糖果的随机点击次数
+     * @param randomNum 随机次数
+     * @param baseNum 基础点击次数
+    */
+    randomCandyClicks(randomNum, baseNum): void {
+        let clicksNum = Math.floor(Math.random() * randomNum) + baseNum;
+        this.clicksLabel = this.self.getChildByName('clicksLabel') as Laya.FontClip;
+        this.clicksLabel.value = clicksNum.toString();
+        // this.clicksLabel.alpha = 0;
     }
 
     /**创建骨骼动画皮肤*/
@@ -73,7 +83,7 @@ export default class Candy extends Laya.Script {
     }
 
     parseComplete(): void {
-        this.playSkeletonAni(2, 'turnDown');
+        this.playSkeletonAni(2, 'bonbonniere');
     }
 
     /**播放骨骼动画
@@ -81,6 +91,11 @@ export default class Candy extends Laya.Script {
      * @param type 播放动画类型
     */
     playSkeletonAni(speed: number, type: string): void {
+        if (type === 'bonbonniere') {
+            this.shadow.skin = 'candy/糖果/糖果盒影子.png';
+        } else {
+            this.shadow.skin = 'candy/糖果/糖果影子.png';
+        }
         switch (this.self.name.substring(0, 11)) {
             case 'yellowCandy':
                 this.skeleton.play('yellow_' + type, true);
@@ -140,14 +155,14 @@ export default class Candy extends Laya.Script {
         }), 0);
 
         // 糖果的影子处理
-        let shadow = this.self.getChildByName('shadow') as Laya.Image;
         // 拉开距离并缩小
-        Laya.Tween.to(shadow, { x: - 20, y: 100, scaleX: 0.8, scaleY: 0.8, }, timePar * 3 / 4, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(this.shadow, { x: - 20 + 52, y: 100 + 60, scaleX: 0.8, scaleY: 0.8, }, timePar * 3 / 4, null, Laya.Handler.create(this, function () {
             // 第二部回归
-            Laya.Tween.to(shadow, { x: -10, y: 60, scaleX: 0.7, scaleY: 0.7 }, timePar, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(this.shadow, { x: -10 + 52, y: 60, scaleX: 0.7, scaleY: 0.7 }, timePar, null, Laya.Handler.create(this, function () {
             }), 0);
         }), 0);
     }
+
 
     /**属性增加提示动画*/
     hintWordMove(): void {

@@ -161,14 +161,14 @@ export default class Role extends Laya.Script {
                 blood: 100,
                 attackValue: 5000,
                 attackSpeed: 1500,
-                defense: 15,
+                defense: 5,
             };
         } else if (this.self.name === 'role_02') {
             this.role_property = {
                 blood: 100,
                 attackValue: 5000,
                 attackSpeed: 1500,
-                defense: 15,
+                defense: 5,
             };
         }
     }

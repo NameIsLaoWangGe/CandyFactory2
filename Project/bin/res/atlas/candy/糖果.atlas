@@ -1,1 +1,1 @@
-{"frames":{"糖果影子.png":{"frame":{"h":72,"idx":0,"w":81,"x":0,"y":0},"sourceSize":{"h":100,"w":105},"spriteSourceSize":{"x":10,"y":20}}},"meta":{"image":"糖果.png","prefix":"candy/糖果/"}}
+{"frames":{"糖果影子.png":{"frame":{"h":72,"idx":0,"w":81,"x":0,"y":0},"sourceSize":{"h":72,"w":81},"spriteSourceSize":{"x":0,"y":0}},"糖果盒影子.png":{"frame":{"h":65,"idx":0,"w":83,"x":0,"y":73},"sourceSize":{"h":65,"w":83},"spriteSourceSize":{"x":0,"y":0}}},"meta":{"image":"糖果.png","prefix":"candy/糖果/"}}
