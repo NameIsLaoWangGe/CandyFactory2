@@ -51,11 +51,11 @@ P E6FC9468 主角属性显示.png
 P FFC99A36 关闭按钮.png
 P C55056AF 分享.png
 P 9168C324 分数牌.png
-P 02BDB92C 分数：.png
+P B83E47F8 分数：.png
 P D980AB90 坏人来袭：.png
 P 08ED2E03 复活倒计时底.png
 P BD211EF5 复活继续.png
-P 05F75E52 对话框.png
+P D168A29B 对话框.png
 R BBC12A8E 属性战士框.png
 R B02DF55B 底板.png
 P DD3BB8F3 开始按钮1.png
@@ -66,6 +66,7 @@ P ACF350BF 怪物来袭底.png
 R 36BB7C9E 排行栏.png
 P 684F9E31 排行榜.png
 P 594D9461 操作位置链接线.png
+P 8A5B0572 攻击力图标.png
 P 4861FB87 敌人属性显示.png
 R 902F0C7A 文字提示底.png
 P 057F9DD9 时间$bar.png
@@ -74,6 +75,7 @@ P 92DB0506 暂停按钮.png
 P 5DD52430 暂停按钮按下.png
 P 546EE85A 正确提示.png
 P B5A09EDB 游戏结束标题.png
+P AC125DE8 生命图标.png
 R 77594E48 纯背景.jpg
 P DF75AD09 继续游戏.png
 P 47A9CC0D 血条$bar.png
@@ -82,8 +84,10 @@ P C309F0D7 返回.png
 P 8F5327DD 进度条白色高光.png
 P B8700732 进度条装饰1.png
 P BBE9EEDE 进度条装饰2.png
+P 78059697 速度图标.png
 P 91F837EB 重来.png
 P F7111ECD 错误提示.png
+P 42C49514 防御图标.png
 R 129BD0E2 防沉迷文字.png
 P 670E5314 黑色底.png
 D candy/主角
@@ -95,9 +99,9 @@ R 2E53C7DF role_02.sk
 P 0F05F937 主角1子弹.png
 P 58DAE67D 主角2子弹.png
 D candy/字体
-P 3A231805 减属性.png
-R D38BC281 分数：+01234567892.png
-P 21E46157 图片数字1.png
+P 1117D953 减属性.png
+R 59DA4B95 分数：+01234567892.png
+P AC1A48E6 加属性.png
 P 8E35E482 属性标签.png
 P F3B07C6D 怪物来袭倒计时0123456789s.png
 P E23D833B 标签小.png
@@ -108,10 +112,10 @@ P 1C6B76C8 干得漂亮.png
 P 806E18E2 牛皮.png
 D candy/操作按钮
 P AA0D3C02 底座.png
-P A5B3DDE9 红色按钮.png
-P E0A0C608 绿色按钮.png
-P 3AA26610 蓝色按钮.png
-P 678D7B70 黄色按钮.png
+P 06A03102 红色按钮.png
+P 0A018820 绿色按钮.png
+P 93FC4BC7 蓝色按钮.png
+P 3216539C 黄色按钮.png
 D candy/敌人
 R 097F1F0B fightingEnemy.png
 R 1366E2BA fightingEnemy.sk

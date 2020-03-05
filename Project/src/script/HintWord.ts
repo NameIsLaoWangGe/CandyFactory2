@@ -4,7 +4,7 @@ export default class HintWord extends Laya.Script {
     /**所属场景*/
     private selfScene: Laya.Sprite;
     /**增加属性属性标签*/
-    private propertyType: Laya.FontClip;
+    private propertyType: Laya.Image;
     /**增加属性值属性值*/
     private addNumber: Laya.FontClip;
     /**减少属性值属性值*/
@@ -25,12 +25,12 @@ export default class HintWord extends Laya.Script {
         this.self.rotation = 0;
         this.self.scale(1, 1);
 
-        this.propertyType = this.self.getChildByName('propertyType') as Laya.FontClip;
+        this.propertyType = this.self.getChildByName('propertyType') as Laya.Image;
         this.addNumber = this.self.getChildByName('addNumber') as Laya.FontClip;
         this.subNumber = this.self.getChildByName('subNumber') as Laya.FontClip;
         this.addScore = this.self.getChildByName('addScore') as Laya.FontClip;
         // 开始全是空
-        this.propertyType.value = null;
+        this.propertyType.skin = null;
         this.addNumber.value = null;
         this.subNumber.value = null;
         this.addScore.value = null;
@@ -48,69 +48,55 @@ export default class HintWord extends Laya.Script {
         switch (propertyType) {
             // 属性增加
             case '公鸡速度':
-                this.propertyType.value = '公鸡速度';
-                this.propertyType.x -= 40;
+                this.propertyType.skin = 'candy/ui/速度图标.png';
                 this.addNumber.value = "+" + numberValue;
                 this.propertyMove();
                 break;
             case '攻击里':
-                this.propertyType.value = '攻击里';
-                this.propertyType.x -= 20;
-                this.addNumber.x -= 20;
+                this.propertyType.skin = 'candy/ui/攻击力图标.png';
                 this.addNumber.value = "+" + numberValue;
                 this.propertyMove();
                 break;
             case '生命':
-                this.propertyType.value = '生命';
-                this.addNumber.x -= 40;
+                this.propertyType.skin = 'candy/ui/生命图标.png';
                 this.addNumber.value = "+" + numberValue;
                 this.propertyMove();
                 break;
             case '防御力':
-                this.propertyType.value = '防御力';
-                this.propertyType.x -= 20;
-                this.addNumber.x -= 20;
+                this.propertyType.skin = 'candy/ui/防御图标.png';
                 this.addNumber.value = "+" + numberValue;
                 this.propertyMove();
                 break;
 
             // 属性减少
             case '减少公鸡速度':
-                this.propertyType.value = '公鸡速度';
-                this.subNumber.x -= 40;
+                this.propertyType.skin = 'candy/ui/速度图标.png';
                 this.subNumber.value = "-" + numberValue;
                 this.propertyMove();
                 break;
             case '减少攻击里':
-                this.propertyType.value = '攻击里';
-                this.propertyType.x -= 20;
-                this.subNumber.x -= 20;
+                this.propertyType.skin = 'candy/ui/攻击力图标.png';
                 this.subNumber.value = "-" + numberValue;
                 this.propertyMove();
                 break;
             case '减少生命':
-                this.propertyType.value = '生命';
-                this.subNumber.x -= 40;
+                this.propertyType.skin = 'candy/ui/生命图标.png';
                 this.subNumber.value = "-" + numberValue;
                 this.propertyMove();
                 break;
             case '减少防御力':
-                this.propertyType.value = '防御力';
-                this.propertyType.x -= 20;
-                this.subNumber.x -= 20;
+                this.propertyType.skin = 'candy/ui/防御图标.png';
                 this.subNumber.value = "-" + numberValue;
                 this.propertyMove();
                 break;
 
             // 敌我减血
             case '主角掉血':
-                this.subNumber.x -= 80;
                 this.subNumber.value = "-" + numberValue;
                 this.propertyMove();
 
                 break;
             case '敌人掉血':
-                this.subNumber.x -= 80;
                 this.subNumber.value = "-" + numberValue;
                 this.propertyMove();
                 break;
@@ -146,6 +132,7 @@ export default class HintWord extends Laya.Script {
     /**增加分数时的动画*/
     rewardScoreMove(numberValue): void {
         // 把scoreLabel的坐标转换成全局坐标
+        this.self.scale(1, 1);
         let scoreLabel_p = this.scoreLabel.parent as Laya.Sprite;
         let scoreLabel_p_p = scoreLabel_p.parent as Laya.Sprite;
         let stageX = this.scoreLabel.x + scoreLabel_p.x + scoreLabel_p_p.x;

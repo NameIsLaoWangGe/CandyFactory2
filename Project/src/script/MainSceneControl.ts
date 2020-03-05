@@ -612,7 +612,7 @@ export default class MainSceneControl extends Laya.Script {
         target.addChild(hintWord);
         hintWord.pos(x, y);
         hintWord.scale(scale, scale);
-        hintWord.zOrder = 200;
+        hintWord.zOrder = 300;
         hintWord['HintWord'].initProperty(proPertyType, numberValue);
     }
 

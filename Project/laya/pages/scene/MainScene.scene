@@ -1,8 +1,8 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":92,
-    "selecteID":205,
+    "selectedBox":175,
+    "selecteID":117,
     "searchKey":"Scene",
     "props":{"x":0,"width":750,"sceneColor":"#000000","height":1334},
     "nodeParent":-1,
@@ -386,13 +386,14 @@
                     "props":{"y":123,"x":30,"width":192,"texture":"candy/ui/分数牌.png","name":"分数牌","height":340},
                     "nodeParent":18,
                     "label":"分数牌",
-                    "isOpen":false,
+                    "isOpen":true,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":113,
                     "child":[
                         {
+                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,score",
                             "props":{"y":0,"x":0,"width":193,"name":"score","height":82},
@@ -405,9 +406,10 @@
                             "compId":175,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Sprite",
                                     "searchKey":"Sprite,分数字样",
-                                    "props":{"y":30,"x":20,"texture":"candy/ui/分数：.png","scaleY":0.4,"scaleX":0.4,"name":"分数字样"},
+                                    "props":{"y":31,"x":20,"texture":"candy/ui/分数：.png","scaleY":0.4,"scaleX":0.4,"name":"分数字样"},
                                     "nodeParent":175,
                                     "label":"分数字样",
                                     "isOpen":true,
@@ -419,6 +421,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"FontClip",
                                     "searchKey":"FontClip,scoreLabel",
                                     "props":{"y":44,"x":125,"width":138,"value":"250","spaceX":-8,"skin":"candy/字体/分数：+01234567892.png","sheet":"+0123456789k","scaleY":0.4,"scaleX":0.4,"pivotY":23,"pivotX":69,"name":"scoreLabel","height":45,"align":"center"},
