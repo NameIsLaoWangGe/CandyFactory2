@@ -256,7 +256,7 @@ export default class Resurgence extends Laya.Script {
             if (this.timeLine % 60 == 0) {
                 this.digital.value = (Number(this.digital.value) - 1).toString();
                 this.digital.scale(1, 1);
-                if (this.digital.value === '-1') {
+                if (this.digital.value === '0') {
                     this.countdown = false;
                     this.createSettlement();
                     this.cutTnterface('settlement');
