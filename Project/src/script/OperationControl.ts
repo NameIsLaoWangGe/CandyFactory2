@@ -10,7 +10,17 @@ export default class OperationButton extends Laya.Script {
     private candyParent: Laya.Sprite;
     /**操作开关*/
     private operateSwitch: boolean;
-
+    /**按钮父节点*/
+    /** @prop {name:btnGroup, tips:"按钮组", type:Node}*/
+    public btnGroup: Laya.Sprite;
+    /** @prop {name:redButton, tips:"按钮组", type:Node}*/
+    public redButton: Laya.Sprite;
+    /** @prop {name:yellowButton, tips:"按钮组", type:Node}*/
+    public yellowButton: Laya.Sprite;
+    /** @prop {name:greenButton, tips:"按钮组", type:Node}*/
+    public greenButton: Laya.Sprite;
+    /** @prop {name:blueButton, tips:"按钮组", type:Node}*/
+    public blueButton: Laya.Sprite;
     /**计时器*/
     private timer: Laya.Sprite;
     /**计时器进度条*/
@@ -57,13 +67,15 @@ export default class OperationButton extends Laya.Script {
 
     /**操作按钮的点击事件*/
     buttonClink(): void {
-        for (let i = 0; i < this.self._children.length; i++) {
-            this.self._children[i].on(Laya.Event.MOUSE_DOWN, this, this.down);
-            this.self._children[i].on(Laya.Event.MOUSE_MOVE, this, this.move);
-            this.self._children[i].on(Laya.Event.MOUSE_UP, this, this.up);
-            this.self._children[i].on(Laya.Event.MOUSE_OUT, this, this.out);
+        for (let i = 0; i < this.btnGroup._children.length; i++) {
+            this.btnGroup._children[i].on(Laya.Event.MOUSE_DOWN, this, this.down);
+            this.btnGroup._children[i].on(Laya.Event.MOUSE_MOVE, this, this.move);
+            this.btnGroup._children[i].on(Laya.Event.MOUSE_UP, this, this.up);
+            this.btnGroup._children[i].on(Laya.Event.MOUSE_OUT, this, this.out);
+            console.log(this.btnGroup._children[i]);
         }
     }
+
     /**判断按下的按钮和准备位置的糖果是否匹配;
      * 如果匹配，那么看下糖果上面写的几次点击次数，需要连续点击到这个次数才可以吃糖果
      * 如果次数没有达到，却点了另一种按钮，那么前面的次数会重置，并且出现一个怪物

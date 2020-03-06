@@ -1,12 +1,12 @@
 {
     "x":0,
     "type":"Scene",
-    "selectedBox":175,
-    "selecteID":116,
+    "selectedBox":12,
+    "selecteID":12,
     "searchKey":"Scene",
     "props":{"x":0,"width":750,"sceneColor":"#000000","height":1334},
     "nodeParent":-1,
-    "maxID":206,
+    "maxID":209,
     "label":"Scene",
     "isOpen":true,
     "isDirectory":true,
@@ -46,7 +46,7 @@
             "x":15,
             "type":"Sprite",
             "searchKey":"Sprite,assembly,assembly",
-            "props":{"y":0,"x":0,"width":751,"var":"assembly","name":"assembly","height":1067},
+            "props":{"y":529,"x":385,"width":750,"var":"assembly","pivotY":530.5,"pivotX":385,"name":"assembly","height":1067},
             "nodeParent":2,
             "label":"assembly",
             "isOpen":true,
@@ -77,14 +77,13 @@
                     "props":{"y":-64,"x":10,"name":"machine","alpha":1},
                     "nodeParent":18,
                     "label":"machine",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":142,
                     "child":[
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,机器图片",
                             "props":{"y":41,"x":15,"texture":"candy/糖果机器/糖果制造机.png","name":"机器图片"},
@@ -98,7 +97,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,suspend",
                             "props":{"y":201,"x":484,"width":109,"pivotY":42,"pivotX":55,"name":"suspend","height":102},
@@ -111,7 +109,6 @@
                             "compId":81,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,press",
                                     "props":{"y":1,"x":1,"skin":"candy/ui/暂停按钮按下.png","name":"press"},
@@ -125,7 +122,6 @@
                                         ]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Image",
                                     "searchKey":"Image,notPress",
                                     "props":{"y":36,"x":56,"width":109,"skin":"candy/ui/暂停按钮.png","pivotY":41,"pivotX":55,"name":"notPress","height":102},
@@ -139,7 +135,6 @@
                                         ]
                                 },
                                 {
-                                    "x":60,
                                     "type":"Script",
                                     "switchAble":true,
                                     "source":"src/script/Suspend.ts",
@@ -157,7 +152,6 @@
                                 }]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_02",
                             "props":{"y":16,"x":195,"texture":"candy/糖果机器/管道2.png","name":"flow_02"},
@@ -171,7 +165,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_01",
                             "props":{"y":119,"x":67,"texture":"candy/糖果机器/管道1.png","name":"flow_01"},
@@ -185,7 +178,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"SkeletonPlayer",
                             "searchKey":"SkeletonPlayer,pipeline_02",
                             "props":{"y":122,"x":282,"url":"candy/糖果机器/pipeline_02.sk","name":"pipeline_02"},
@@ -199,7 +191,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_02高光",
                             "props":{"y":39,"x":274,"texture":"candy/糖果机器/管道2高光.png","name":"flow_02高光"},
@@ -213,7 +204,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"SkeletonPlayer",
                             "searchKey":"SkeletonPlayer,pipeline_01",
                             "props":{"y":189,"x":197,"url":"candy/糖果机器/pipeline_01.sk","name":"pipeline_01"},
@@ -227,7 +217,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,flow_01高光",
                             "props":{"y":141,"x":211,"width":121,"texture":"candy/糖果机器/水管流水高光_01.png","rotation":1,"pivotY":17,"pivotX":61,"name":"flow_01高光","height":33},
@@ -242,7 +231,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite",
                             "props":{"y":157.5,"x":91,"texture":"candy/糖果机器/指示灯.png"},
@@ -256,7 +244,6 @@
                                 ]
                         },
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,energyLamp_01",
                             "props":{"y":314,"x":430,"width":79,"name":"energyLamp_01","height":16},
@@ -386,14 +373,13 @@
                     "props":{"y":123,"x":30,"width":192,"texture":"candy/ui/分数牌.png","name":"分数牌","height":340},
                     "nodeParent":18,
                     "label":"分数牌",
-                    "isOpen":true,
+                    "isOpen":false,
                     "isDirectory":true,
                     "isAniNode":true,
                     "hasChild":true,
                     "compId":113,
                     "child":[
                         {
-                            "x":45,
                             "type":"Sprite",
                             "searchKey":"Sprite,score",
                             "props":{"y":0,"x":0,"width":193,"name":"score","height":82},
@@ -406,7 +392,6 @@
                             "compId":175,
                             "child":[
                                 {
-                                    "x":60,
                                     "type":"Sprite",
                                     "searchKey":"Sprite,分数字样",
                                     "props":{"y":31,"x":20,"texture":"candy/ui/分数：.png","scaleY":0.4,"scaleX":0.4,"name":"分数字样"},
@@ -421,7 +406,6 @@
                                         ]
                                 },
                                 {
-                                    "x":60,
                                     "type":"FontClip",
                                     "searchKey":"FontClip,scoreLabel",
                                     "props":{"y":44,"x":129,"width":138,"value":"0","spaceX":-8,"skin":"candy/字体/分数：+01234567892.png","sheet":"+0123456789k","scaleY":0.4,"scaleX":0.4,"pivotY":23,"pivotX":69,"name":"scoreLabel","height":45,"align":"center"},
@@ -485,7 +469,7 @@
                     "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,按钮底",
-                    "props":{"y":1020,"x":135,"texture":"candy/操作按钮/底座.png","name":"按钮底","alpha":1},
+                    "props":{"y":1020,"x":135,"texture":"candy/操作按钮/底座.png","name":"按钮底","alpha":0},
                     "nodeParent":18,
                     "label":"按钮底",
                     "isOpen":true,
@@ -681,13 +665,14 @@
             "props":{"y":-9,"x":0,"width":750,"var":"roleParent","name":"roleParent","mouseThrough":true,"height":1334,"alpha":1},
             "nodeParent":2,
             "label":"roleParent",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":12,
             "child":[
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,role_02,role_02",
                     "props":{"y":947,"x":669,"width":102,"var":"role_02","pivotY":62,"pivotX":80,"name":"role_02","height":123},
@@ -700,6 +685,7 @@
                     "compId":24,
                     "child":[
                         {
+                            "x":45,
                             "type":"Script",
                             "switchAble":true,
                             "source":"src/script/Role.ts",
@@ -716,6 +702,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,propertyShow",
                             "props":{"y":-175,"x":-43,"width":194,"skin":"candy/ui/主角属性显示.png","sizeGrid":"38,34,48,48","name":"propertyShow","height":126},
@@ -728,6 +715,7 @@
                             "compId":70,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Label",
                                     "searchKey":"Label,blood",
                                     "props":{"y":13,"x":22.5,"width":149,"text":"blood","name":"blood","height":25,"fontSize":23,"font":"Microsoft YaHei","color":"#ffffff"},
@@ -741,6 +729,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Label",
                                     "searchKey":"Label,attackValue",
                                     "props":{"y":38,"x":22,"width":149,"text":"attackValue","name":"attackValue","height":25,"fontSize":23,"font":"Microsoft YaHei","color":"#ffffff"},
@@ -755,6 +744,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Label",
                                     "searchKey":"Label,attackSpeed",
                                     "props":{"y":67,"x":24,"width":149,"text":"attackSpeed","name":"attackSpeed","height":25,"fontSize":23,"font":"Microsoft YaHei","color":"#ffffff"},
@@ -769,6 +759,7 @@
                                         ]
                                 },
                                 {
+                                    "x":60,
                                     "type":"Label",
                                     "searchKey":"Label,defense",
                                     "props":{"y":91,"x":24,"width":149,"text":"defense","name":"defense","height":25,"fontSize":23,"font":"Microsoft YaHei","color":"#ffffff"},
@@ -784,6 +775,7 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"ProgressBar",
                             "searchKey":"ProgressBar,health",
                             "props":{"y":-32,"x":0,"skin":"candy/ui/血条.png","name":"health"},
@@ -796,6 +788,7 @@
                             "compId":134,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Label",
                                     "searchKey":"Label,bloodLabel",
                                     "props":{"y":12,"x":54,"width":126,"valign":"middle","text":"label","pivotY":12,"pivotX":63,"name":"bloodLabel","height":24,"fontSize":20,"align":"center"},
@@ -811,6 +804,7 @@
                         }]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
                     "searchKey":"Sprite,role_01,role_01",
                     "props":{"y":954,"x":139,"width":123,"var":"role_01","pivotY":73,"pivotX":97,"name":"role_01","height":145},
@@ -823,6 +817,7 @@
                     "compId":25,
                     "child":[
                         {
+                            "x":45,
                             "type":"Script",
                             "switchAble":true,
                             "source":"src/script/Role.ts",
@@ -839,6 +834,7 @@
                                 ]
                         },
                         {
+                            "x":45,
                             "type":"Image",
                             "searchKey":"Image,propertyShow",
                             "props":{"y":-190,"x":-31.5,"width":194,"skin":"candy/ui/主角属性显示.png","sizeGrid":"38,34,48,48","name":"propertyShow","height":126},
@@ -907,6 +903,7 @@
                                 }]
                         },
                         {
+                            "x":45,
                             "type":"ProgressBar",
                             "searchKey":"ProgressBar,health",
                             "props":{"y":-38,"x":7.5,"skin":"candy/ui/血条.png","name":"health"},
@@ -919,6 +916,7 @@
                             "compId":135,
                             "child":[
                                 {
+                                    "x":60,
                                     "type":"Label",
                                     "searchKey":"Label,bloodLabel",
                                     "props":{"y":12.5,"x":53,"width":126,"valign":"middle","text":"label","pivotY":12,"pivotX":63,"name":"bloodLabel","height":24,"fontSize":20,"align":"center"},
@@ -953,74 +951,108 @@
             "x":15,
             "type":"Sprite",
             "searchKey":"Sprite,operating,operating",
-            "props":{"y":1,"x":0,"var":"operating","name":"operating"},
+            "props":{"y":1014,"x":367,"width":443,"var":"operating","pivotX":222,"name":"operating","height":275},
             "nodeParent":2,
             "label":"operating",
-            "isOpen":false,
+            "isOpen":true,
             "isDirectory":true,
             "isAniNode":true,
             "hasChild":true,
             "compId":62,
             "child":[
                 {
-                    "type":"Sprite",
-                    "searchKey":"Sprite,redButton",
-                    "props":{"y":1077,"x":276,"width":179,"texture":"candy/操作按钮/红色按钮.png","pivotY":45,"pivotX":90,"name":"redButton","height":108},
+                    "x":30,
+                    "type":"Image",
+                    "searchKey":"Image,按钮底",
+                    "props":{"y":4,"x":-9,"skin":"candy/操作按钮/底座.png","name":"按钮底"},
                     "nodeParent":62,
-                    "label":"redButton",
+                    "label":"按钮底",
                     "isDirectory":false,
                     "isAniNode":true,
                     "hasChild":false,
-                    "compId":182,
+                    "compId":206,
                     "child":[
                         ]
                 },
                 {
+                    "x":30,
                     "type":"Sprite",
-                    "searchKey":"Sprite,yellowButton",
-                    "props":{"y":1077,"x":457,"width":179,"texture":"candy/操作按钮/黄色按钮.png","pivotY":45,"pivotX":90,"name":"yellowButton","height":108},
+                    "searchKey":"Sprite,btnGroup",
+                    "props":{"y":0,"x":0,"width":443,"name":"btnGroup","height":275},
                     "nodeParent":62,
-                    "label":"yellowButton",
-                    "isDirectory":false,
+                    "label":"btnGroup",
+                    "isOpen":true,
+                    "isDirectory":true,
                     "isAniNode":true,
-                    "hasChild":false,
-                    "compId":101,
+                    "hasChild":true,
+                    "compId":208,
                     "child":[
-                        ]
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,redButton",
+                            "props":{"y":62,"x":131,"width":179,"texture":"candy/操作按钮/红色按钮.png","pivotY":45,"pivotX":90,"name":"redButton","height":108},
+                            "nodeParent":208,
+                            "label":"redButton",
+                            "isOpen":true,
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":182,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,yellowButton",
+                            "props":{"y":62,"x":312,"width":179,"texture":"candy/操作按钮/黄色按钮.png","pivotY":45,"pivotX":90,"name":"yellowButton","height":108},
+                            "nodeParent":208,
+                            "label":"yellowButton",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":101,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,greenButton",
+                            "props":{"y":153,"x":131,"width":179,"texture":"candy/操作按钮/绿色按钮.png","pivotY":40,"pivotX":90,"name":"greenButton","height":108},
+                            "nodeParent":208,
+                            "label":"greenButton",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":99,
+                            "child":[
+                                ]
+                        },
+                        {
+                            "x":45,
+                            "type":"Sprite",
+                            "searchKey":"Sprite,blueButton",
+                            "props":{"y":157,"x":312,"width":179,"texture":"candy/操作按钮/蓝色按钮.png","pivotY":44,"pivotX":90,"name":"blueButton","height":108},
+                            "nodeParent":208,
+                            "label":"blueButton",
+                            "isDirectory":false,
+                            "isAniNode":true,
+                            "hasChild":false,
+                            "compId":100,
+                            "child":[
+                                ]
+                        }]
                 },
                 {
-                    "type":"Sprite",
-                    "searchKey":"Sprite,greenButton",
-                    "props":{"y":1169,"x":276,"width":179,"texture":"candy/操作按钮/绿色按钮.png","pivotY":40,"pivotX":90,"name":"greenButton","height":108},
-                    "nodeParent":62,
-                    "label":"greenButton",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":99,
-                    "child":[
-                        ]
-                },
-                {
-                    "type":"Sprite",
-                    "searchKey":"Sprite,blueButton",
-                    "props":{"y":1173,"x":457,"width":179,"texture":"candy/操作按钮/蓝色按钮.png","pivotY":44,"pivotX":90,"name":"blueButton","height":108},
-                    "nodeParent":62,
-                    "label":"blueButton",
-                    "isDirectory":false,
-                    "isAniNode":true,
-                    "hasChild":false,
-                    "compId":100,
-                    "child":[
-                        ]
-                },
-                {
+                    "x":30,
                     "type":"Script",
                     "switchAble":true,
                     "source":"src/script/OperationControl.ts",
                     "searchKey":"Script,OperationControl",
                     "removeAble":true,
-                    "props":{"clickHintSign":"@node:202","clickHintMask":"@node:202"},
+                    "props":{"yellowButton":"@node:101","y":1,"x":0,"redButton":"@node:182","greenButton":"@node:99","clickHintSign":"@node:202","clickHintMask":"@node:202","btnGroup":"@node:208","blueButton":"@node:100"},
                     "nodeParent":62,
                     "label":"OperationControl",
                     "isDirectory":false,
@@ -1038,7 +1070,7 @@
             "source":"src/script/MainSceneControl.ts",
             "searchKey":"Script,MainSceneControl",
             "removeAble":true,
-            "props":{"y":3,"x":0,"timer":"@node:92","suspend":"@node:81","startInterface":"@Prefab:prefab/startInterface.prefab","speakBoxParent":"@node:53","speakBox":"@Prefab:prefab/speakBox.prefab","settlement":"@Prefab:prefab/settlement.prefab","scoreLabel":"@node:116","score":"@Prefab:prefab/score.prefab","role_02":"@node:24","role_01":"@node:25","roleParent":"@node:12","roleBullet":"@Prefab:prefab/roleBullet.prefab","rewardWords":"@Prefab:prefab/rewardWords.prefab","resurgence":"@Prefab:prefab/resurgence.prefab","ranking":"@Prefab:prefab/ranking.prefab","operating":"@node:62","machine":"@node:109","induction":"@node:15","hintWord":"@Prefab:prefab/hintWord .prefab","friend":"@node:42","explode":"@Prefab:prefab/explode.prefab","enemy_Infighting":"@Prefab:prefab/enemy_Infighting.prefab","enemy_Fighting":"@Prefab:prefab/enemy_Fighting.prefab","enemyParent":"@node:23","enemyHint":"@Prefab:prefab/enemyHint.prefab","enemyBullet":"@Prefab:prefab/enemyBullet.prefab","enemy":"@Prefab:prefab/enemy.prefab","displays":"@node:184","clickHintSign":"@node:202","clickHintMask":"@node:203","candy_ExplodeParent":"@node:85","candy_Explode":"@Prefab:prefab/candy_Explode.prefab","candyParent_Move":"@node:85","candyParent":"@node:13","candy":"@Prefab:prefab/candy.prefab","bulletParent":"@node:59","bullet":"@Prefab:prefab/bullet.prefab","bucketParent":"@node:12","bucket":"@Prefab:prefab/bucket.prefab","background":"@node:4","assembly":"@node:18"},
+            "props":{"y":4,"x":0,"timer":"@node:92","suspend":"@node:81","startInterface":"@Prefab:prefab/startInterface.prefab","speakBoxParent":"@node:53","speakBox":"@Prefab:prefab/speakBox.prefab","settlement":"@Prefab:prefab/settlement.prefab","scoreLabel":"@node:116","score":"@Prefab:prefab/score.prefab","role_02":"@node:24","role_01":"@node:25","roleParent":"@node:12","roleBullet":"@Prefab:prefab/roleBullet.prefab","rewardWords":"@Prefab:prefab/rewardWords.prefab","resurgence":"@Prefab:prefab/resurgence.prefab","ranking":"@Prefab:prefab/ranking.prefab","operating":"@node:62","machine":"@node:109","induction":"@node:15","hintWord":"@Prefab:prefab/hintWord .prefab","friend":"@node:42","explode":"@Prefab:prefab/explode.prefab","enemy_Infighting":"@Prefab:prefab/enemy_Infighting.prefab","enemy_Fighting":"@Prefab:prefab/enemy_Fighting.prefab","enemyParent":"@node:23","enemyHint":"@Prefab:prefab/enemyHint.prefab","enemyBullet":"@Prefab:prefab/enemyBullet.prefab","enemy":"@Prefab:prefab/enemy.prefab","displays":"@node:184","clickHintSign":"@node:202","clickHintMask":"@node:203","candy_ExplodeParent":"@node:85","candy_Explode":"@Prefab:prefab/candy_Explode.prefab","candyParent_Move":"@node:85","candyParent":"@node:13","candy":"@Prefab:prefab/candy.prefab","bulletParent":"@node:59","bullet":"@Prefab:prefab/bullet.prefab","bucketParent":"@node:12","bucket":"@Prefab:prefab/bucket.prefab","background":"@node:4","assembly":"@node:18"},
             "nodeParent":2,
             "label":"MainSceneControl",
             "isDirectory":false,

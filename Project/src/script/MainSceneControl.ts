@@ -158,6 +158,15 @@ export default class MainSceneControl extends Laya.Script {
         this.noStarted();
         this.createStartInterface('start');
         this.wxPostInit();
+        this.adaptive();
+    }
+
+    /**自适应*/
+    adaptive(): void {
+        this.assembly.y = Laya.stage.height / 2 - 150;
+        this.role_01.y = Laya.stage.height * 0.71;
+        this.role_02.y = Laya.stage.height * 0.71 - 24;
+        this.operating.y = Laya.stage.height * 0.76;
     }
 
     /**场景初始化*/
@@ -290,16 +299,22 @@ export default class MainSceneControl extends Laya.Script {
         let startX_01 = Laya.stage.width / 2 + 60;
         let startX_02 = Laya.stage.width / 2 - 50;
         //最远的那个位置
-        let startY = this.displays.y + 4 * (candyHeiht + spacing) - 35;
+        //陈列台父节点
+        let displaysPar = this.displays.parent as Laya.Sprite;
+        // 流水线内部转换为世界坐标Y所需要的差值
+        let worldDevY = displaysPar.y - displaysPar.pivotY;
+        // 第一个糖果的是陈列台位置，后面糖果往后排
+        let startY = this.displays.y + worldDevY + 4 * (candyHeiht + spacing) - 35;
         for (let i = 0; i < this.startRow; i++) {
             Laya.timer.frameOnce(delayed, this, function () {
                 for (let j = 0; j < 2; j++) {
                     let candy = this.createCandy();
                     candy['Candy'].group = i;
                     candy.zOrder = this.startRow - i;//层级
+                    // 出生Y轴位置是发射口相对世界坐标
+                    let BirthY = this.candyLaunch_01.y + worldDevY - 20;
                     if (j === 0) {
-                        // 出生位置
-                        candy.pos(this.displays.x + 160, this.displays.y - 50);
+                        candy.pos(this.candyLaunch_02.x, BirthY);
                         candy.scaleX = 0;
                         candy.scaleY = 0;
                         this.candyLaunch_01.play('launchLeft', false);
@@ -308,7 +323,7 @@ export default class MainSceneControl extends Laya.Script {
                         this.candyFlipTheAni(i, j, candy, startX_01, targetY);
                     } else {
                         // 出生位置
-                        candy.pos(this.displays.x - 160, this.displays.y - 50);
+                        candy.pos(this.candyLaunch_01.x, BirthY);
                         candy.scaleX = 0.5;
                         candy.scaleY = 0.5;
                         this.candyLaunch_02.play('launchRight', false);
@@ -402,7 +417,7 @@ export default class MainSceneControl extends Laya.Script {
         this.candyParent.addChild(candy);
         candy.rotation = 0;
         this.candyCount++;
-      
+
         return candy;
     }
 
@@ -513,15 +528,16 @@ export default class MainSceneControl extends Laya.Script {
             enemy.pivotX = enemy.width / 2;
             enemy.pivotY = enemy.height / 2;
             //出生位置判定,和攻击目标选择
+            let y = Laya.stage.height * 0.23;
             if (mode === 'left') {
-                enemy.pos(-50, 300);
+                enemy.pos(-50, y);
             } else if (mode === 'right') {
-                enemy.pos(800, 300);
+                enemy.pos(800, y);
             } else if (mode === 'target') {
                 if (tagRole.x < Laya.stage.width / 2 && tagRole.x > 0) {
-                    enemy.pos(-50, 300);
+                    enemy.pos(-50, y);
                 } else if (tagRole.x >= Laya.stage.width / 2 && tagRole.x < Laya.stage.width) {
-                    enemy.pos(800, 300);
+                    enemy.pos(800, y);
                 }
             }
             enemy['Enemy'].slefTagRole = tagRole;
