@@ -166,7 +166,8 @@ export default class MainSceneControl extends Laya.Script {
         this.assembly.y = Laya.stage.height / 2 - 150;
         this.role_01.y = Laya.stage.height * 0.71;
         this.role_02.y = Laya.stage.height * 0.71 - 24;
-        this.operating.y = Laya.stage.height * 0.76;
+        this.operating.y = Laya.stage.height * 0.85;
+        this.owner.scene.height = Laya.stage.height;
     }
 
     /**场景初始化*/
