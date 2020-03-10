@@ -1,5 +1,7 @@
 D .
 D candy
+R 4127230C rank.atlas
+R DF8CDDF3 rank.png
 P 546EE85A 子弹.png
 P 546EE85A 红色桶.png
 P 546EE85A 血条.png
@@ -63,7 +65,6 @@ P 10767910 开始按钮2.png
 P AB788A6C 开始游戏标题.png
 P DF085DC3 当前点击提示.png
 P ACF350BF 怪物来袭底.png
-R 36BB7C9E 排行栏.png
 P 684F9E31 排行榜.png
 P 7A73DF06 操作位置链接线.png
 P 8A5B0572 攻击力图标.png
@@ -102,7 +103,6 @@ D candy/字体
 P 1117D953 减属性.png
 R 59DA4B95 分数：+01234567892.png
 P AC1A48E6 加属性.png
-P 8E35E482 属性标签.png
 P F3B07C6D 怪物来袭倒计时0123456789s.png
 P E23D833B 标签小.png
 P D2E13039 糖果上文字.png
@@ -146,8 +146,8 @@ P 2A75C362 青色单元.png
 P DB8ABCB2 黄色单元.png
 P 69E3458C 黑色单元.png
 D candy/糖果
-R A22BAF4C candyCompilations.png
-R E1A5C99E candyCompilations.sk
+R F620D77B candyCompilations.png
+R B6AFD35E candyCompilations.sk
 P 060CFBC8 糖果影子.png
 P E970C911 糖果盒影子.png
 D candy/糖果机器

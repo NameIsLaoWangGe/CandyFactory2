@@ -66,7 +66,7 @@ export default class Candy extends Laya.Script {
         let clicksNum = Math.floor(Math.random() * randomNum) + baseNum;
         this.clicksLabel = this.self.getChildByName('clicksLabel') as Laya.FontClip;
         this.clicksLabel.value = clicksNum.toString();
-        // this.clicksLabel.alpha = 0;
+        this.clicksLabel.alpha = 0;
     }
 
     /**创建骨骼动画皮肤*/
@@ -83,7 +83,7 @@ export default class Candy extends Laya.Script {
     }
 
     parseComplete(): void {
-        this.playSkeletonAni(2, 'bonbonniere');
+        this.playSkeletonAni(2, 'box_turnDown');
     }
 
     /**播放骨骼动画

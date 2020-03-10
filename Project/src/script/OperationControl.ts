@@ -72,7 +72,6 @@ export default class OperationButton extends Laya.Script {
             this.btnGroup._children[i].on(Laya.Event.MOUSE_MOVE, this, this.move);
             this.btnGroup._children[i].on(Laya.Event.MOUSE_UP, this, this.up);
             this.btnGroup._children[i].on(Laya.Event.MOUSE_OUT, this, this.out);
-            console.log(this.btnGroup._children[i]);
         }
     }
 
