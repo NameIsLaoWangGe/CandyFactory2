@@ -38,6 +38,8 @@ export default class OperationButton extends Laya.Script {
     private zeroCount: number;
     /**所有糖果中，有多少个错误的糖果*/
     private erroCount: number;
+    /**是否是第一次点击*/
+    private firstClick: boolean;
 
     constructor() { super(); }
 
@@ -181,7 +183,7 @@ export default class OperationButton extends Laya.Script {
         this.zeroCount = 0;
         this.clicksGroup++;
         //两边箭头提示
-        let maskYArr = [753, 651.5, 550, 449];
+        let maskYArr = [749, 647.5, 546, 449];
         this.clickHintSign.alpha = 1;
         this.clickHintSign.y = maskYArr[this.clicksGroup];
     }
@@ -190,7 +192,7 @@ export default class OperationButton extends Laya.Script {
         this.zeroCount = 0;
         this.clicksGroup = 0;
         //两边箭头提示
-        let maskYArr = [753, 651.5, 550, 449];
+        let maskYArr = [749, 651.5, 550, 449];
         this.clickHintSign.alpha = 1;
         this.clickHintSign.y = maskYArr[this.clicksGroup];
         this.erroCount = 0;
@@ -204,7 +206,7 @@ export default class OperationButton extends Laya.Script {
     */
     settlement(type): void {
         this.clickHintSign.alpha = 0;
-        this.operateSwitch = false;//结算的时候不可点击
+        this.operateSwitch = false;
         if (type === 'finished') {
             if (this.erroCount === 0) {
                 this.additionAward();
@@ -243,6 +245,16 @@ export default class OperationButton extends Laya.Script {
      * 延时进行结算动画
     */
     settlementAni(): void {
+        // 如果是第一次，结算的时候删掉主角对话框，因为第一轮是新手引导
+        let launcheCount = this.selfScene['MainSceneControl'].launcheCount;
+        if (launcheCount === 1) {
+            let role_01 = this.selfScene['MainSceneControl'].role_01;
+            let speakBox_01 = role_01.getChildByName('speakBox') as Laya.Sprite;
+            speakBox_01.removeSelf();
+            let role_02 = this.selfScene['MainSceneControl'].role_02;
+            let speakBox_02 = role_02.getChildByName('speakBox') as Laya.Sprite;
+            speakBox_02.removeSelf();
+        }
         let delayed = 10;
         for (let i = this.candyParent._children.length - 1; i >= 0; i--) {
             delayed += 15;
@@ -257,8 +269,13 @@ export default class OperationButton extends Laya.Script {
                 }
                 // 当最后一个执行的时候就播放下一组
                 if (i === 0) {
-                    this.selfScene['MainSceneControl'].candyLaunch_01.play('prepare', false);
-                    this.selfScene['MainSceneControl'].candyLaunch_02.play('prepare', false);
+                    // 如果是第二次才正式开始初始化
+                    if (launcheCount === 1) {
+                        this.selfScene['MainSceneControl'].secondAfterStart();
+                    } else {
+                        this.selfScene['MainSceneControl'].candyLaunch_01.play('prepare', false);
+                        this.selfScene['MainSceneControl'].candyLaunch_02.play('prepare', false);
+                    }
                 }
             })
         }
@@ -313,10 +330,11 @@ export default class OperationButton extends Laya.Script {
      * 并且结算，重置属性
     */
     timerControl(): void {
-        if (this.timeSchedule.value > 0 && this.operateSwitch) {
+        if (this.timeSchedule.value > 0 && this.operateSwitch && !this.firstClick) {
             this.timeSchedule.value -= 0.0015;
         } else if (this.timeSchedule.value <= 0 && this.operateSwitch) {
-            // 点击过的结算
+            // 时间到了进行结算
+            console.log(this.operateSwitch);
             this.settlement('unfinished');
         }
     }

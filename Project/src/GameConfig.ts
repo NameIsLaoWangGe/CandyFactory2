@@ -16,6 +16,7 @@ import Resurgence from "./script/Resurgence"
 import RewardWords from "./script/RewardWords"
 import RoleBullet from "./script/RoleBullet"
 import Settlement from "./script/Settlement"
+import SpeakBox from "./script/SpeakBox"
 import StartGame from "./script/StartGame"
 /*
 * 游戏初始化配置;
@@ -53,6 +54,7 @@ export default class GameConfig{
         reg("script/RewardWords.ts",RewardWords);
         reg("script/RoleBullet.ts",RoleBullet);
         reg("script/Settlement.ts",Settlement);
+        reg("script/SpeakBox.ts",SpeakBox);
         reg("script/StartGame.ts",StartGame);
     }
 }

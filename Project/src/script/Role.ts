@@ -68,6 +68,28 @@ export default class Role extends Laya.Script {
         this.rolePropertySet();
     }
 
+    /**主角的属性
+    *两个主角属性分别计算
+    *四个属性依次是，生命值，子弹攻击力，子弹发射频率和弹道速度，防御能力
+   */
+    rolePropertySet(): void {
+        if (this.self.name === 'role_01') {
+            this.role_property = {
+                blood: 100,
+                attackValue: 10,
+                attackSpeed: 1500,
+                defense: 5,
+            };
+        } else if (this.self.name === 'role_02') {
+            this.role_property = {
+                blood: 100,
+                attackValue: 10,
+                attackSpeed: 1500,
+                defense: 5,
+            };
+        }
+    }
+
     /**创建骨骼动画皮肤*/
     createBoneAni(): void {
         //创建动画模板
@@ -149,28 +171,6 @@ export default class Role extends Laya.Script {
         // 攻击播放一次
         this.skeleton.play('attack', false);
         this.playSpeedAdjust();
-    }
-
-    /**主角的属性
-     *两个主角属性分别计算
-     *四个属性依次是，生命值，子弹攻击力，子弹发射频率和弹道速度，防御能力
-    */
-    rolePropertySet(): void {
-        if (this.self.name === 'role_01') {
-            this.role_property = {
-                blood: 100,
-                attackValue: 5000,
-                attackSpeed: 1500,
-                defense: 5,
-            };
-        } else if (this.self.name === 'role_02') {
-            this.role_property = {
-                blood: 100,
-                attackValue: 5000,
-                attackSpeed: 1500,
-                defense: 5,
-            };
-        }
     }
 
     /**属性实时刷新刷新*/

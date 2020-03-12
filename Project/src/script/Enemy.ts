@@ -62,6 +62,7 @@ export default class Enemy extends Laya.Script {
     constructor() { super(); }
 
     onEnable(): void {
+        // console.log('怪物报道');
         this.initProperty();
         this.enemyPropertySet();
     }

@@ -81,7 +81,7 @@ export default class startGame extends Laya.Script {
     init(): void {
         this.self = this.owner as Laya.Sprite;
         this.selfScene = this.self.scene as Laya.Scene;
-        this.self['startGame'] = this;
+        this.self['StartGame'] = this;
 
         this.LoGo.zOrder = 1000;//logo下面要有星星动画
 
@@ -182,7 +182,7 @@ export default class startGame extends Laya.Script {
         //黑色遮罩渐变缓冲
         Laya.Tween.to(this.maskBg, { alpha: 0 }, 1200, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
             this.self.removeSelf();
-            this.selfScene['MainSceneControl'].startGame();
+            this.selfScene['MainSceneControl'].firstStart();
         }, []), 0);
 
         // 4个背景拉开

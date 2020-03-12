@@ -25,8 +25,6 @@ export default class MainSceneControl extends Laya.Script {
     /** @prop {name:background, tips:"背景图", type:Node}*/
     public background: Laya.Sprite;
 
-    /** @prop {name:speakBoxParent, tips:"对话框父节点", type:Node}*/
-    public speakBoxParent: Laya.Sprite;
     /** @prop {name:speakBox, tips:"对话框", type:Prefab}*/
     public speakBox: Laya.Prefab;
 
@@ -84,33 +82,15 @@ export default class MainSceneControl extends Laya.Script {
     /** @prop {name:enemyHint , tips:"倒计时", type:Prefab}*/
     public enemyHint: Laya.Prefab;
 
-    /**两个主角的对话框*/
-    private role_01speak: Laya.Sprite;
-    private role_02speak: Laya.Sprite;
-
-    /**敌人出现开关，这个开关每次开启后，一次性，赋一次值只能产生一个敌人*/
-    private enemyAppear: boolean;
     /**怪物攻击对象,也是上个吃糖果对象,一次性，赋一次值只能用一次*/
     private enemyTagRole: Laya.Sprite;
     /**敌人产生的总个数记录*/
     private enemyCount: number;
 
-    /**糖果产生的时间间隔*/
-    private candy_interval: number;
-    /**当前时间记录*/
-    private creatTime: number;
-    /**生产开关*/
-    private creatOnOff: boolean;
-    /**糖果到碰到感应装置时，名字装进这个数组*/
-    private nameArr: Array<string>;
     /**糖果生产的总个数记录*/
     private candyCount: number;
-    /**复活所需吃糖果的数量*/
-    private rescueNum: number;
-
     /**时间线*/
     private timerControl: number;
-
     /**怪物属性*/
     private enemyProperty: any;
 
@@ -133,8 +113,6 @@ export default class MainSceneControl extends Laya.Script {
     private posArr_right: Array<Array<number>>;
     /**每次创建第一波糖果他们的名称组合*/
     private candyNameArr: Array<string>;
-    /**糖果的行数*/
-    private startRow: number;
     /**自己*/
     private self: Laya.Sprite;
     /**所属场景*/
@@ -149,14 +127,18 @@ export default class MainSceneControl extends Laya.Script {
     private launchTemp_02: Laya.Templet;
     private candyLaunch_02: Laya.Skeleton;
 
+    /**糖果波次记录*/
+    private launcheCount: number;
+
     /**游戏结束*/
     private gameOver: boolean;
 
     constructor() { super(); }
 
     onEnable(): void {
-        this.noStarted();
+        this.noStarted('startInterface');
         this.createStartInterface('start');
+        this.createLaunchAni();
         this.wxPostInit();
         this.adaptive();
     }
@@ -170,12 +152,60 @@ export default class MainSceneControl extends Laya.Script {
         this.owner.scene.height = Laya.stage.height;
     }
 
-    /**场景初始化*/
-    startGame(): void {
-        this.enemyAppear = false;
-        this.enemyTagRole = null;
-        this.enemyCount = 0;
-        // 初始化怪物属性，依次为血量，攻击力，攻速，移动速度，攻击速度
+    /**第一次场景初始化
+      * 第一次和后面正式开始只有两个个却别，
+      * 1、是场景时间时间线关闭怪物不出现
+      * 2、糖果点击倒计时关闭
+     */
+    firstStart(): void {
+        // 流水线水管动画
+        this.assembly['Assembly'].pipeAnimation('flow');
+        this.roleAppear();
+        this.candyLaunch_01.play('prepare', false);
+        this.candyLaunch_02.play('prepare', false);
+    }
+
+    /**第二次开始场景初始化
+     * 第一次和后面正式开始只有两个个却别，
+     * 1、是场景时间时间线关闭怪物不出现
+     * 2、糖果点击倒计时关闭
+    */
+    secondAfterStart(): void {
+        this.timerControl = 0;
+        this.candyLaunch_01.play('prepare', false);
+        this.candyLaunch_02.play('prepare', false);
+        this.createEnemyHint();
+    }
+
+    /**游戏没有开始的时候设置的属性
+     * @param type 这个是重来初始化还是返回主界面的初始化
+    */
+    noStarted(type): void {
+        this.self = this.owner as Laya.Scene;
+        //脚本赋值
+        this.owner['MainSceneControl'] = this;
+        // 关闭多点触控
+        Laya.MouseManager.multiTouchEnabled = false;
+        this.scoreLabel.value = '0';
+        this.timeSchedule = this.timer.getChildByName('timeSchedule') as Laya.ProgressBar;
+        this.timeSchedule.value = 1;
+        this.suspend = false;
+        this.gameOver = false;
+        this.launcheCount = 0;
+        if (type === 'reStart') {
+            this.role_01['Role'].skeleton.play('speak', true);
+            this.role_02['Role'].skeleton.play('speak', true);
+        } else if (type === 'startInterface') {
+            this.role_01.x = -500;
+            this.role_02.x = 1834;
+        }
+        this.enemyPropertyInit();
+    }
+
+    /**敌人的属性初始化
+     * 怪物属性依次为血量，攻击力，攻速，移动速度，攻击速度
+    */
+    enemyPropertyInit(): void {
         this.enemyProperty = {
             blood: 200,
             attackValue: 10,
@@ -184,47 +214,14 @@ export default class MainSceneControl extends Laya.Script {
             moveSpeed: 10,
             creatInterval: 8000
         }
-        this.enemyInterval_01 = 500;
+        this.enemyCount = 0;
         this.enemyTime_01 = Date.now();
-        this.enemySwitch_01 = false;
-
-        this.enemyInterval_02 = 500;
         this.enemyTime_02 = Date.now();
+        this.enemyInterval_01 = this.enemyProperty.creatInterval;
+        this.enemyInterval_02 = this.enemyProperty.creatInterval;
+        this.enemySwitch_01 = false;
         this.enemySwitch_02 = false;
-
-        this.candy_interval = 1000;
-        this.creatTime = Date.now();
-        this.creatOnOff = true;
-        this.nameArr = [];
-        this.candyCount = 0;
-        this.scoreLabel.value = '0';
-
-        this.timeSchedule = this.timer.getChildByName('timeSchedule') as Laya.ProgressBar;
-
-        this.rescueNum = 0;
-        // 关闭多点触控
-        Laya.MouseManager.multiTouchEnabled = false;
-        this.timerControl = 0;
-        this.suspend = false;
-        this.startRow = 4;
-        this.gameOver = false;
-        // 流水线水管动画
-        this.assembly['Assembly'].pipeAnimation('flow');
-
-        this.roleAppear();
-        this.candyMoveToDisplay();
-        this.createEnemyHint();
-
-    }
-
-    /**游戏没有开始的时候设置的属性*/
-    noStarted(): void {
-        this.self = this.owner as Laya.Scene;
-        this.owner['MainSceneControl'] = this;//脚本赋值
-        this.gameOver = true;
-        this.role_01.x = -500;
-        this.role_02.x = 1834;
-        this.createLaunchAni();
+        this.enemyTagRole = null;
     }
 
     /**创建开始游戏界面*/
@@ -236,7 +233,7 @@ export default class MainSceneControl extends Laya.Script {
         startInterface.x = Laya.stage.width / 2;
         startInterface.y = Laya.stage.height / 2;
 
-        startInterface['startGame'].aniTypeInit(type);
+        startInterface['StartGame'].aniTypeInit(type);
     }
 
     /**两个发射口的骨骼动画
@@ -276,7 +273,6 @@ export default class MainSceneControl extends Laya.Script {
     */
     candyLaunchListen_01(e): void {
         if (e.name === 'launch') {
-            console.log('发射！');
         } else if (e.name === 'getReady') {
             this.candyMoveToDisplay();
             this.timeSchedule.value = 1;
@@ -286,6 +282,7 @@ export default class MainSceneControl extends Laya.Script {
     candyLaunchListen_02(e): void {
         if (e.name === 'launch') {
         } else if (e.name === 'getReady') {
+
         }
     }
 
@@ -294,24 +291,29 @@ export default class MainSceneControl extends Laya.Script {
      * 倒过来遍历
     */
     candyMoveToDisplay(): void {
+        //行数
+        let row = 4;
+        //每组循环的延时数，逐步增加
         let delayed = 10;
+        //糖果高度
         let candyHeiht = 100;
+        //间距
         let spacing = -1;
+        //两个初始X位置
         let startX_01 = Laya.stage.width / 2 + 60;
         let startX_02 = Laya.stage.width / 2 - 50;
-        //最远的那个位置
         //陈列台父节点
         let displaysPar = this.displays.parent as Laya.Sprite;
         // 流水线内部转换为世界坐标Y所需要的差值
         let worldDevY = displaysPar.y - displaysPar.pivotY;
         // 第一个糖果的是陈列台位置，后面糖果往后排
-        let startY = this.displays.y + worldDevY + 4 * (candyHeiht + spacing) - 35;
-        for (let i = 0; i < this.startRow; i++) {
+        let startY = this.displays.y + worldDevY + row * (candyHeiht + spacing) - 35;
+        for (let i = 0; i < row; i++) {
             Laya.timer.frameOnce(delayed, this, function () {
                 for (let j = 0; j < 2; j++) {
                     let candy = this.createCandy();
                     candy['Candy'].group = i;
-                    candy.zOrder = this.startRow - i;//层级
+                    candy.zOrder = row - i;//层级
                     // 出生Y轴位置是发射口相对世界坐标
                     let BirthY = this.candyLaunch_01.y + worldDevY - 20;
                     if (j === 0) {
@@ -338,7 +340,6 @@ export default class MainSceneControl extends Laya.Script {
             delayed += 15;
         }
     }
-
     /**糖果发射动画时间线
      * @param i 当前组
      * @param j 当前列
@@ -363,13 +364,24 @@ export default class MainSceneControl extends Laya.Script {
             let HalfY = candy.y + (targetY - candy.y) / distancePer;
             Laya.Tween.to(candy, { x: HalfX, y: HalfY, scaleX: 1.3, scaleY: 1.3 }, timePar * 3 / 4, null, Laya.Handler.create(this, function () {
                 // 第三步降落
-                Laya.Tween.to(candy, { x: targetX, y: targetY, scaleX: 1, scaleY: 1 }, timePar, null, Laya.Handler.create(this, function () {
+                Laya.Tween.to(candy, { x: targetX, y: targetY, scaleX: 1, scaleY: 1 }, timePar * 1.3, null, Laya.Handler.create(this, function () {
                     // 落下特效并且播放禁止动画,并且显示点击次数
                     this.explodeAni(this.owner, candy.x, candy.y, 'disappear', 8, 1000);
                     candy['Candy'].playSkeletonAni(1, 'bonbonniere');
                     candy['Candy'].clicksLabel.alpha = 1;
                     // 最后一组发射完毕后
                     if (i === 3 && j === 1) {
+                        this.launcheCount++;
+                        console.log('弟' + this.launcheCount + '次发射！');
+                        // 第一次需要引导玩家操作，通过说话完成，并且第一轮不计算时间
+                        if (this.launcheCount === 1) {
+                            this.roleSpeakBoxs('role_01', 'firstClick');
+                            this.roleSpeakBoxs('role_02', 'firstClick');
+                            this.operating['OperationControl'].firstClick = true;
+                        } else if (this.launcheCount === 2) {
+                            // 第二轮的时候开启倒计时
+                            this.operating['OperationControl'].firstClick = false;
+                        }
                         this.operating['OperationControl'].operateSwitch = true;
                         this.operating['OperationControl'].initHint();
                     }
@@ -383,7 +395,7 @@ export default class MainSceneControl extends Laya.Script {
             // 第二步和糖果拉开距离
             Laya.Tween.to(shadow, { x: -20 + 52, y: 100 + 60, scaleX: 0.5, scaleY: 0.5, }, timePar * 3 / 4, null, Laya.Handler.create(this, function () {
                 // 第三步降落
-                Laya.Tween.to(shadow, { x: 0 + 52, y: 0 + 60, scaleX: 1, scaleY: 1 }, timePar, null, Laya.Handler.create(this, function () {
+                Laya.Tween.to(shadow, { x: 0 + 52, y: 0 + 60, scaleX: 1, scaleY: 1 }, timePar * 1.3, null, Laya.Handler.create(this, function () {
                 }), 0);
             }), 0);
         }), 10);
@@ -444,68 +456,20 @@ export default class MainSceneControl extends Laya.Script {
     }
 
     /**两个主角对话框的初始化*/
-    roleSpeakBoxs(): void {
-        for (let i = 0; i < 2; i++) {
-            let speakBox = Laya.Pool.getItemByCreateFun('speakBox', this.speakBox.create, this.speakBox) as Laya.Sprite;
-            this.speakBoxParent.addChild(speakBox);
-            if (i === 0) {
-                speakBox.pos(this.role_01.x, this.role_01.y);
-                this.role_01speak = speakBox;
-                this.role_01speak.alpha = 0;
-                // 反向和偏移
-                let pic = this.role_01speak.getChildByName('pic') as Laya.Sprite;
-                let label = this.role_01speak.getChildByName('label') as Laya.Sprite;
-                pic.scaleX = -1;
-                label.x += 30;
-            } else {
-                speakBox.pos(this.role_02.x, this.role_02.y);
-                this.role_02speak = speakBox;
-                this.role_02speak.alpha = 0;
-            }
+    roleSpeakBoxs(who, describe): void {
+        let speakBox = Laya.Pool.getItemByCreateFun('speakBox', this.speakBox.create, this.speakBox) as Laya.Sprite;
+        speakBox.name = 'speakBox';
+        if (who === 'role_01') {
+            this.role_01.addChild(speakBox);
+        } else if (who === 'role_02') {
+            this.role_02.addChild(speakBox);
         }
+        speakBox['SpeakBox'].speakingRules(who, describe);
+        speakBox.pos(70, -110);
     }
 
     /**角色死亡复活状况*/
     roleDeathState(): void {
-        // 角色死亡情况
-        let len = this.roleParent._children.length;
-        if (len === 0) {
-            // 死亡
-            this.enemySwitch_01 = false;
-            this.enemySwitch_02 = false;
-
-            return;
-        } else if (len === 1) {
-            let speak_01 = this.role_01speak.getChildByName('label') as Laya.Label;
-            let speak_02 = this.role_02speak.getChildByName('label') as Laya.Label;
-            // 复活
-            if (this.rescueNum >= 5) {
-                this.rescueNum = 0;
-                if (this.roleParent._children[0].name === "role_01") {
-                    this.roleParent.addChild(this.role_02);
-                    this.role_02speak.x -= 150;
-                    speak_02.text = '谢谢你啊！';
-                } else {
-                    this.roleParent.addChild(this.role_01);
-                    speak_01.text = '谢谢你啊！';
-                    this.role_01speak.x += 150;
-                }
-            } else {
-                // 待复活提示
-                if (this.roleParent._children[0].name === "role_01") {
-                    this.role_02speak.alpha = 1;
-                    this.role_02speak.x = this.role_02.x;
-                    speak_02.text = '连续吃5个糖果不犯错的话我就复活了';
-                } else {
-                    this.role_01speak.alpha = 1;
-                    this.role_01speak.x = this.role_01.x;
-                    speak_01.text = '连续吃5个糖果不犯错的话我就复活了';
-                }
-            }
-        } else if (len === 2) {
-            // 保持，复活状态为空
-            this.rescueNum === 0;
-        }
     }
 
     /**敌人出现倒计时*/
@@ -568,7 +532,7 @@ export default class MainSceneControl extends Laya.Script {
     * 每隔600帧增长一次，大约是10秒钟
     */
     enemyPropertyUpdate(): void {
-        if (this.timerControl % 600 === 0) {
+        if (this.timerControl % 600 === 0 && this.enemySwitch_01) {
             // 血量增长
             this.enemyProperty.blood += 25;
             // 攻击力增长
@@ -639,10 +603,12 @@ export default class MainSceneControl extends Laya.Script {
      * 然后主角复活
     */
     restart(): void {
+        //需要对比他们的数量，复活重来需要在动画的最后一个
+        let len1 = this.enemyParent._children.length;
+        let len2 = this.candyParent._children.length;
         // 消除敌人
         // 先隐藏在一并删除，否则可能会有length变化造成错误
         let enemyDelayed = 0;
-        let len1 = this.enemyParent._children.length;
         for (let i = 0; i < this.enemyParent._children.length; i++) {
             Laya.timer.frameOnce(enemyDelayed, this, function () {
                 if (!this.enemyParent._children[i]) {
@@ -657,23 +623,20 @@ export default class MainSceneControl extends Laya.Script {
                     this.explodeAni(this.owner, x, y, 'range', 15, 100);
                 }
                 if (i === len1 - 1) {
+                    //对比数量，数量多的后播放完，然后执行主角复活
+                    // 这个等于也是如此
+                    if (len1 >= len2) {
+                        this.roleResurgenceAni();
+                    }
+
                     this.enemyParent.removeChildren(0, len1 - 1);
                 }
             });
             enemyDelayed += 20;
         }
-
-        // 消除糖果,如果此时没有糖果直接初始化
-        // 先隐藏在一并删除，否则可能会有length变化造成错误
+        // 在消除糖果
         let candyDelayed = 0;
-        let len3 = this.candyParent._children.length;
-        if (len3 === 0) {
-            this.roleResurgenceAni();
-            this.candyParent.removeChildren(0, len3 - 1);
-            return;
-        }
-
-        for (let k = 0; k < len3; k++) {
+        for (let k = 0; k < len2; k++) {
             Laya.timer.frameOnce(candyDelayed, this, function () {
                 if (!this.candyParent._children[k]) {
                     return;
@@ -683,9 +646,12 @@ export default class MainSceneControl extends Laya.Script {
                 let x = this.candyParent._children[k].x;
                 let y = this.candyParent._children[k].y;
                 this.explodeAni(this.owner, x, y, 'disappear', 8, 1000);
-                if (k === len3 - 1) {
-                    this.roleResurgenceAni();
-                    this.candyParent.removeChildren(0, len3 - 1);
+                if (k === len2 - 1) {
+                    //对比数量，数量多的后播放完，然后执行主角复活
+                    if (len1 < len2) {
+                        this.roleResurgenceAni();
+                    }
+                    this.candyParent.removeChildren(0, len2 - 1);
                 }
             });
             candyDelayed += 20;
@@ -704,9 +670,15 @@ export default class MainSceneControl extends Laya.Script {
         }, []), 0);
     }
 
-    /**重新开始所需改变的属性*/
+    /**重新开始所需改变的属性
+     * 重新开始不会经过新手引导  this.launcheCount从2开始;
+    */
     restartProperties(): void {
-        this.startGame();
+        this.noStarted('reStart');
+        this.secondAfterStart();
+        this.role_01.x = 139;
+        this.role_02.x = 669;
+        this.launcheCount = 2;
         //主角复活
         this.role_01['Role'].role_Warning = false;
         this.role_01['Role'].roleDeath = false;
@@ -717,23 +689,16 @@ export default class MainSceneControl extends Laya.Script {
         this.role_02['Role'].initProperty();
 
         this.operating['OperationControl'].initProperty();
-
     }
 
     /**返回主界面清理场景*/
     returnStartSet(): void {
-        // 分数清零
-        this.scoreLabel.value = '0';
-        this.noStarted();
-        // 清空三个元素
+        this.noStarted('startInterface');
+        // 清空怪物和糖果
         let len1 = this.enemyParent._children.length;
         this.enemyParent.removeChildren(0, len1 - 1);
-
-        let len2 = this.candy_ExplodeParent._children.length;
-        this.candy_ExplodeParent.removeChildren(0, len2 - 1);
-
-        let len3 = this.candyParent._children.length;
-        this.candyParent.removeChildren(0, len3 - 1);
+        let len2 = this.candyParent._children.length;
+        this.candyParent.removeChildren(0, len2 - 1);
         //主角复活
         this.role_01.alpha = 1;
         this.role_01['Role'].role_Warning = false;
@@ -744,7 +709,8 @@ export default class MainSceneControl extends Laya.Script {
         this.role_02['Role'].role_Warning = false;
         this.role_02['Role'].roleDeath = false;
         this.role_02['Role'].initProperty();
-
+        // 重置怪物属性
+        this.enemyPropertyInit();
         // 操作台重置
         this.operating['OperationControl'].initProperty();
     }
@@ -806,14 +772,12 @@ export default class MainSceneControl extends Laya.Script {
         if (this.gameOver) {
             return;
         }
-
         // 主角全部死亡则停止移动,并且弹出复活
         if (this.role_01['Role'].roleDeath && this.role_02['Role'].roleDeath) {
             this.gameOver = true;
             this.createResurgence();
             return;
         }
-
         // 时刻对敌人的层级进行排序
         this.enemyOrder();
         // 记录时间
