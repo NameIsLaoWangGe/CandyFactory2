@@ -229,7 +229,9 @@ export default class Candy extends Laya.Script {
         }
         // 第二部回归
         Laya.Tween.to(this.self, { x: this.candyTagRole.x, y: this.candyTagRole.y }, 800, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
-            this.selfScene['MainSceneControl'].explodeAni(this.selfScene, this.self.x, this.self.y, this.self.name.substring(0, 11), 15, 100);
+            let MainSceneControl = this.selfScene['MainSceneControl'];
+            let zOrder = MainSceneControl.roleParent.zOrder = 2;
+            MainSceneControl.explodeAni(this.selfScene, this.self.x, this.self.y, this.self.name.substring(0, 11), 15, zOrder - 1);
             this.propertyHintWord();
             this.roleReduceProperty();
             this.self.removeSelf();

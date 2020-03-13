@@ -632,7 +632,7 @@ export default class MainSceneControl extends Laya.Script {
                     this.enemyParent.removeChildren(0, len1 - 1);
                 }
             });
-            enemyDelayed += 20;
+            enemyDelayed += 1;
         }
         // 在消除糖果
         let candyDelayed = 0;

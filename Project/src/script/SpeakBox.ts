@@ -18,20 +18,32 @@ export default class SpeakBox extends Laya.Script {
         if (who === 'role_01') {
             switch (describe) {
                 case 'firstClick':
-                    content = '第一排糖果是小箭头显示的位置哦~！'
+                    content = '点击和第一排和糖果颜色的按钮！'
                     break;
+                case 'clickError':
+                    content = '抱歉你点击错了！'
+                    break;
+                case 'clickRight':
+                    content = '你真棒，点对了！'
                 default:
                     break;
             }
         } else if (who === 'role_02') {
             switch (describe) {
                 case 'firstClick':
-                    content = '点击和第一排和糖果颜色的按钮！'
+                    content = '第一排糖果是小箭头显示的位置哦~！'
+                    break;
+                case 'clickError':
+                    content = '请看准颜色！'
+                    break;
+                case 'clickRight':
+                    content = '数字表示要点击几次！'
                     break;
                 default:
                     break;
             }
         } else {
+
         }
         this.speakContent.text = content;
     }

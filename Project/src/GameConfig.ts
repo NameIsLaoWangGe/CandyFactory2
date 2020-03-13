@@ -5,7 +5,6 @@ import Role from "./script/Role"
 import OperationControl from "./script/OperationControl"
 import MainSceneControl from "./script/MainSceneControl"
 import Candy from "./script/Candy"
-import Candy_Explode from "./script/Candy_Explode"
 import Enemy from "./script/Enemy"
 import EnemyBullet from "./script/EnemyBullet"
 import EnemyHint from "./script/EnemyHint"
@@ -43,7 +42,6 @@ export default class GameConfig{
         reg("script/OperationControl.ts",OperationControl);
         reg("script/MainSceneControl.ts",MainSceneControl);
         reg("script/Candy.ts",Candy);
-        reg("script/Candy_Explode.ts",Candy_Explode);
         reg("script/Enemy.ts",Enemy);
         reg("script/EnemyBullet.ts",EnemyBullet);
         reg("script/EnemyHint.ts",EnemyHint);
