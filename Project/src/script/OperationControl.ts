@@ -309,39 +309,69 @@ export default class OperationButton extends Laya.Script {
         // 左右两个方向
         let point;//飞向固定点的左右位置
         let explodeTarget;//攻击对象
-        // 抛物线运动最高点位置
-        let HalfX;
-        let HalfY;
-        // 抛物线最高点位置站整个x移动位置的比例
-        let distancePer = 2;
-        if (candy.x < Laya.stage.width / 2) {
-            explodeTarget = this.selfScene['MainSceneControl'].role_01;
-            point = new Laya.Point(candy.x - 200, candy.y + 80);
-            HalfX = candy.x - (candy.x - point.x) / distancePer;
-        } else {
-            explodeTarget = this.selfScene['MainSceneControl'].role_02;
-            point = new Laya.Point(candy.x + 200, candy.y + 80);
-            HalfX = candy.x + (point.x - candy.x) / distancePer;
-        }
-        HalfY = candy.y - 100;
 
+        let MainSceneControl = this.selfScene['MainSceneControl'];
+        let role_01 = MainSceneControl.role_01;
+        let role_02 = MainSceneControl.role_02;
+
+        // 这里面有个判断就是有一个主角死了，糖果都会飞向另一个主角
+        let xLeft = Laya.stage.width * 1 / 4 - 90;
+        let xRight = Laya.stage.width * 3 / 4 + 70;
+        let rotate;
+        let y = candy.y + 80;
+        if (role_01['Role'].roleDeath) {
+            explodeTarget = role_02;
+            point = new Laya.Point(xRight, y);
+            rotate = 360;
+        } else if (role_02['Role'].roleDeath) {
+            explodeTarget = role_01;
+            point = new Laya.Point(xLeft, y);
+            rotate = -360;
+
+        } else {
+            if (candy.x < Laya.stage.width / 2) {
+                explodeTarget = role_01;
+                rotate = -360;
+                point = new Laya.Point(xLeft, y);
+            } else {
+                explodeTarget = role_02;
+                point = new Laya.Point(xRight, y);
+                rotate = 360;
+            }
+        }
+
+        // 抛物线运动最高点位置,也就相当于中间的那个位置
+        let distancePer = 3;
+        let HalfX = candy.x + (point.x - candy.x) / distancePer;
+        let HalfY = candy.y - 100;
+        //每段动画的时间，当前动画分为两段
+        let time = 300;
+        // 缩放大小，以1基础
+        let scale1 = 1.2;
+        let scale2 = 0.95;
         // 第一步飞天放大
-        Laya.Tween.to(candy, { x: HalfX, y: HalfY, scaleX: 1.3, scaleY: 1.3 }, 250, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(candy, { x: HalfX, y: HalfY, scaleX: scale1, scaleY: scale1 }, time, null, Laya.Handler.create(this, function () {
 
             // 第二步降落缩小
-            Laya.Tween.to(candy, { x: point.x, y: point.y, scaleX: 0.9, scaleY: 0.9 }, 300, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(candy, { x: point.x, y: point.y, scaleX: scale2, scaleY: scale2 }, time, null, Laya.Handler.create(this, function () {
                 candy.scale(0.9, 0.9);
                 this.selfScene['MainSceneControl'].explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 1000);
                 candy['Candy'].asExplodeCandy();
             }, []), 0);
         }, []), 0);
 
+        // 骨骼动画的旋转，旋转2圈
+        let skeleton = candy['Candy'].skeleton;
+        // 拉开距离并缩小
+        Laya.Tween.to(skeleton, { rotation: rotate }, time * 2, null, Laya.Handler.create(this, function () {
+        }), 0);
+
         // 糖果的影子处理
         let shadow = candy.getChildByName('shadow') as Laya.Image;
         // 拉开距离并缩小
-        Laya.Tween.to(shadow, { x: -20 + 52, y: 80 + 60, scaleX: 0.8, scaleY: 0.8, }, 300, null, Laya.Handler.create(this, function () {
+        Laya.Tween.to(shadow, { x: -20 + 52, y: 80 + 60, scaleX: 1, scaleY: 1 }, time, null, Laya.Handler.create(this, function () {
             // 第二部回归
-            Laya.Tween.to(shadow, { x: 0 + 52, y: 0 + 60, scaleX: 1, scaleY: 1 }, 300, null, Laya.Handler.create(this, function () {
+            Laya.Tween.to(shadow, { x: 0 + 52, y: 0 + 60, scaleX: scale2, scaleY: scale2 }, time, null, Laya.Handler.create(this, function () {
             }), 0);
         }), 0);
     }

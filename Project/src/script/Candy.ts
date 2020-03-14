@@ -41,6 +41,7 @@ export default class Candy extends Laya.Script {
         this.self = this.owner as Laya.Sprite;
         this.selfScene = this.self.scene as Laya.Scene;
         this.candyTagRole = null;
+        this.self.rotation = 0;
         this.selfSpeed = 10;
         this.spaceY = 5;
 
@@ -114,6 +115,7 @@ export default class Candy extends Laya.Script {
         }
         this.skeleton.x = this.self.width / 2 + 3;
         this.skeleton.y = this.self.height / 2;
+        this.skeleton.rotation = 0;
         this.skeleton.playbackRate(speed);
     }
 
@@ -121,12 +123,21 @@ export default class Candy extends Laya.Script {
     * 并且播放属性增加动画
     */
     candyFlyToRole(): void {
-        if (this.self.x < Laya.stage.width / 2) {
-            this.candyTagRole = this.selfScene['MainSceneControl'].role_01;
+        // 需要判断当前还有几个主角，如果只有一个了，那么都飞向这一个主角
+        let MainSceneControl = this.selfScene['MainSceneControl'];
+        let role_01 = MainSceneControl.role_01;
+        let role_02 = MainSceneControl.role_02;
+        if (role_01['Role'].roleDeath) {
+            this.candyTagRole = role_02;
+        } else if (role_02['Role'].roleDeath) {
+            this.candyTagRole = role_01;
         } else {
-            this.candyTagRole = this.selfScene['MainSceneControl'].role_02;
+            if (this.self.x < Laya.stage.width / 2) {
+                this.candyTagRole = role_01;
+            } else {
+                this.candyTagRole = role_02;
+            }
         }
-
         this.playSkeletonAni(2, 'turnDown');
         // 基础时间参数，动画的时间会随着位置边近而缩小
         let timePar = 300 + this.group * 100;
@@ -162,7 +173,6 @@ export default class Candy extends Laya.Script {
             }), 0);
         }), 0);
     }
-
 
     /**属性增加提示动画*/
     hintWordMove(): void {
@@ -260,8 +270,8 @@ export default class Candy extends Laya.Script {
         }
     }
 
-    /**根据糖果的种类增加主角属性规则
-     * 并且播放增加属性文字提示动画
+    /**根据糖果的种类减少主角属性规则
+     * 并且播放减少属性文字提示动画
     */
     roleReduceProperty(): void {
         this.self.name = this.self.name.substring(0, 11);
