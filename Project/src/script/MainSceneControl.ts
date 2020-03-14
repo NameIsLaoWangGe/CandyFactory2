@@ -608,33 +608,8 @@ export default class MainSceneControl extends Laya.Script {
         let len2 = this.candyParent._children.length;
         // 消除敌人
         // 先隐藏在一并删除，否则可能会有length变化造成错误
-        let enemyDelayed = 0;
-        for (let i = 0; i < this.enemyParent._children.length; i++) {
-            Laya.timer.frameOnce(enemyDelayed, this, function () {
-                if (!this.enemyParent._children[i]) {
-                    return;
-                }
-                this.enemyParent._children[i].alpha = 0;
-                let x = this.enemyParent._children[i].x;
-                let y = this.enemyParent._children[i].y;
-                if (this.enemyParent._children[i]['Enemy'] === 'infighting') {
-                    this.explodeAni(this.owner, x, y, 'infighting', 15, 100);
-                } else {
-                    this.explodeAni(this.owner, x, y, 'range', 15, 100);
-                }
-                if (i === len1 - 1) {
-                    //对比数量，数量多的后播放完，然后执行主角复活
-                    // 这个等于也是如此
-                    if (len1 >= len2) {
-                        this.roleResurgenceAni();
-                    }
-
-                    this.enemyParent.removeChildren(0, len1 - 1);
-                }
-            });
-            enemyDelayed += 1;
-        }
-        // 在消除糖果
+        this.clearAllEnemy('reStart', len2);
+        // 再消除糖果
         let candyDelayed = 0;
         for (let k = 0; k < len2; k++) {
             Laya.timer.frameOnce(candyDelayed, this, function () {
@@ -649,20 +624,64 @@ export default class MainSceneControl extends Laya.Script {
                 if (k === len2 - 1) {
                     //对比数量，数量多的后播放完，然后执行主角复活
                     if (len1 < len2) {
-                        this.roleResurgenceAni();
+                        this.roleResurgenceAni('reStart');
                     }
                     this.candyParent.removeChildren(0, len2 - 1);
                 }
             });
-            candyDelayed += 20;
+            candyDelayed += 5;
         }
     }
 
-    /**重新开始主角所初始化的属性*/
-    roleResurgenceAni(): void {
+    /**清除所有怪物
+     * 用不同的参数执行在不同的地方执行
+     * 目前有两个地方使用，一个是复活，一个是重来
+     * @param type 
+     * @param number
+    */
+    clearAllEnemy(type, len2): void {
+        let len1 = this.enemyParent._children.length;
+        let enemyDelayed = 0;
+        for (let i = 0; i < len1; i++) {
+            let enemy = this.enemyParent._children[i];
+            Laya.timer.frameOnce(enemyDelayed, this, function () {
+                if (!this.enemyParent._children[i]) {
+                    return;
+                }
+                if (this.enemyParent._children[i]['Enemy'].enemyType === 'fighting') {
+                    this.explodeAni(this.owner, enemy.x, enemy.y, 'fighting', 15, 100);
+                } else {
+                    this.explodeAni(this.owner, enemy.x, enemy.y, 'range', 15, 100);
+                }
+                enemy.alpha = 0;
+                if (i === len1 - 1) {
+                    if (type === 'reStart' && len2 !== null) {
+                        //对比数量，数量多的后播放完，然后执行主角复活
+                        if (len1 >= len2) {
+                            this.roleResurgenceAni('reStart');
+                        }
+                    } else if (type === 'resurgence') {
+                        // 直接复活这是复活模式
+                        this.roleResurgenceAni('resurgence');
+                    }
+                    this.enemyParent.removeChildren(0, len1 - 1);
+                }
+            });
+            enemyDelayed += 5;
+        }
+    }
+
+    /**重新开始主角所初始化的属性
+     * @param type 是复活界面的复活还是重来的复活
+    */
+    roleResurgenceAni(type): void {
         let skeleton1 = this.role_01.getChildByName('skeleton') as Laya.Skeleton;
         Laya.Tween.to(this.role_01, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
-            this.restartProperties();
+            if (type === 'reStart') {
+                this.resetGame('reStart');
+            } else if (type === 'resurgence') {
+                this.resurgenceHintWord();
+            }
         }, []), 0);
 
         let skeleton2 = this.role_02.getChildByName('skeleton') as Laya.Skeleton;
@@ -670,25 +689,76 @@ export default class MainSceneControl extends Laya.Script {
         }, []), 0);
     }
 
-    /**重新开始所需改变的属性
+    /**重新开始或者复活所需改变的属性
      * 重新开始不会经过新手引导  this.launcheCount从2开始;
+     * 这里面有两个情况，一个是重新开始，一个是复活；
     */
-    restartProperties(): void {
-        this.noStarted('reStart');
-        this.secondAfterStart();
-        this.role_01.x = 139;
-        this.role_02.x = 669;
-        this.launcheCount = 2;
-        //主角复活
+    resetGame(type): void {
+        if (type === 'reStart') {
+            this.noStarted('reStart');
+            this.secondAfterStart();
+            this.role_01.x = 139;
+            this.role_02.x = 669;
+            this.launcheCount = 2;
+            //主角复活
+            this.role_01['Role'].initProperty();
+            this.role_02['Role'].initProperty();
+
+            this.operating['OperationControl'].initProperty();
+        } else if (type === 'resurgence') {
+            this.gameOver = false;
+            this.operating['OperationControl'].operateSwitch = true;
+        }
         this.role_01['Role'].role_Warning = false;
         this.role_01['Role'].roleDeath = false;
-        this.role_01['Role'].initProperty();
-
         this.role_02['Role'].role_Warning = false;
         this.role_02['Role'].roleDeath = false;
-        this.role_02['Role'].initProperty();
+    }
 
-        this.operating['OperationControl'].initProperty();
+    /**主角复活提示动画*/
+    resurgenceHintWord(): void {
+        let delayed = 0;
+        this.role_01;
+        this.role_02;
+        let x = 80;
+        let y = -20;
+        for (let i = 0; i < 4; i++) {
+            Laya.timer.frameOnce(delayed, this, function () {
+                switch (i) {
+                    case 0:
+                        this.createHintWord(this.role_01, x, y, '攻击里', 20, 1);
+                        this.createHintWord(this.role_02, x - 10, y, '攻击里', 20, 1);
+                        this.role_01['Role'].role_property.attackValue += 20;
+                        this.role_02['Role'].role_property.attackValue += 20;
+                        break;
+                    case 1:
+                        this.createHintWord(this.role_01, x, y, '生命', 1000, 1);
+                        this.createHintWord(this.role_02, x - 10, y, '生命', 1000, 1);
+                        this.role_01['Role'].role_property.blood = 1000;
+                        this.role_02['Role'].role_property.blood = 1000;
+                        break;
+                    case 2:
+                        this.createHintWord(this.role_01, x, y, '公鸡速度', 20, 1);
+                        this.createHintWord(this.role_02, x - 10, y, '公鸡速度', 20, 1);
+                        this.role_01['Role'].role_property.attackSpeed += 20;
+                        this.role_02['Role'].role_property.attackSpeed += 20;
+                        break;
+                    case 3:
+                        this.createHintWord(this.role_01, x, y, '防御力', 10, 1);
+                        this.createHintWord(this.role_02, x - 10, y, '防御力', 10, 1);
+                        this.role_01['Role'].role_property.defense += 10;
+                        this.role_02['Role'].role_property.defense += 10;
+                        break;
+                    default:
+                        break;
+                }
+                // 播放完毕之后开始游戏
+                if (i === 3) {
+                    this.resetGame('resurgence');
+                }
+            })
+            delayed += 25;
+        }
     }
 
     /**返回主界面清理场景*/

@@ -124,7 +124,7 @@ export default class Resurgence extends Laya.Script {
         // 移动
         Laya.Tween.to(this.self, { x: 1500, rotation: 720, scaleX: 0, scaleY: 0, alpha: 0 }, 700, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
             if (type === 'main') {
-                this.roleResurgenceAni();
+                this.selfScene['MainSceneControl'].clearAllEnemy('resurgence', null);
                 this.self.removeSelf();
             } else {
                 this.self.removeSelf();
@@ -133,72 +133,6 @@ export default class Resurgence extends Laya.Script {
         // 背景
         Laya.Tween.to(this.background, { alpha: 0 }, 450, Laya.Ease.expoIn, Laya.Handler.create(this, function () {
         }, []), 0);
-    }
-
-    /**主角复活重新开始*/
-    roleResurgenceAni(): void {
-        let role_01 = this.selfScene['MainSceneControl'].role_01;
-        let role_02 = this.selfScene['MainSceneControl'].role_02;
-        Laya.Tween.to(role_01, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
-            this.hintWordMove();
-        }, []), 0);
-        Laya.Tween.to(role_02, { alpha: 1 }, 700, null, Laya.Handler.create(this, function () {
-
-        }, []), 0);
-    }
-
-    /**属性增加提示动画*/
-    hintWordMove(): void {
-        let delayed = 0;
-        let MainSceneControl = this.selfScene['MainSceneControl'];
-        let role_01 = MainSceneControl.role_01;
-        let role_02 = MainSceneControl.role_02;
-        for (let i = 0; i < 4; i++) {
-            Laya.timer.frameOnce(delayed, this, function () {
-                switch (i) {
-                    case 0:
-                        MainSceneControl.createHintWord(role_01, 100, -10, '攻击里', 20, 1);
-                        MainSceneControl.createHintWord(role_02, 100, -10, '攻击里', 20, 1);
-                        role_01['Role'].role_property.attackValue += 20;
-                        role_02['Role'].role_property.attackValue += 20;
-                        break;
-                    case 1:
-                        MainSceneControl.createHintWord(role_01, 100, -10, '生命', 1000, 1);
-                        MainSceneControl.createHintWord(role_02, 100, -10, '生命', 1000, 1);
-                        role_01['Role'].role_property.blood = 1000;
-                        role_02['Role'].role_property.blood = 1000;
-                        break;
-                    case 2:
-                        MainSceneControl.createHintWord(role_01, 100, -10, '公鸡速度', 20, 1);
-                        MainSceneControl.createHintWord(role_02, 100, -10, '公鸡速度', 20, 1);
-                        role_01['Role'].role_property.attackSpeed += 20;
-                        role_02['Role'].role_property.attackSpeed += 20;
-                        break;
-                    case 3:
-                        MainSceneControl.createHintWord(role_01, 100, -10, '防御力', 10, 1);
-                        MainSceneControl.createHintWord(role_02, 100, -10, '防御力', 10, 1);
-                        role_01['Role'].role_property.defense += 10;
-                        role_02['Role'].role_property.defense += 10;
-                        break;
-                    default:
-                        break;
-                }
-                // 播放完毕之后开始游戏
-                if (i === 3) {
-                    this.resurgenceProperties();
-                }
-            })
-            delayed += 25;
-        }
-    }
-
-    /**开始或者重新开始所需改变的属性*/
-    resurgenceProperties(): void {
-        let MainSceneControl = this.selfScene['MainSceneControl'];
-        MainSceneControl.gameOver = false;
-        MainSceneControl.role_01['Role'].roleDeath = false;
-        MainSceneControl.role_02['Role'].roleDeath = false;
-        MainSceneControl.operating['OperationControl'].operateSwitch = true;
     }
 
     /**复活按钮点击事件*/
@@ -271,7 +205,6 @@ export default class Resurgence extends Laya.Script {
 
     onDisable(): void {
         Laya.Tween.clearAll(this);
-        Laya.timer.clearAll(this);
         Laya.Pool.recover('resurgence', this.self);
     }
 }

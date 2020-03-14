@@ -131,13 +131,13 @@ export default class OperationButton extends Laya.Script {
                     if (Number(clicksLabel.value) > 0) {
                         rightCount++;
                         clicksLabel.value = (Number(clicksLabel.value) - 1).toString();
+                        this.spealGuidance('right');
                         this.clicksRightAni(candy);
                         if (Number(clicksLabel.value) === 0) {
                             mainSceneControl.explodeAni(this.selfScene, candy.x, candy.y, 'disappear', 8, 100);
                             candy['Candy'].playSkeletonAni(1, 'static');
                             clicksLabel.value = ' ';
                             this.rightCount++;
-                            this.spealGuidance('right');
                         }
                         break;
                     }
@@ -180,7 +180,7 @@ export default class OperationButton extends Laya.Script {
         }, []), 0);
     }
 
-    /**判断是否是第一次，通过主角对话框给与一些引导*/
+    /**判断是否是第一次，如果是第一次，那么通过主角对话框给予一些引导*/
     spealGuidance(judge: string): void {
         // 如果是第一次，结算的时候删掉主角对话框，因为第一轮是新手引导
         let MainSceneControl = this.selfScene['MainSceneControl'];
