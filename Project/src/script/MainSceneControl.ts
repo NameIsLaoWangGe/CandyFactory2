@@ -375,8 +375,8 @@ export default class MainSceneControl extends Laya.Script {
                         console.log('弟' + this.launcheCount + '次发射！');
                         // 第一次需要引导玩家操作，通过说话完成，并且第一轮不计算时间
                         if (this.launcheCount === 1) {
-                            this.roleSpeakBoxs('role_01', 'firstClick');
-                            this.roleSpeakBoxs('role_02', 'firstClick');
+                            this.roleSpeak('role_01', 'firstClick');
+                            this.roleSpeak('role_02', 'firstClick');
                             this.operating['OperationControl'].firstClick = true;
                         } else if (this.launcheCount === 2) {
                             // 第二轮的时候开启倒计时
@@ -455,8 +455,11 @@ export default class MainSceneControl extends Laya.Script {
         }, []), 0);
     }
 
-    /**两个主角对话框的初始化*/
-    roleSpeakBoxs(who, describe): void {
+    /**主角说话
+     * @param who 哪个主角说话
+     * @param describe 说话的标题
+    */
+    roleSpeak(who: string, describe: string): void {
         let speakBox = Laya.Pool.getItemByCreateFun('speakBox', this.speakBox.create, this.speakBox) as Laya.Sprite;
         speakBox.name = 'speakBox';
         if (who === 'role_01') {
@@ -464,8 +467,19 @@ export default class MainSceneControl extends Laya.Script {
         } else if (who === 'role_02') {
             this.role_02.addChild(speakBox);
         }
-        speakBox['SpeakBox'].speakingRules(who, describe);
+        speakBox['SpeakBox'].roleSpeakRules(who, describe);
         speakBox.pos(70, -110);
+    }
+
+    /**敌人说话
+     * @param enemy 当前敌人
+    */
+    enemySpeak(enemy): void {
+        let speakBox = Laya.Pool.getItemByCreateFun('speakBox', this.speakBox.create, this.speakBox) as Laya.Sprite;
+        enemy.addChild(speakBox);
+        speakBox.name = 'speakBox';
+        speakBox.pos(100, -110);
+        speakBox['SpeakBox'].enemySpeakRules();
     }
 
     /**角色死亡复活状况*/

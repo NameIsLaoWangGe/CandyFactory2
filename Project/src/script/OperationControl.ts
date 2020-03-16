@@ -192,11 +192,11 @@ export default class OperationButton extends Laya.Script {
             let role_02 = MainSceneControl.role_02;
             let speakBox_02 = role_02.getChildByName('speakBox') as Laya.Sprite;
             if (judge === 'error') {
-                speakBox_01['SpeakBox'].speakingRules('role_01', 'clickError');
-                speakBox_02['SpeakBox'].speakingRules('role_02', 'clickError');
+                speakBox_01['SpeakBox'].roleSpeakRules('role_01', 'clickError');
+                speakBox_02['SpeakBox'].roleSpeakRules('role_02', 'clickError');
             } else if (judge === 'right') {
-                speakBox_01['SpeakBox'].speakingRules('role_01', 'clickRight');
-                speakBox_02['SpeakBox'].speakingRules('role_02', 'clickRight');
+                speakBox_01['SpeakBox'].roleSpeakRules('role_01', 'clickRight');
+                speakBox_02['SpeakBox'].roleSpeakRules('role_02', 'clickRight');
             }
         }
     }
@@ -360,11 +360,11 @@ export default class OperationButton extends Laya.Script {
             }, []), 0);
         }, []), 0);
 
-        // 骨骼动画的旋转，旋转2圈
-        let skeleton = candy['Candy'].skeleton;
-        // 拉开距离并缩小
-        Laya.Tween.to(skeleton, { rotation: rotate }, time * 2, null, Laya.Handler.create(this, function () {
-        }), 0);
+        // // 骨骼动画的旋转，旋转2圈
+        // let skeleton = candy['Candy'].skeleton;
+        // // 拉开距离并缩小
+        // Laya.Tween.to(skeleton, { rotation: rotate }, time * 2, null, Laya.Handler.create(this, function () {
+        // }), 0);
 
         // 糖果的影子处理
         let shadow = candy.getChildByName('shadow') as Laya.Image;

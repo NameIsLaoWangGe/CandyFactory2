@@ -95,6 +95,19 @@ export default class Enemy extends Laya.Script {
         }
         this.role_01 = this.selfScene['MainSceneControl'].role_01;
         this.role_02 = this.selfScene['MainSceneControl'].role_02;
+        this.enemySpeak();
+    }
+
+    /**怪物会随机带一句话，当然也可能不带
+    * 目前是二分之一的概率说话
+   */
+    enemySpeak(): void {
+        let random = Math.floor(Math.random() * 2);
+        if (random === 0) {
+            this.selfScene['MainSceneControl'].enemySpeak(this.self);
+        } else {
+
+        }
     }
 
     /**创建骨骼动画皮肤*/
@@ -431,6 +444,10 @@ export default class Enemy extends Laya.Script {
     }
 
     onDisable(): void {
+        let speakBox = this.self.getChildByName('speakBox');
+        if (speakBox) {
+            speakBox.removeSelf();
+        }
         Laya.Pool.recover('enemy', this.self);
     }
 
