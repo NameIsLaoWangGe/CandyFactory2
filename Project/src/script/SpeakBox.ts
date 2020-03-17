@@ -47,6 +47,8 @@ export default class SpeakBox extends Laya.Script {
         this.speakContent.text = content;
     }
 
+    /**每轮*/ 
+
     /**敌人说话*/
     enemySpeakRules(): void {
         let content = ' ';
